@@ -987,8 +987,9 @@ function setYearLayer(){
   yearSrc=src;return src;
 }
 const wbUrl=yr=>{const k=WB&&(WB[yr]||WB[Math.max(2014,Math.min(2026,yr))]);return k?'https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/'+k.num+'/{z}/{y}/{x}':'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';};
-let NUBES=null; // % de nubes diurnas (MODIS Terra) sobre el Tolima por día desde 2000-01-01
-const nub=d=>NUBES&&d>=0&&d<NUBES.length?NUBES[d]:-1;
+let NUBES=null,COB=null; // por día desde 2000-01-01: % de nubes y % del Tolima con imagen (MODIS Terra, medido en la imagen real)
+// solo cuentan los días cuya imagen cubre ≥ 90 % del Tolima (sin franjas negras entre pasadas del satélite)
+const nub=d=>{if(!NUBES||d<0||d>=NUBES.length)return -1;if(COB&&!(COB[d]>=90))return -1;return NUBES[d];};
 // Día para la imagen NASA: en un rango, el más despejado; si hay > 30 % de nubes, el día más cercano con < 30 % (primero el anterior)
 function pickClear(from,to,lim=30){
   if(!NUBES)return {d:from,pct:null,exact:true};
@@ -1442,7 +1443,7 @@ fetch('data/hotspots.json').then(r=>{if(!r.ok)throw 0;return r.json();}).then(j=
   setRange(S.from,S.to,{quiet:true});
   Promise.all([fetch('data/clima.json').then(r=>r.ok?r.json():null).catch(()=>null),fetch('data/wayback.json').then(r=>r.ok?r.json():null).catch(()=>null),
     fetch('data/nubes.json').then(r=>r.ok?r.json():null).catch(()=>null)])
-    .then(([c,w,nb])=>{CLIMA=c;WB=w;NUBES=nb&&nb.pct;yearSrc=null;updateBase();if(S.tab==='years')renderCharts();ready=true;lastYearSaid=S.year;});
+    .then(([c,w,nb])=>{CLIMA=c;WB=w;NUBES=nb&&nb.pct;COB=nb&&nb.cob||null;yearSrc=null;updateBase();if(S.tab==='years')renderCharts();ready=true;lastYearSaid=S.year;});
   countUp($('k-hot'),N);countUp($('k-k'),C.kg,1,'×');$('kStep').textContent=C.kg.toFixed(1).replace('.',',');
   window.__fire={D,get C(){return C;},compute,get map(){return map;},S,setRange,say,sayYear,goMpio,get hs(){return hsLayer;},get ready(){return ready;}};
 }).catch(err=>{console.error(err);
