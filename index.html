@@ -6,26 +6,27 @@
 <title>Calendario de Quema MODIS-VIIRS</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
-:root{--bg:#f7f6f2;--card:#fff;--fg:#1f2328;--mut:#6b7280;--acc:#d9480f;--line:#e5e7eb;--ok:#0b7285}
+:root{--bg:#f7f6f2;--card:#fff;--fg:#1f2328;--mut:#6b7280;--acc:#d9480f;--line:#e5e7eb;--ok:#0b7285;
+  --c0:#facc15;--c1:#f97316;--c2:#b91c1c;--cx:#7c3aed}
 @media (prefers-color-scheme:dark){:root{--bg:#14110f;--card:#1e1a17;--fg:#ece7e1;--mut:#9ca3af;--line:#2d2723}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-main{max-width:920px;margin:0 auto;padding:14px 14px 40px}
+main{max-width:980px;margin:0 auto;padding:14px 16px 40px}
 h1{font-size:20px;margin:4px 0 2px}
 h2{font-size:15px;margin:0 0 8px}
 .sub{color:var(--mut);margin:0 0 8px;font-size:13px}
 .badge{display:inline-block;background:var(--acc);color:#fff;font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px;letter-spacing:.03em}
 section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:12px}
-#map{height:280px;border-radius:8px;border:1px solid var(--line);background:#e8e4dc}
+#map{height:460px;border-radius:8px;border:1px solid var(--line);background:#e8e4dc}
 .row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0;align-items:center}
-button,.seg label{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;padding:6px 10px;cursor:pointer}
+button,select{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;padding:6px 10px;cursor:pointer}
 button.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
 .small{font-size:12px;color:var(--mut)}
 canvas{width:100%;display:block;touch-action:pan-y}
 #tip{min-height:20px;font-size:13px;margin-top:6px}
 #legend{height:10px;border-radius:5px;margin-top:6px}
 .lg{display:flex;justify-content:space-between;font-size:11px;color:var(--mut)}
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-top:10px}
 .card{border:1px solid var(--line);border-radius:10px;padding:8px 10px}
 .card b{display:block;font-size:18px}
 .card span{font-size:12px;color:var(--mut)}
@@ -33,43 +34,62 @@ ol{margin:0;padding-left:20px}
 ol li{margin:4px 0}
 ol button{padding:3px 8px;font-size:13px}
 details{margin-top:12px;font-size:13px;color:var(--mut)}
-pre{overflow:auto;background:var(--bg);padding:8px;border-radius:8px;font-size:12px}
-label.chk{font-size:13px;display:flex;gap:6px;align-items:center}
+label.chk{font-size:13px;display:inline-flex;gap:5px;align-items:center;margin-right:8px;cursor:pointer}
+.dot{width:11px;height:11px;border-radius:2px;display:inline-block;border:1px solid rgba(0,0,0,.35)}
+#period{font-size:13px;font-weight:600}
+.leaflet-popup-content{font-size:13px;line-height:1.4}
 </style>
 </head>
 <body>
 <main>
 <h1>Calendario de actividad de quema</h1>
-<p class="sub">Armonización de hotspots MODIS + VIIRS · Tolima, Colombia (piloto)</p>
+<p class="sub">Armonización de hotspots MODIS + VIIRS · Tolima, Colombia · 2000–2025</p>
 <span class="badge" id="badge">CARGANDO…</span>
 
 <section>
-  <h2>1 · Área de interés</h2>
-  <div id="map"></div>
+  <h2>1 · Área de interés y hotspots</h2>
+  <div class="row">
+    <span class="small">Confianza:</span>
+    <label class="chk"><input type="checkbox" data-c="0"><span class="dot" style="background:var(--c0)"></span>Baja</label>
+    <label class="chk"><input type="checkbox" data-c="1" checked><span class="dot" style="background:var(--c1)"></span>Nominal</label>
+    <label class="chk"><input type="checkbox" data-c="2" checked><span class="dot" style="background:var(--c2)"></span>Alta</label>
+    <label class="chk"><input type="checkbox" id="excl" checked><span class="dot" style="background:var(--cx)"></span>Excluir volcán y fuentes fijas</label>
+  </div>
+  <div class="row">
+    <span class="small">Sensor en el mapa:</span>
+    <label class="chk"><input type="checkbox" data-s="1" checked>VIIRS (375 m)</label>
+    <label class="chk"><input type="checkbox" data-s="0" checked>MODIS (1 km)</label>
+  </div>
+  <div class="row">
+    <span class="small">Periodo en el mapa:</span>
+    <select id="year"></select>
+    <button id="fullyear">Año completo</button>
+    <span id="period"></span>
+  </div>
+  <div id="map" style="margin-top:8px"></div>
   <div class="row" id="presets">
-    <button data-p="all">Todo</button>
+    <button data-p="all">Todo el Tolima</button>
     <button data-p="n">Norte (≥4,5°N)</button>
     <button data-p="c">Centro (3,75–4,5°N)</button>
     <button data-p="s">Sur (&lt;3,75°N)</button>
     <button data-p="none">Limpiar</button>
-    <button data-p="fit">Reencuadrar mapa</button>
+    <button data-p="fit">Reencuadrar</button>
   </div>
   <p class="small" id="selinfo"></p>
-  <p class="small">Toca celdas (0,25°) para sumarlas o quitarlas. Solo se muestran celdas con al menos 25 % de su área dentro del Tolima (límites municipales: DANE, MGN). Las grises son fuentes fijas urbanas/industriales.</p>
+  <p class="small">Toca municipios para sumarlos o quitarlos del área de interés. Cada hotspot se dibuja con la huella nominal de su píxel (VIIRS 375 m, MODIS 1 km; al alejar el mapa se ven como puntos). Toca un hotspot para ver fecha, hora, confianza y potencia (FRP). En morado: volcán activo o fuente fija según FIRMS.</p>
 </section>
 
 <section>
   <h2>2 · Calendario semanal (año × semana)</h2>
-  <div class="row seg" id="segSrc">
+  <div class="row" id="segSrc">
     <button data-v="harm" class="on">Armonizado</button>
     <button data-v="raw">Crudo (sin armonizar)</button>
   </div>
-  <div class="row seg" id="segView">
+  <div class="row" id="segView">
     <button data-v="int" class="on">Intensidad</button>
     <button data-v="anom">Anomalía (z)</button>
   </div>
-  <div class="row"><label class="chk"><input type="checkbox" id="mask" checked> Excluir zonas urbanas/industriales</label></div>
-  <canvas id="cal"></canvas>
+  <canvas id="cal" style="margin-top:8px"></canvas>
   <div id="legend"></div>
   <div class="lg"><span id="lg0"></span><span id="lg1"></span></div>
   <div id="tip"></div>
@@ -84,140 +104,99 @@ label.chk{font-size:13px;display:flex;gap:6px;align-items:center}
 
 <section>
   <h2>4 · Periodos críticos (armonizado, z ≥ 1,5)</h2>
-  <p class="small">Solo semanas de temporada activa (≥ 20 % del pico climatológico), para no alarmar por variaciones mínimas en época húmeda.</p>
+  <p class="small">Solo semanas de temporada activa (≥ 20 % del pico climatológico), para no alarmar por variaciones mínimas en época húmeda. Toca uno para verlo en el calendario y en el mapa.</p>
   <ol id="crit"></ol>
 </section>
 
 <details>
-  <summary>Metodología y formato de datos reales</summary>
-  <p>1) Hotspots de NASA FIRMS (MODIS Collection 6.1 y VIIRS S-NPP 375 m, productos estándar) agregados a grilla de 0,25° y semana; MODIS con confianza ≥ 30, VIIRS nominal/alta. 2) Celdas con detección en más del 60 % de las semanas VIIRS se marcan como fuente fija (urbana/industrial). 3) k = Σ VIIRS / Σ MODIS en el solapamiento 2012–2025, por banda de latitud (norte/centro/sur) y mes. 4) Serie armonizada = MODIS×k antes de 2012 y VIIRS desde 2012. 5) Anomalía z contra la climatología de cada semana (±1 semana).</p>
-  <p>La tarjeta «k» muestra Σ VIIRS / Σ MODIS de las celdas seleccionadas en el solapamiento; la serie usa el k por banda×mes calculado en <code>pipeline/harmonize.py</code>. Datos: <code>data/harmonized.json</code>. Si no existe, la página usa un modelo sintético de demostración.</p>
-  <p>Créditos: NASA FIRMS (LANCE/EOSDIS) · Sentinel-2 cloudless 2020 © EOX (uso no comercial) · © OpenStreetMap.</p>
+  <summary>Metodología, limitaciones y créditos</summary>
+  <p><b>Datos.</b> Hotspots de NASA FIRMS, productos estándar MODIS Collection 6.1 (Terra y Aqua, 1 km, desde 2000) y VIIRS S-NPP 375 m (desde 2012). Se eliminan duplicados exactos (sensor, posición, fecha y hora) y se recortan al Tolima con los límites municipales del DANE (MGN).</p>
+  <p><b>Confianza.</b> VIIRS trae baja/nominal/alta. MODIS trae 0–100 y se agrupa como FIRMS: &lt;30 baja, 30–79 nominal, ≥80 alta. Por defecto se usan nominal y alta.</p>
+  <p><b>Falsos positivos.</b> Se excluyen por defecto los hotspots que FIRMS marca como volcán activo (type 1, Nevado del Ruiz y Cerro Bravo), otra fuente fija terrestre (type 2, p. ej. industria en Ibagué y Espinal) o costa afuera (type 3).</p>
+  <p><b>Armonización.</b> En el solapamiento 2012–2025 se calcula k = Σ VIIRS / Σ MODIS por franja de latitud (norte/centro/sur) y mes, con los filtros activos y sobre todo el Tolima. La serie armonizada es MODIS×k antes de 2012 y VIIRS desde 2012. Anomalía z contra la climatología de cada semana (±1 semana).</p>
+  <p><b>Limitaciones.</b> Un hotspot es una detección térmica en el paso del satélite, no área quemada. Nubosidad y hora de paso influyen. k se supone constante en el tiempo. La huella dibujada es la nominal en el nadir; hacia los bordes de la pasada el píxel es mayor. El año 2000 está casi vacío porque el producto estándar MODIS apenas lo cubre.</p>
+  <p><b>Créditos.</b> NASA FIRMS (LANCE/EOSDIS) · DANE, Marco Geoestadístico Nacional · Sentinel-2 cloudless 2020 © EOX IT Services GmbH (uso no comercial) · © OpenStreetMap.</p>
 </details>
 </main>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (()=>{
-const Y0=2000,Y1=2025,NY=Y1-Y0+1,NW=53,YV=2012,SENS=0.35;
-const LAT0=2.75,LAT1=5.5,LON0=-76.25,LON1=-74.25,STEP=0.25,NR=11,NC=8;
-let BAND_CUTS=[4.5,3.75],REAL=null; // REAL = contenido de data/harmonized.json
-let TOL=null; const TOL_MIN=0.25;     // TOL = data/tolima.json (celdas con >=25 % dentro del Tolima)
-const bandOf=c=>{const lat=(c.lat0+c.lat1)/2;return lat>=BAND_CUTS[0]?0:lat>=BAND_CUTS[1]?1:2;};
-const monthOfWeek=w=>Math.min(11,Math.floor((w*7+3)/30.44));
+const Y0=2000,Y1=2025,NY=Y1-Y0+1,NW=53,YV=2012;
 const MONTHS=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const CONF=['Baja','Nominal','Alta'],SAT=['Terra','Aqua','Suomi-NPP'];
+const TYPE=['fuego de vegetación (presunto)','volcán activo','fuente fija terrestre','costa afuera'];
 const $=id=>document.getElementById(id);
-const S={src:'harm',view:'int',mask:true,hl:null};
 const fmt=n=>Math.round(n).toLocaleString('es');
+const S={src:'harm',view:'int',conf:[false,true,true],excl:true,sens:[true,true],hl:null,year:2024,wk:null};
+let D=null,N=0,BAND_CUTS=[4.5,3.75];
+let IDX,BAND,MON,SEL; // por punto: índice año*53+semana, franja, mes; SEL: municipios seleccionados
+const monthOfWeek=w=>Math.min(11,Math.floor((w*7+3)/30.44));
+const bandOfLat=lat=>lat>=BAND_CUTS[0]?0:lat>=BAND_CUTS[1]?1:2;
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||'#888';}
 
-function rnd(a,b,c,d){
-  let h=Math.imul(a+1,374761393)^Math.imul(b+7,668265263)^Math.imul(c+13,1274126177)^Math.imul(d+29,2246822519);
-  h=Math.imul(h^(h>>>15),2246822519);h=Math.imul(h^(h>>>13),3266489917);h^=h>>>16;
-  return (h>>>0)/4294967296;
-}
-function gauss(u,v){return Math.sqrt(-2*Math.log(u+1e-9))*Math.cos(2*Math.PI*v);}
-
-/* ---------- modelo sintético ---------- */
-const seas=Array.from({length:NW},(_,w)=>Math.exp(1.8*(Math.cos(2*Math.PI*(w-5)/NW)-1)));
-const YF={2005:1.35,2010:1.5,2015:1.3,2016:1.45,2019:1.2,2020:1.3,2024:1.6};
-const yf=y=>YF[y]||1;
-const reg=new Float64Array(NY*NW);
-for(let y=0;y<NY;y++)for(let w=0;w<NW;w++)reg[y*NW+w]=gauss(rnd(y,w,77,0),rnd(y,w,78,0));
-
-const cells=[];
-function buildCells(){
-  const byRC={};
-  if(REAL)for(const e of REAL.cells)byRC[e.r+'-'+e.c]=e;
-  const tol={};
-  if(TOL)for(const t of TOL.cells)tol[t.r+'-'+t.c]=t;
-  for(let r=0;r<NR;r++)for(let c=0;c<NC;c++){
-    const tc=tol[r+'-'+c];
-    if(TOL&&!(tc&&tc.frac>=TOL_MIN))continue; // fuera del Tolima
-    const cell={id:r*NC+c,r,c,mpio:tc?tc.mpio:null,frac:tc?tc.frac:1,
-      lat0:LAT1-(r+1)*STEP,lat1:LAT1-r*STEP,lon0:LON0+c*STEP,lon1:LON0+(c+1)*STEP,sel:true};
-    if(REAL){
-      const e=byRC[r+'-'+c];
-      cell.urban=!!(e&&e.urban);
-      cell.m=e?e.m:null;cell.v=e?e.v:null;
-      cell.base=e?e.v.reduce((a,b)=>a+b,0)+e.m.reduce((a,b)=>a+b,0):0;
-    }else{
-      const g=gauss(rnd(r,c,1,0),rnd(r,c,2,0));
-      const smooth=.5+.5*Math.sin(r/2+1)*Math.cos(c/2.5);
-      cell.urban=rnd(r,c,3,0)<0.05;
-      cell.base=cell.urban?0.4:Math.exp(.8*g)*(.25+1.4*smooth);
-    }
-    cells.push(cell);
+function prep(){
+  N=D.meta.n;BAND_CUTS=D.meta.band_cuts||BAND_CUTS;
+  IDX=new Int32Array(N);BAND=new Int8Array(N);MON=new Int8Array(N);
+  for(let i=0;i<N;i++){
+    const w=Math.min(52,Math.floor((D.j[i]-1)/7));
+    IDX[i]=D.y[i]*NW+w;BAND[i]=bandOfLat(D.la[i]/1e5);MON[i]=monthOfWeek(w);
   }
-  const mx=Math.max(1,...cells.filter(c=>!c.urban).map(c=>c.base));
-  for(const c of cells)c.t=Math.sqrt(c.base/mx);
+  SEL=new Uint8Array(D.mpios.length).fill(1);
 }
+const passes=i=>S.conf[D.c[i]]&&!(S.excl&&D.t[i]!==0);
 
-function computeReal(){
-  const use=cells.filter(c=>c.sel&&!(S.mask&&c.urban));
-  const K=REAL.meta.k_banda_mes;
-  const R=new Float64Array(NY*NW),H=new Float64Array(NY*NW);
-  let sv=0,sm=0;
-  for(const c of use){
-    if(!c.m)continue;
-    const b=bandOf(c);
-    for(let y=0;y<NY;y++){const pre=Y0+y<YV;
-      for(let w=0;w<NW;w++){
-        const i=y*NW+w,m=c.m[i],v=c.v[i];
-        if(pre){R[i]+=m;H[i]+=m*K[b][monthOfWeek(w)];}
-        else{R[i]+=v;H[i]+=v;sv+=v;sm+=m;}
-      }
-    }
-  }
-  return {R,H,k:sm>0?sv/sm:REAL.meta.k_global,n:use.length,
-    nUrb:cells.filter(c=>c.sel&&c.urban).length,empty:use.length===0};
-}
-
+/* ---------- cálculo ---------- */
 function compute(){
-  if(REAL)return computeReal();
-  const use=cells.filter(c=>c.sel&&!(S.mask&&c.urban));
-  const M=new Float64Array(NY*NW),V=new Float64Array(NY*NW);
-  for(const c of use){
-    for(let y=0;y<NY;y++){const yr=Y0+y;
-      for(let w=0;w<NW;w++){
-        const i=y*NW+w;
-        const T=c.urban?0.4:c.base*seas[w]*yf(yr)*Math.exp(.3*reg[i])*Math.exp(.5*(rnd(c.id,yr,w,1)-.5));
-        M[i]+=8*SENS*T*Math.exp(.5*(rnd(c.id,yr,w,2)-.5));
-        if(yr>=YV)V[i]+=8*T*Math.exp(.3*(rnd(c.id,yr,w,3)-.5));
-      }
-    }
+  // k por franja x mes con todo el Tolima y los filtros activos (solapamiento)
+  const v=Array.from({length:3},()=>new Float64Array(12)),m=Array.from({length:3},()=>new Float64Array(12));
+  const Mr=new Float64Array(NY*NW),Vr=new Float64Array(NY*NW);
+  let sv=0,sm=0,nv=0,nsel=0;
+  for(let i=0;i<N;i++){
+    if(!passes(i))continue;
+    if(D.y[i]>=YV-Y0){(D.s[i]?v:m)[BAND[i]][MON[i]]++;}
+    if(!SEL[D.m[i]])continue;
+    nsel++;
+    if(D.s[i]){Vr[IDX[i]]++;if(D.y[i]>=YV-Y0){sv++;nv++;}}
+    else{Mr[IDX[i]]++;if(D.y[i]>=YV-Y0)sm++;}
   }
-  let sv=0,sm=0;
-  for(let y=YV-Y0;y<NY;y++)for(let w=0;w<NW;w++){sv+=V[y*NW+w];sm+=M[y*NW+w];}
-  const k=sm>0?sv/sm:1;
+  let tv=0,tm=0;for(let b=0;b<3;b++)for(let k=0;k<12;k++){tv+=v[b][k];tm+=m[b][k];}
+  const kg=tm>0?tv/tm:1,K=[];
+  for(let b=0;b<3;b++){
+    let bv=0,bm=0;for(let k=0;k<12;k++){bv+=v[b][k];bm+=m[b][k];}
+    const kb=bm>50?bv/bm:kg;
+    K.push(Array.from({length:12},(_,k)=>m[b][k]>50?v[b][k]/m[b][k]:kb));
+  }
+  // la serie armonizada necesita la franja de cada punto: se recalcula MODIS×k por punto
   const R=new Float64Array(NY*NW),H=new Float64Array(NY*NW);
-  for(let y=0;y<NY;y++)for(let w=0;w<NW;w++){
-    const i=y*NW+w,pre=Y0+y<YV;
-    R[i]=pre?M[i]:V[i];H[i]=pre?M[i]*k:V[i];
+  for(let i=0;i<N;i++){
+    if(!SEL[D.m[i]]||!passes(i))continue;
+    const pre=D.y[i]<YV-Y0;
+    if(pre&&D.s[i]===0){R[IDX[i]]++;H[IDX[i]]+=K[BAND[i]][MON[i]];}
+    else if(!pre&&D.s[i]===1){R[IDX[i]]++;H[IDX[i]]++;}
   }
-  return {R,H,k,n:use.length,nUrb:cells.filter(c=>c.sel&&c.urban).length,empty:use.length===0};
+  const nm=SEL.reduce((a,b)=>a+b,0);
+  return {R,H,kg,K,ksel:sm>0?sv/sm:kg,nm,nsel,empty:nm===0};
 }
 
-function zscores(D){
+function zscores(X){
   const z=new Float64Array(NY*NW);
   for(let w=0;w<NW;w++){
     const w0=Math.max(0,w-1),w1=Math.min(NW-1,w+1);
     let s=0,n=0;
-    for(let y=0;y<NY;y++)for(let k=w0;k<=w1;k++){s+=D[y*NW+k];n++;}
+    for(let y=0;y<NY;y++)for(let k=w0;k<=w1;k++){s+=X[y*NW+k];n++;}
     const m=s/n;let q=0;
-    for(let y=0;y<NY;y++)for(let k=w0;k<=w1;k++){const d=D[y*NW+k]-m;q+=d*d;}
+    for(let y=0;y<NY;y++)for(let k=w0;k<=w1;k++){const d=X[y*NW+k]-m;q+=d*d;}
     const sd=Math.max(Math.sqrt(q/n),m*0.05+1e-9);
-    for(let y=0;y<NY;y++)z[y*NW+w]=(D[y*NW+w]-m)/sd;
+    for(let y=0;y<NY;y++)z[y*NW+w]=(X[y*NW+w]-m)/sd;
   }
   return z;
 }
-
 function critical(zH,H){
   const mean=new Float64Array(NW);
-  for(let w=0;w<NW;w++){let s=0;for(let y=0;y<NY;y++)s+=H[y*NW+w];mean[w]=s/NY;}
-  const thr=0.2*Math.max(...mean);
-  const act=w=>mean[w]>=thr;
-  const out=[];
-  for(let y=0;y<NY;y++){
+  for(let w=0;w<NW;w++){let s=0;for(let y=1;y<NY;y++)s+=H[y*NW+w];mean[w]=s/(NY-1);}
+  const thr=0.2*Math.max(...mean),act=w=>mean[w]>=thr,out=[];
+  for(let y=1;y<NY;y++){ // 2000 se omite: cobertura MODIS incompleta
     let w=0;
     while(w<NW){
       if(act(w)&&zH[y*NW+w]>=1.5){
@@ -228,14 +207,11 @@ function critical(zH,H){
     }
   }
   out.sort((a,b)=>b.pk-a.pk);
-  return out.slice(0,6);
+  return out.slice(0,8);
 }
 
 /* ---------- utilidades ---------- */
-function ds(y,w){
-  const a=new Date(Date.UTC(y,0,1+7*w));
-  return a.getUTCDate()+' '+MONTHS[a.getUTCMonth()];
-}
+function ds(y,w){const a=new Date(Date.UTC(y,0,1+7*w));return a.getUTCDate()+' '+MONTHS[a.getUTCMonth()];}
 function range(y,w0,w1){
   w1=w1===undefined?w0:w1;
   const e=w1>=NW-1?new Date(Date.UTC(y,11,31)):new Date(Date.UTC(y,0,7+7*w1));
@@ -248,7 +224,6 @@ function ramp(st,t){
   const x=t*(st.length-1),i=Math.min(st.length-2,Math.floor(x)),f=x-i,a=st[i],b=st[i+1];
   return `rgb(${Math.round(a[0]+(b[0]-a[0])*f)},${Math.round(a[1]+(b[1]-a[1])*f)},${Math.round(a[2]+(b[2]-a[2])*f)})`;
 }
-function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||'#888';}
 function fit(cv,h){
   const dpr=window.devicePixelRatio||1,w=cv.clientWidth||360;
   cv.width=w*dpr;cv.height=h*dpr;cv.style.height=h+'px';
@@ -257,39 +232,83 @@ function fit(cv,h){
 }
 
 /* ---------- mapa ---------- */
-function cellStyle(c){
-  const t=c.t;
-  return {color:c.sel?css('--ok'):'#999',weight:c.sel?1.4:.3,
-    fillColor:c.urban?'#6b7280':ramp(HEAT,t),fillOpacity:c.sel?.5:.08};
+let map=null,mpLayers=[],hsLayer=null,bounds=null,canvasR=null;
+function mpioStyle(k,dens,mx){
+  const sel=SEL[k];
+  return {color:sel?'#ffffff':'#9ca3af',weight:sel?1.6:.6,opacity:.9,
+    fillColor:ramp(HEAT,Math.sqrt(dens/mx)),fillOpacity:sel?.25:.04};
 }
-let map=null;
+function styleMpios(){
+  if(!map)return;
+  const cnt=new Float64Array(D.mpios.length);
+  for(let i=0;i<N;i++)if(D.s[i]===1&&passes(i))cnt[D.m[i]]++;
+  const dens=D.mpios.map((m,k)=>cnt[k]/m.area),mx=Math.max(...dens)||1;
+  mpLayers.forEach((l,k)=>{l.setStyle(mpioStyle(k,dens[k],mx));
+    l.setTooltipContent(`${D.mpios[k].n} · ${fmt(cnt[k])} hotspots VIIRS 2012–2025`);});
+}
 function initMap(){
-  if(typeof L==='undefined'){$('map').innerHTML='<p class="small" style="padding:12px">No se pudo cargar el mapa (sin conexión). Usa los botones de selección.</p>';return;}
-  map=L.map('map').setView([(LAT0+LAT1)/2,(LON0+LON1)/2],7);
-  map.attributionControl.addAttribution('Hotspots: <a href="https://firms.modaps.eosdis.nasa.gov" target="_blank">NASA FIRMS</a>');
+  if(typeof L==='undefined'){$('map').innerHTML='<p class="small" style="padding:12px">No se pudo cargar el mapa (sin conexión).</p>';return;}
+  map=L.map('map',{preferCanvas:true});
+  canvasR=L.canvas({padding:.3});
   const s2=L.tileLayer('https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg',
-    {attribution:'<a href="https://s2maps.eu" target="_blank">Sentinel-2 cloudless</a> by <a href="https://eox.at" target="_blank">EOX IT Services GmbH</a> (Contains modified Copernicus Sentinel data 2020)',maxZoom:12,minZoom:4});
+    {attribution:'<a href="https://s2maps.eu" target="_blank">Sentinel-2 cloudless</a> by <a href="https://eox.at" target="_blank">EOX IT Services GmbH</a> (Contains modified Copernicus Sentinel data 2020)',maxZoom:16,maxNativeZoom:14,minZoom:6});
   const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:12,minZoom:4});
+    {attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:16,minZoom:6});
   s2.addTo(map);
   L.control.layers({'Sentinel-2':s2,'OpenStreetMap':osm},null,{collapsed:true}).addTo(map);
-  let s2err=0;
-  s2.on('tileerror',()=>{if(++s2err===4){map.removeLayer(s2);osm.addTo(map);}});
-  if(TOL){
-    const rings=[];
-    for(const m of TOL.municipios)for(const r of m.rings)rings.push(r.map(p=>[p[1],p[0]]));
-    L.polygon(rings,{color:'#ffffff',weight:1,opacity:.8,fill:false,interactive:false}).addTo(map);
-  }
-  for(const c of cells){
-    c.rect=L.rectangle([[c.lat0,c.lon0],[c.lat1,c.lon1]],cellStyle(c)).addTo(map);
-    if(c.mpio)c.rect.bindTooltip(c.mpio+(c.urban?' · fuente fija':''),{sticky:true});
-    c.rect.on('click',()=>{c.sel=!c.sel;c.rect.setStyle(cellStyle(c));refresh();});
-  }
-  map.fitBounds([[LAT0,LON0],[LAT1,LON1]]);
+  map.attributionControl.addAttribution('Hotspots: <a href="https://firms.modaps.eosdis.nasa.gov" target="_blank">NASA FIRMS</a> · Límites: DANE');
+  let s2err=0;s2.on('tileerror',()=>{if(++s2err===4){map.removeLayer(s2);osm.addTo(map);}});
+  const pane=map.createPane('mpios');pane.style.zIndex=410;
+  D.mpios.forEach((m,k)=>{
+    const rings=m.rings.map(r=>r.map(p=>[p[1],p[0]]));
+    const l=L.polygon(rings,{pane:'mpios'}).addTo(map);
+    l.bindTooltip(m.n,{sticky:true});
+    l.on('click',()=>{SEL[k]=SEL[k]?0:1;styleMpios();refresh();});
+    mpLayers.push(l);
+  });
+  bounds=L.featureGroup(mpLayers).getBounds();
+  map.fitBounds(bounds);
+  hsLayer=L.layerGroup().addTo(map);
+  map.on('zoomend',drawHotspots);
 }
-function setSel(fn){
-  for(const c of cells){c.sel=fn(c);if(c.rect)c.rect.setStyle(cellStyle(c));}
-  refresh();
+function popup(i){
+  const y=Y0+D.y[i],d=new Date(Date.UTC(y,0,D.j[i]));
+  const hm=String(D.hm[i]).padStart(4,'0');
+  return `<b>${D.s[i]?'VIIRS':'MODIS'} · ${SAT[D.sat[i]]}</b><br>`+
+    `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${y}, ${hm.slice(0,2)}:${hm.slice(2)} UTC (${D.dn[i]?'noche':'día'})<br>`+
+    `Confianza: <b>${CONF[D.c[i]]}</b><br>FRP: ${(D.f[i]/10).toFixed(1)} MW<br>`+
+    `Municipio: ${D.mpios[D.m[i]].n}<br>Tipo FIRMS: ${TYPE[D.t[i]]||D.t[i]}<br>`+
+    `<span style="color:#6b7280">${(D.la[i]/1e5).toFixed(4)}°, ${(D.lo[i]/1e5).toFixed(4)}°</span>`;
+}
+function drawHotspots(){
+  if(!map)return;
+  hsLayer.clearLayers();
+  const yi=S.year-Y0,col=[css('--c0'),css('--c1'),css('--c2')],cx=css('--cx');
+  const big=map.getZoom()>=11;
+  let n=0,nv=0,nm=0;
+  for(let i=0;i<N;i++){
+    if(D.y[i]!==yi||!S.sens[D.s[i]])continue;
+    if(!S.conf[D.c[i]])continue;
+    const fixed=D.t[i]!==0;
+    if(S.excl&&fixed)continue;
+    if(S.wk&&((IDX[i]%NW)<S.wk[0]||(IDX[i]%NW)>S.wk[1]))continue;
+    const lat=D.la[i]/1e5,lon=D.lo[i]/1e5,c=fixed?cx:col[D.c[i]];
+    let lyr;
+    if(big){
+      const h=D.s[i]?0.0017:0.0045,hx=h/Math.cos(lat*Math.PI/180);
+      lyr=L.rectangle([[lat-h,lon-hx],[lat+h,lon+hx]],{renderer:canvasR,color:c,weight:1,fillColor:c,fillOpacity:.55,dashArray:fixed?'3 2':null});
+    }else{
+      lyr=L.circleMarker([lat,lon],{renderer:canvasR,radius:D.s[i]?3:4.5,color:'rgba(0,0,0,.5)',weight:.6,fillColor:c,fillOpacity:.9});
+    }
+    lyr.bindPopup(()=>popup(i));
+    hsLayer.addLayer(lyr);
+    n++;D.s[i]?nv++:nm++;
+  }
+  const per=S.wk?range(S.year,S.wk[0],S.wk[1])+' '+S.year:S.year+' completo';
+  $('period').textContent=`${per} · ${fmt(n)} hotspots en el mapa (VIIRS ${fmt(nv)}, MODIS ${fmt(nm)})`;
+}
+function setPeriod(y,w0,w1){
+  S.year=y;S.wk=w0===null?null:[w0,w1];$('year').value=y;drawHotspots();
 }
 
 /* ---------- dibujo ---------- */
@@ -299,7 +318,7 @@ function drawCal(){
   const left=30,top=16,cw=(W-left)/NW,ch=11;
   G={left,top,cw,ch};
   g.clearRect(0,0,W,1000);
-  if(C.empty){g.fillStyle=css('--mut');g.font='13px system-ui';g.fillText('Selecciona al menos una celda',left,top+20);return;}
+  if(C.empty){g.fillStyle=css('--mut');g.font='13px system-ui';g.fillText('Selecciona al menos un municipio',left,top+20);return;}
   const anom=S.view==='anom';
   let vmax=1;
   if(!anom){const s=Array.from(Dcur).sort((a,b)=>a-b);vmax=s[Math.floor(s.length*0.98)]||1;}
@@ -322,16 +341,16 @@ function drawCal(){
 function drawLegend(){
   const anom=S.view==='anom',st=anom?DIV:HEAT;
   $('legend').style.background='linear-gradient(90deg,'+[0,.25,.5,.75,1].map(t=>ramp(st,t)).join(',')+')';
-  $('lg0').textContent=anom?'−3σ (por debajo)':'bajo';
-  $('lg1').textContent=anom?'+3σ (por encima)':'alto (hotspots/semana, relativo)';
+  $('lg0').textContent=anom?'−3σ (por debajo)':'0';
+  $('lg1').textContent=anom?'+3σ (por encima)':'alto (hotspots/semana, eq. VIIRS)';
 }
 function drawBars(){
-  const [g,W,H]=fit($('bars'),160);
+  const [g,W,H]=fit($('bars'),170);
   g.clearRect(0,0,W,H);
   if(C.empty)return;
-  const tot=D=>Array.from({length:NY},(_,y)=>{let s=0;for(let w=0;w<NW;w++)s+=D[y*NW+w];return s;});
+  const tot=X=>Array.from({length:NY},(_,y)=>{let s=0;for(let w=0;w<NW;w++)s+=X[y*NW+w];return s;});
   const tr=tot(C.R),th=tot(C.H),mx=Math.max(...tr,...th)||1;
-  const left=4,bot=18,top=12,gw=(W-left)/NY,bw=gw*.38;
+  const left=4,bot=18,top=14,gw=(W-left)/NY,bw=gw*.38;
   for(let y=0;y<NY;y++){
     const x=left+y*gw;
     g.fillStyle='#9ca3af';g.fillRect(x+gw*.08,H-bot-(H-bot-top)*tr[y]/mx,bw,(H-bot-top)*tr[y]/mx);
@@ -339,32 +358,34 @@ function drawBars(){
   }
   g.fillStyle=css('--mut');g.font='10px system-ui';
   for(let y=0;y<NY;y+=4)g.fillText(String(Y0+y),left+y*gw,H-5);
+  g.fillText(fmt(mx),left,10);
   const xv=left+(YV-Y0)*gw;
   g.strokeStyle=css('--fg');g.setLineDash([3,2]);g.beginPath();g.moveTo(xv,top-4);g.lineTo(xv,H-bot);g.stroke();g.setLineDash([]);
-  g.fillText('VIIRS →',xv+3,top+4);
+  g.fillText('VIIRS →',xv+3,top+6);
 }
 function renderText(){
-  if(C.empty){$('cards').innerHTML='';$('crit').innerHTML='<li class="small">Sin celdas seleccionadas.</li>';return;}
+  const area=D.mpios.reduce((a,m,k)=>a+(SEL[k]?m.area:0),0);
+  $('selinfo').textContent=`${C.nm} de ${D.mpios.length} municipios seleccionados ≈ ${fmt(area)} km²`;
+  if(C.empty){$('cards').innerHTML='';$('crit').innerHTML='<li class="small">Sin municipios seleccionados.</li>';return;}
   const mean=new Float64Array(NW);
-  for(let w=0;w<NW;w++){let s=0;for(let y=0;y<NY;y++)s+=C.H[y*NW+w];mean[w]=s/NY;}
+  for(let w=0;w<NW;w++){let s=0;for(let y=1;y<NY;y++)s+=C.H[y*NW+w];mean[w]=s/(NY-1);}
   let pw=0;for(let w=1;w<NW;w++)if(mean[w]>mean[pw])pw=w;
-  let by=0,bt=0;
-  for(let y=0;y<NY;y++){let s=0;for(let w=0;w<NW;w++)s+=C.H[y*NW+w];if(s>bt){bt=s;by=y;}}
+  let by=1,bt=0;
+  for(let y=1;y<NY;y++){let s=0;for(let w=0;w<NW;w++)s+=C.H[y*NW+w];if(s>bt){bt=s;by=y;}}
   $('cards').innerHTML=
-    `<div class="card"><b>k = ${C.k.toFixed(2)}</b><span>Calibración MODIS→VIIRS (2012–2025)</span></div>`+
-    `<div class="card"><b>${C.n} celdas</b><span>usadas${S.mask&&C.nUrb?` · ${C.nUrb} urbanas excluidas`:''}</span></div>`+
+    `<div class="card"><b>k = ${C.kg.toFixed(2)}</b><span>VIIRS/MODIS en todo el Tolima (2012–2025); en tu selección ${C.ksel.toFixed(2)}</span></div>`+
+    `<div class="card"><b>${fmt(C.nsel)}</b><span>hotspots en la selección con los filtros activos</span></div>`+
     `<div class="card"><b>${range(2001,pw)}</b><span>semana pico climatológica</span></div>`+
     `<div class="card"><b>${Y0+by}</b><span>año más intenso (armonizado)</span></div>`;
   const cr=critical(zscores(C.H),C.H);
   $('crit').innerHTML=cr.length?cr.map((p,i)=>`<li><button data-i="${i}">${Y0+p.y} · ${range(Y0+p.y,p.w0,p.w1)}</button> <span class="small">z máx +${p.pk.toFixed(1)}</span></li>`).join(''):'<li class="small">Sin periodos con z ≥ 1,5.</li>';
   $('crit').querySelectorAll('button').forEach(b=>b.onclick=()=>{
     const p=cr[+b.dataset.i];S.hl={y:p.y,w0:p.w0,w1:p.w1};drawCal();
-    $('tip').textContent=`${Y0+p.y} · ${range(Y0+p.y,p.w0,p.w1)} · z máx +${p.pk.toFixed(1)}`;
+    $('tip').textContent=`${Y0+p.y} · ${range(Y0+p.y,p.w0,p.w1)} · z máx +${p.pk.toFixed(1)} (mostrado en el mapa)`;
+    setPeriod(Y0+p.y,p.w0,p.w1);
   });
 }
 function render(){
-  const area=Math.round(cells.filter(c=>c.sel).length*774);
-  $('selinfo').textContent=`${cells.filter(c=>c.sel).length} celdas seleccionadas ≈ ${fmt(area)} km²`;
   if(!C.empty){Dcur=S.src==='harm'?C.H:C.R;Zcur=zscores(Dcur);}
   drawLegend();drawCal();drawBars();renderText();
 }
@@ -378,40 +399,45 @@ function seg(id,key){
     S[key]=b.dataset.v;render();
   });
 }
-seg('segSrc','src');seg('segView','view');
-$('mask').onchange=e=>{S.mask=e.target.checked;refresh();};
-$('presets').querySelectorAll('button').forEach(b=>b.onclick=()=>{
-  const p=b.dataset.p;
-  if(p==='fit'){if(map)map.fitBounds([[LAT0,LON0],[LAT1,LON1]]);return;}
-  setSel(c=>p==='all'?true:p==='none'?false:bandOf(c)===({n:0,c:1,s:2})[p]);
-});
-function pick(e){
-  if(!G||C.empty)return null;
-  const r=$('cal').getBoundingClientRect();
-  const w=Math.floor((e.clientX-r.left-G.left)/G.cw),y=Math.floor((e.clientY-r.top-G.top)/G.ch);
-  return (w<0||w>=NW||y<0||y>=NY)?null:{y,w};
+function bind(){
+  seg('segSrc','src');seg('segView','view');
+  document.querySelectorAll('input[data-c]').forEach(el=>el.onchange=()=>{S.conf[+el.dataset.c]=el.checked;styleMpios();drawHotspots();refresh();});
+  document.querySelectorAll('input[data-s]').forEach(el=>el.onchange=()=>{S.sens[+el.dataset.s]=el.checked;drawHotspots();});
+  $('excl').onchange=e=>{S.excl=e.target.checked;styleMpios();drawHotspots();refresh();};
+  for(let y=Y1;y>=Y0;y--)$('year').add(new Option(String(y),y));
+  $('year').value=S.year;
+  $('year').onchange=e=>setPeriod(+e.target.value,null);
+  $('fullyear').onclick=()=>setPeriod(S.year,null);
+  $('presets').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    const p=b.dataset.p;
+    if(p==='fit'){if(map)map.fitBounds(bounds);return;}
+    D.mpios.forEach((m,k)=>SEL[k]=p==='all'?1:p==='none'?0:(bandOfLat(m.lat)===({n:0,c:1,s:2})[p]?1:0));
+    styleMpios();refresh();
+  });
+  const pick=e=>{
+    if(!G||C.empty)return null;
+    const r=$('cal').getBoundingClientRect();
+    const w=Math.floor((e.clientX-r.left-G.left)/G.cw),y=Math.floor((e.clientY-r.top-G.top)/G.ch);
+    return (w<0||w>=NW||y<0||y>=NY)?null:{y,w};
+  };
+  const info=p=>{const i=p.y*NW+p.w;
+    return `${Y0+p.y} · sem ${p.w+1} (${range(Y0+p.y,p.w)}) · ${Dcur[i].toFixed(Dcur[i]%1?1:0)} hotspots · z ${Zcur[i]>=0?'+':''}${Zcur[i].toFixed(1)}`;};
+  $('cal').addEventListener('pointermove',e=>{const p=pick(e);if(p)$('tip').textContent=info(p);});
+  $('cal').addEventListener('pointerdown',e=>{const p=pick(e);if(p){S.hl={y:p.y,w0:p.w,w1:p.w};drawCal();
+    $('tip').textContent=info(p)+' (mostrado en el mapa)';setPeriod(Y0+p.y,p.w,p.w);}});
+  window.addEventListener('resize',()=>{if(C)render();});
 }
-function info(p){
-  const i=p.y*NW+p.w;
-  return `${Y0+p.y} · sem ${p.w+1} (${range(Y0+p.y,p.w)}) · ${fmt(Dcur[i])} hotspots · z ${Zcur[i]>=0?'+':''}${Zcur[i].toFixed(1)}`;
-}
-$('cal').addEventListener('pointermove',e=>{const p=pick(e);if(p)$('tip').textContent=info(p);});
-$('cal').addEventListener('pointerdown',e=>{const p=pick(e);if(p){S.hl={y:p.y,w0:p.w,w1:p.w};drawCal();$('tip').textContent=info(p);}});
-window.addEventListener('resize',()=>{if(C)render();});
 
-$('tip').textContent='Toca o pasa el cursor sobre el calendario.';
-function start(){
-  const b=$('badge');
-  if(REAL){b.textContent='DATOS REALES · NASA FIRMS';b.style.background='#0b7285';}
-  else b.textContent='DATOS SINTÉTICOS DE DEMOSTRACIÓN';
-  buildCells();initMap();C=compute();render();
-}
-const getJSON=u=>fetch(u).then(r=>r.ok?r.json():null).catch(()=>null);
-Promise.all([getJSON('data/harmonized.json'),getJSON('data/tolima.json')]).then(([j,t])=>{
-  if(j&&j.meta&&j.cells){REAL=j;if(j.meta.band_cuts)BAND_CUTS=j.meta.band_cuts;}
-  if(t&&t.cells)TOL=t;
-}).finally(start);
-window.__fire={get C(){return C;},compute,zscores,critical};
+fetch('data/hotspots.json').then(r=>{if(!r.ok)throw 0;return r.json();}).then(j=>{
+  D=j;prep();
+  $('badge').textContent='DATOS REALES · NASA FIRMS';$('badge').style.background='#0b7285';
+  $('tip').textContent='Toca o pasa el cursor sobre el calendario; al tocar una semana se muestra en el mapa.';
+  bind();initMap();styleMpios();C=compute();render();drawHotspots();
+  window.__fire={D,get C(){return C;},compute};
+}).catch(()=>{
+  $('badge').textContent='SIN DATOS';
+  $('map').innerHTML='<p class="small" style="padding:12px">No se pudo cargar data/hotspots.json. Abre la página desde un servidor (python -m http.server) o desde GitHub Pages, no con doble clic.</p>';
+});
 })();
 </script>
 </body>
