@@ -1007,7 +1007,14 @@ function ensoRange(){
 }
 let hlsLabel='🛰 Buscando la imagen más despejada…',hlsTok=0;
 async function updateHls(){
-  if(!map||!baseHls)return;if(useGls()){hlsTok++;return;}const tk=++hlsTok,c=map.getCenter(),t=Math.min(S.to,dayOf(2026,1,28));
+  if(!map||!baseHls)return;if(useGls()){hlsTok++;return;}const tk=++hlsTok,c=map.getCenter(),gap=s2Gap();
+  if(gap){const Y=S.year,mid=dayOf(Y,7,15),y0=Math.max(HLS0,dayOf(Y,0,1)),y1=Math.min(dayOf(Y,11,31),dayOf(2026,1,28));
+    let r=await hlsFind(c.lat,c.lng,mid,-1,mid-y0+1);if(!r)r=await hlsFind(c.lat,c.lng,mid+1,+1,y1-mid);
+    if(tk!==hlsTok||!s2Gap())return;
+    if(r){baseHls.setUrl(hlsUrl(r.lay,r.d));hlsLabel=`🛰 ${HLSN[r.lay]} 30 m · ${nice(r.d)} · ${r.cloud} % nubes (imagen más despejada de ${Y}; no hay mosaico Sentinel-2 10 m de ese año)`;}
+    else hlsLabel=`🛰 No hallé una imagen despejada de ${Y}`;
+    const el=$('mapInfo');if(el&&baseMode==='nasa')el.innerHTML=`<div class="img" style="border:0;margin:0;padding:0">${hlsLabel}</div>`;return;}
+  const t=Math.min(S.to,dayOf(2026,1,28));
   if(t<HLS0+5){hlsLabel='🛰 Imagen del día: disponible desde abril de 2013';baseHls.setUrl('');const el=$('mapInfo');if(el&&baseMode==='hls')el.innerHTML=`<div class="img" style="border:0;margin:0;padding:0">${hlsLabel}</div>`;return;}
   let r=await hlsFind(c.lat,c.lng,t,-1,60);if(!r)r=await hlsFind(c.lat,c.lng,t+1,+1,30);
   if(tk!==hlsTok||useGls())return;
@@ -1017,11 +1024,13 @@ async function updateHls(){
 }
 // Landsat 7 (GLS 2000, NASA/USGS vía Esri) para 2000–2009: una sola imagen del Tolima con contraste uniforme
 let baseGls=null;
-const useGls=()=>S.year<=2009&&(baseMode==='nasa'||baseMode==='hls');
+const useGls=()=>S.year<=2012&&(baseMode==='nasa'||baseMode==='hls');
+// años sin mosaico anual EOX (2013–2015, 2017): imagen HLS más despejada de ese mismo año
+const s2Gap=()=>baseMode==='nasa'&&S.year>=2013&&!S2Y.includes(S.year);
 function syncBase(){
   if(!map||CMP)return;
   if(!baseGls)baseGls=L.imageOverlay('assets/landsat7_2000_tolima.jpg',[[2.82,-76.24378],[5.37,-74.32622]],{attribution:'Landsat 7 · Global Land Survey 2000 (NASA/USGS), servicio Esri',opacity:1,zIndex:1});
-  const want=useGls()?baseGls:({year:baseYear,nasa:baseNasa,osm:baseOSM,hls:baseHls})[baseMode];
+  const want=useGls()?baseGls:s2Gap()?baseHls:({year:baseYear,nasa:baseNasa,osm:baseOSM,hls:baseHls})[baseMode];
   [baseYear,baseNasa,baseOSM,baseHls,baseGls].forEach(l=>{if(l&&l!==want&&map.hasLayer(l))map.removeLayer(l);});
   if(want&&!map.hasLayer(want)){want.addTo(map);if(want.bringToBack)want.bringToBack();}
 }
@@ -1035,8 +1044,9 @@ function updateBase(){
   const ex=e?{nino:'Menos lluvias en el Tolima: más riesgo de incendios.',nina:'Más lluvias en el Tolima: menos incendios.',neutral:'Ni El Niño ni La Niña en este periodo.'}[e.fase]:'';
   let img='';
   if(baseMode==='year')img='🛰 '+ysrc.lab;
-  else if(useGls())img='🛰 Landsat 7 · 30 m · 16 jul 2001 (mosaico GLS 2000 de NASA/USGS). Para 2002–2012 no hay imágenes nítidas: Landsat 7 quedó con franjas desde 2003.';
+  else if(useGls())img='🛰 Landsat 7 · 30 m · 16 jul 2001 (mosaico GLS 2000 de NASA/USGS). Para 2002–2012 no hay imágenes nítidas del Tolima: Landsat 7 quedó con franjas desde 2003 y Landsat 5 casi siempre está nublado.';
   else if(baseMode==='hls'){img=hlsLabel;updateHls();}
+  else if(s2Gap()){img=hlsLabel;updateHls();}
   else if(baseMode==='nasa'){const y=s2Year();img=`🛰 Sentinel-2 10 m · mosaico sin nubes ${y}${y!==S.year?` (el más cercano a ${S.year})`:''}`;}
   else if(false){img=`🛰 NASA MODIS del ${nice(nasaPick.d)}${nasaPick.pct!=null?` · ${nasaPick.pct} % nubes`:''}${nasaPick.why==='cerca'?' (día más cercano con menos de 30 % de nubes)':nasaPick.why==='nublado'?' (no hubo días con menos de 30 % de nubes cerca; este es el menos nublado)':''}`;}
   else img='🗺 OpenStreetMap';
@@ -1107,7 +1117,7 @@ function layersControl(){
     const d=stop(L.DomUtil.create('div','mctl layers'+(innerWidth<700?' closed':'')));
     d.innerHTML=`<div class="head"><span>⚙ Capas y filtros</span><span id="lyTog">${innerWidth<700?'▾':'▴'}</span></div>
     <div class="body">
-      <div class="blk"><h4>Mapa base</h4><div class="seg" id="segBase"><button data-b="nasa" class="on" title="Mosaico anual Sentinel-2 sin nubes (2016, 2018–2025): cambia cada año">Sentinel-2 anual</button><button data-b="hls" title="Imagen de 30 m (Sentinel-2/Landsat) más despejada cerca de la fecha elegida (desde 2013)">Imagen del día</button><button data-b="year" title="Esri alta resolución (se actualiza cada pocos años)">Esri</button><button data-b="osm">Mapa</button></div></div>
+      <div class="blk"><h4>Mapa base</h4><div class="seg" id="segBase"><button data-b="nasa" class="on" title="Cambia cada año: mosaico Sentinel-2 sin nubes (2016, 2018–2025); 2013–2015 y 2017: imagen más despejada de ese año; 2000–2012: Landsat 7">Sentinel-2 anual</button><button data-b="hls" title="Imagen de 30 m (Sentinel-2/Landsat) más despejada cerca de la fecha elegida (desde 2013)">Imagen del día</button><button data-b="year" title="Esri alta resolución (se actualiza cada pocos años)">Esri</button><button data-b="osm">Mapa</button></div></div>
       <div class="blk"><h4>Confianza</h4><div class="chips" id="confChips">
         <span class="chip" data-c="0"><span class="dot" style="background:var(--c0)"></span>Baja</span>
         <span class="chip on" data-c="1"><span class="dot" style="background:var(--c1)"></span>Nominal</span>
@@ -1475,7 +1485,7 @@ function initFx(){
 }
 
 /* ---------- imágenes HLS fechadas (Sentinel-2 / Landsat 30 m, NASA GIBS) ---------- */
-const HLS0=dayOf(2013,3,11);
+const HLS0=dayOf(2013,3,11),S30_0=dayOf(2015,10,28);
 const hlsUrl=(lay,d)=>`https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/HLS_${lay}_Nadir_BRDF_Adjusted_Reflectance/default/${iso(d)}/GoogleMapsCompatible_Level12/{z}/{y}/{x}.png`;
 const HLSN={S30:'Sentinel-2',L30:'Landsat'};
 const hlsCache=new Map();
@@ -1500,7 +1510,7 @@ async function hlsFind(lat,lon,start,dir,maxDays=90){
   const last=dayOf(2026,1,28);
   for(const [lay,ok] of [['S30',okS],['L30',okL]]){
     for(let k=0;k<maxDays;k+=15){
-      const ds=[];for(let j=k;j<Math.min(maxDays,k+15);j++){const d=start+dir*j;if(d>=HLS0&&d<=last)ds.push(d);}
+      const ds=[];for(let j=k;j<Math.min(maxDays,k+15);j++){const d=start+dir*j;if(d>=(lay==='S30'?S30_0:HLS0)&&d<=last)ds.push(d);}
       if(!ds.length)break;
       const rs=await Promise.all(ds.map(d=>hlsStat(lay,d,lat,lon)));
       for(const r of rs)if(ok(r))return r;
