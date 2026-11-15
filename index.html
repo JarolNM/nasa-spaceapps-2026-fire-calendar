@@ -184,6 +184,12 @@ footer .lg{width:110px;height:72px;border-radius:12px;background:#fff center/con
 #guide .bubble .gt{display:block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--fire);margin-bottom:4px}
 #guide .bubble.pop{animation:gpop .45s cubic-bezier(.2,1.4,.4,1)}
 @keyframes gpop{from{transform:scale(.85) translateY(8px);opacity:0}to{transform:none;opacity:1}}
+.ensob{display:none;align-items:center;gap:7px;font:700 12px var(--font),sans-serif;border-radius:99px;padding:6px 11px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;white-space:nowrap}
+.ensob i{width:10px;height:10px;border-radius:50%;flex:none}
+.ensob small{font-weight:500;color:var(--ink3)}
+.ensob.nino{background:rgba(224,49,49,.12);border-color:rgba(224,49,49,.4)}.ensob.nino i{background:#e03131;animation:pulse 2s infinite}
+.ensob.nina{background:rgba(28,126,214,.12);border-color:rgba(28,126,214,.4)}.ensob.nina i{background:#1c7ed6}
+.ensob.neutral i{background:#adb5bd}
 .mapinfo{background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(6px);color:var(--ink);border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.25);padding:8px 10px;font:12px/1.4 var(--font),sans-serif;max-width:270px}
 .mapinfo .enso{display:flex;align-items:center;gap:8px;font-weight:700}
 .mapinfo .enso i{width:12px;height:12px;border-radius:50%;flex:none}
@@ -426,7 +432,8 @@ body.intro-on{overflow:hidden}
         <div class="pane on" id="p-cal">
           <div class="ph">
             <div><h3 id="calTitle">Calendario de quema</h3><p id="calSub"></p></div>
-            <div class="ctrls">
+            <div class="ctrls" style="align-items:center">
+              <button class="ensob" id="ensoBadge" title="Fenómeno de El Niño / La Niña en el periodo elegido (NOAA, índice ONI)"></button>
               <div class="seg" id="segGran"><button data-v="m" class="on">Mes</button><button data-v="w">Semana</button><button data-v="d">Día</button></div>
             </div>
           </div>
@@ -624,6 +631,7 @@ body.intro-on{overflow:hidden}
 <div id="tt"></div>
 
 <div id="guide">
+  <button id="guideMute" title="Activar o silenciar la voz de Sati" style="pointer-events:auto;align-self:flex-start;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;width:34px;height:34px;cursor:pointer;font-size:15px;box-shadow:0 4px 12px rgba(0,0,0,.15)">🔊</button>
   <div class="bubble" id="guideText">¡Hola! Soy <b>Sati</b>. Elige un año arriba y explora el mapa y las gráficas.</div>
   <svg class="mini" viewBox="60 20 80 120" id="guideBot" aria-hidden="true">
     <path d="M100 52V36" stroke="#0b2a5b" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="32" r="6" fill="#e8590c"/>
@@ -761,8 +769,16 @@ const TIPS={
   mun:'Comparamos por cada 100 km², así un municipio grande no gana solo por tamaño.',
   crit:'Estos periodos tuvieron mucho más fuego de lo normal. 2015 y 2024 fueron años de <b>El Niño</b>.'
 };
-let sayT=0;
-function say(html,title='Sati te cuenta',ms=11000){const g=$('guideText');clearTimeout(sayT);g.style.display='';
+let sayT=0,voiceOn=true,satiVoice=null;
+try{voiceOn=localStorage.getItem('satiVoz')!=='0';}catch(e){}
+function pickSatiVoice(){if(!window.speechSynthesis)return;const vs=speechSynthesis.getVoices().filter(v=>/^es/i.test(v.lang));
+  satiVoice=vs.find(v=>/es-(CO|MX|US|419)/i.test(v.lang)&&/natural|online|google/i.test(v.name))||vs.find(v=>/natural|online|google/i.test(v.name))||vs.find(v=>/es-(CO|MX|US|419)/i.test(v.lang))||vs[0]||null;}
+if(window.speechSynthesis){pickSatiVoice();speechSynthesis.addEventListener('voiceschanged',pickSatiVoice);}
+function speak(html){
+  if(!voiceOn||!window.speechSynthesis)return;const hw=document.getElementById('howto');if(hw&&hw.classList.contains('on'))return;
+  const t=html.replace(/<br\s*\/?>/g,'. ').replace(/<[^>]+>/g,'').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,'').replace(/k ≈ 6/g,'k cercano a 6').replace(/#(\d+)/g,'número $1').replace(/ONI/g,'O N I').replace(/ \+(\d)/g,' más $1').replace(/ −(\d)/g,' menos $1').replace(/\s+/g,' ').trim();
+  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=satiVoice?satiVoice.lang:'es-ES';if(satiVoice)u.voice=satiVoice;u.rate=1.05;u.pitch=1.15;speechSynthesis.speak(u);}
+function say(html,title='Sati te cuenta',ms=11000){speak(html);const g=$('guideText');clearTimeout(sayT);g.style.display='';
   g.classList.remove('pop');void g.offsetWidth;g.innerHTML=`<span class="gt">${title}</span>${html}`;g.style.opacity=1;g.classList.add('pop');
   sayT=setTimeout(()=>g.style.opacity=0,ms);}
 const EVENTOS={
@@ -797,8 +813,11 @@ const FXFACT={
   sin_identificar:'Este punto se calienta una y otra vez durante años en el mismo lugar. Un incendio real no se repite así: probablemente es un horno o una industria. ¿Sabes qué hay aquí?'
 };
 let hsSaid=0;
-let tipT=0;function tip(k){const g=$('guideText');g.style.display='';g.style.opacity=0;clearTimeout(tipT);setTimeout(()=>{g.innerHTML=TIPS[k];g.style.opacity=1;},200);tipT=setTimeout(()=>g.style.opacity=0,9000);}
+function tip(k){say(TIPS[k],({cal:'Calendario',season:'Temporadas',years:'Por año',mun:'Municipios',crit:'Periodos críticos'})[k]||'Sati te cuenta');}
 setTimeout(()=>{$('guideText').style.opacity=0;},9000);
+const gm=$('guideMute');const setMuteIcon=()=>gm.textContent=voiceOn?'🔊':'🔇';setMuteIcon();
+gm.onclick=()=>{voiceOn=!voiceOn;try{localStorage.setItem('satiVoz',voiceOn?'1':'0');}catch(e){}setMuteIcon();
+  if(!voiceOn&&window.speechSynthesis)speechSynthesis.cancel();else say('¡Listo! Ahora te hablo cuando hagas algo en el tablero.','Voz activada',6000);};
 $('guideBot').onclick=()=>{const g=$('guideText');g.style.display=g.style.display==='none'?'':'none';};
 
 function countUp(el,to,dec=0,suf=''){const t0=performance.now();
@@ -911,7 +930,12 @@ function updateBase(){
     img=k?`🛰 Imagen Esri, versión ${k.fecha.slice(0,7)}${S.year<2014?' (no hay archivo antes de 2014)':''}`:'🛰 Imagen Esri actual';}
   else if(baseMode==='nasa')img=`🛰 Imagen NASA del ${nice(S.to-S.from<=31?S.from:Math.round((S.from+S.to)/2))} (puede tener nubes)`;
   else img='🗺 OpenStreetMap';
-  el.innerHTML=(e?`<div class="enso ${e.fase}"><i></i>${lab} <span style="font-weight:500;color:var(--ink3)">ONI ${e.fase==='neutral'?(e.avg>=0?'+':'')+e.avg.toFixed(1).replace('.',','):'pico '+(e.fase==='nino'?'+':'−')+e.peak.toFixed(1).replace('.',',')}</span></div><div class="ex">${ex}</div>`:'')+`<div class="img">${img}</div>`;
+  el.innerHTML=`<div class="img" style="border:0;margin:0;padding:0">${img}</div>`;
+  const bd=$('ensoBadge');
+  if(bd){if(e){bd.style.display='inline-flex';bd.className='ensob '+e.fase;
+      bd.innerHTML=`<i></i>${lab}<small>ONI ${e.fase==='neutral'?(e.avg>=0?'+':'')+e.avg.toFixed(1).replace('.',','):(e.fase==='nino'?'+':'−')+e.peak.toFixed(1).replace('.',',')}</small>`;
+      bd.onclick=()=>say(`<b>${lab}</b> en el periodo elegido. ${ex} El índice ONI de la NOAA mide cuánto se calienta (+) o enfría (−) el océano Pacífico; desde 0,5 °C hay El Niño o La Niña.`,'Clima');}
+    else bd.style.display='none';}
 }
 function applyYM(){
   const y=S.year,m=S.month;
@@ -1316,8 +1340,17 @@ function bind(){
     $('tabs').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
     document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id==='p-'+b.dataset.t));
     S.tab=b.dataset.t;tip(S.tab);renderCharts();});
+  const SEGMSG={
+    harm:['Armonizado','Antes de 2012 multiplicamos MODIS por <b>k ≈ 6</b> (VIIRS ve unas seis veces más). Así los 26 años se comparan en la misma escala y el salto de 2012 desaparece.'],
+    raw:['Sin armonizar','Estos son los datos tal cual: MODIS hasta 2011 y VIIRS desde 2012. ¿Ves cómo todo se oscurece desde 2012? No hubo más fuego: <b>cambió el satélite</b>.'],
+    int:['¿Cuánto fuego?','Cada cuadro muestra cuántos hotspots hubo. <b>Más oscuro = más fuego.</b> Las columnas oscuras caen en las temporadas secas.'],
+    anom:['¿Fue normal?','Ahora comparo cada periodo con lo que es <b>normal</b> para esa época del año. <b>Rojo</b> = mucho más fuego de lo normal; <b>azul</b> = menos. Así encuentras años raros, como los de El Niño.'],
+    m:['Vista por mes','Cada fila es un año y cada columna un mes. El número dentro del cuadro es la cantidad de hotspots.'],
+    w:['Vista por semana','Las 52 semanas de cada año: sirve para ver con precisión cuándo empieza y termina cada temporada de quema.'],
+    d:['Vista por día','Cada cuadro es un día del año elegido, como un calendario de pared. Toca un día y te muestro sus hotspots en el mapa.']};
   const seg=(id,key)=>$(id).querySelectorAll('button').forEach(b=>b.onclick=()=>{
-    $(id).querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));S[key]=b.dataset.v;drawCal();});
+    $(id).querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));S[key]=b.dataset.v;drawCal();
+    const m=SEGMSG[b.dataset.v];if(m)say(m[1],m[0]);});
   seg('segGran','gran');seg('segView','view');seg('segSrc','src');
   // controles dentro del mapa
   document.querySelectorAll('#confChips [data-c]').forEach(c=>c.onclick=()=>{c.classList.toggle('on');S.conf[+c.dataset.c]=c.classList.contains('on');refresh();
