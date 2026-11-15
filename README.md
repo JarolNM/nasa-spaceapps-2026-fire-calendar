@@ -37,5 +37,18 @@ burning-activity calendar for a selected area of interest (pilot: Tolima, Colomb
 - Dos temporadas de quema: enero–marzo y agosto–septiembre (pico climatológico: 27 ago – 2 sep).
 - FIRMS marca 731 hotspots de volcán (Villahermosa, Casabianca: Nevado del Ruiz / Cerro Bravo) y 1.489 de fuentes fijas (Ibagué, Espinal, Chaparral).
 
+## Validación externa
+Comparación con Perea-Ardila & Murillo-Sandoval, *Tendencia de incendios forestales en el Tolima* (Nota Regional CERE 21, Universidad del Tolima), que usa focos MODIS 2001–2022:
+
+| Indicador (MODIS 2001–2022) | Nota CERE 21 | Este proyecto (todas las confianzas) |
+|---|---|---|
+| Total de focos | 7.334 | 7.678 (+4,7 %) |
+| Año con más focos | 2003 (7,81 %) | 2003 (7,66 %) |
+| Segundo año | 2015 (7,15 %) | 2015 (7,14 %) |
+| Chaparral, Ortega, Natagaima y Ataco | 24 % | 23,9 % |
+| Espinal, Ibagué, San Luis y Rovira | 15,42 % | 15,8 % |
+
+La nota asocia 2003 y 2015 con El Niño. Con el filtro por defecto (nominal + alta, sin fuentes fijas) el grupo de Ibagué baja a 12,6 %, porque se excluyen las fuentes fijas industriales y urbanas de Ibagué y Espinal.
+
 ## Créditos de datos
 NASA FIRMS (MODIS, VIIRS) · Sentinel-2 cloudless by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2020) · © OpenStreetMap contributors · DANE, Marco Geoestadístico Nacional.

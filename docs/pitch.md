@@ -26,6 +26,7 @@
 ## 4. Validación (20 s)
 - En el solapamiento, MODIS×k reproduce VIIRS con **R² = 0,66 / 0,85 / 0,82** (norte/centro/sur, bloques de 4 semanas) y
   k = 5,91 en todo el Tolima.
+- **Validación externa:** coincide con la Nota Regional CERE 21 (Universidad del Tolima): mismos años pico (2003 y 2015, El Niño), mismo reparto por municipios (24 % en Chaparral, Ortega, Natagaima y Ataco) y total de focos MODIS a menos de 5 %.
 - [Opcional] Un periodo crítico verificado con cicatrices de quema en Sentinel-2.
 
 ## 5. Limitaciones (15 s)
