@@ -127,5 +127,8 @@
 "Busco la imagen de 30 m más despejada cerca de la fecha que elijas (Sentinel-2 o Landsat, desde 2013). Así puedes ver el paisaje de ese momento, incluso cicatrices de quema.",
 "Estoy buscando las imágenes de satélite más despejadas de antes y después del incendio…",
 "Estoy buscando en el archivo de Esri las fotos de alta resolución tomadas antes y después del incendio…",
-"Arrastra la barra blanca para comparar. A la izquierda, la foto de antes; a la derecha, la de después. Acerca el mapa para ver el detalle. Para salir, toca el botón naranja o la tecla Escape."
+"Arrastra la barra blanca para comparar. A la izquierda, la foto de antes; a la derecha, la de después. Acerca el mapa para ver el detalle. Para salir, toca el botón naranja o la tecla Escape.",
+"Estoy buscando las imágenes Sentinel-2 más despejadas de justo antes y justo después del incendio…",
+"No encontré imágenes despejadas de antes y después para este incendio (mucha nubosidad en esas fechas).",
+"Para incendios anteriores a abril de 2013 no hay imágenes Sentinel-2 o Landsat 8 para comparar el antes y el después."
 ]
