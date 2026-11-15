@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Calendario de Quema MODIS-VIIRS</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{--bg:#f7f6f2;--card:#fff;--fg:#1f2328;--mut:#6b7280;--acc:#d9480f;--line:#e5e7eb;--ok:#0b7285}
+@media (prefers-color-scheme:dark){:root{--bg:#14110f;--card:#1e1a17;--fg:#ece7e1;--mut:#9ca3af;--line:#2d2723}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:920px;margin:0 auto;padding:14px 14px 40px}
+h1{font-size:20px;margin:4px 0 2px}
+h2{font-size:15px;margin:0 0 8px}
+.sub{color:var(--mut);margin:0 0 8px;font-size:13px}
+.badge{display:inline-block;background:var(--acc);color:#fff;font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px;letter-spacing:.03em}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:12px}
+#map{height:280px;border-radius:8px;border:1px solid var(--line);background:#e8e4dc}
+.row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0;align-items:center}
+button,.seg label{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;padding:6px 10px;cursor:pointer}
+button.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.small{font-size:12px;color:var(--mut)}
+canvas{width:100%;display:block;touch-action:pan-y}
+#tip{min-height:20px;font-size:13px;margin-top:6px}
+#legend{height:10px;border-radius:5px;margin-top:6px}
+.lg{display:flex;justify-content:space-between;font-size:11px;color:var(--mut)}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.card{border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.card b{display:block;font-size:18px}
+.card span{font-size:12px;color:var(--mut)}
+ol{margin:0;padding-left:20px}
+ol li{margin:4px 0}
+ol button{padding:3px 8px;font-size:13px}
+details{margin-top:12px;font-size:13px;color:var(--mut)}
+pre{overflow:auto;background:var(--bg);padding:8px;border-radius:8px;font-size:12px}
+label.chk{font-size:13px;display:flex;gap:6px;align-items:center}
+</style>
+</head>
+<body>
+<main>
+<h1>Calendario de actividad de quema</h1>
+<p class="sub">Armonización de hotspots MODIS + VIIRS · Llanos Colombia–Venezuela (piloto)</p>
+<span class="badge">DATOS SINTÉTICOS DE DEMOSTRACIÓN</span>
+
+<section>
+  <h2>1 · Área de interés</h2>
+  <div id="map"></div>
+  <div class="row" id="presets">
+    <button data-p="all">Todo</button>
+    <button data-p="n">Norte (≥7°N)</button>
+    <button data-p="c">Centro (5–7°N)</button>
+    <button data-p="s">Sur (&lt;5°N)</button>
+    <button data-p="none">Limpiar</button>
+  </div>
+  <p class="small" id="selinfo"></p>
+  <p class="small">Toca celdas (0,25°) para sumarlas o quitarlas. Las grises son fuentes fijas urbanas/industriales.</p>
+</section>
+
+<section>
+  <h2>2 · Calendario semanal (año × semana)</h2>
+  <div class="row seg" id="segSrc">
+    <button data-v="harm" class="on">Armonizado</button>
+    <button data-v="raw">Crudo (sin armonizar)</button>
+  </div>
+  <div class="row seg" id="segView">
+    <button data-v="int" class="on">Intensidad</button>
+    <button data-v="anom">Anomalía (z)</button>
+  </div>
+  <div class="row"><label class="chk"><input type="checkbox" id="mask" checked> Excluir zonas urbanas/industriales</label></div>
+  <canvas id="cal"></canvas>
+  <div id="legend"></div>
+  <div class="lg"><span id="lg0"></span><span id="lg1"></span></div>
+  <div id="tip"></div>
+  <div class="cards" id="cards"></div>
+</section>
+
+<section>
+  <h2>3 · Totales anuales: crudo vs armonizado</h2>
+  <canvas id="bars"></canvas>
+  <p class="small">Gris = crudo (MODIS hasta 2011, VIIRS desde 2012). Naranja = armonizado (MODIS×k hasta 2011). El salto del crudo en 2012 es el cambio de sensor, no más fuego.</p>
+</section>
+
+<section>
+  <h2>4 · Periodos críticos (armonizado, z ≥ 1,5)</h2>
+  <p class="small">Solo semanas de temporada activa (≥ 20 % del pico climatológico), para no alarmar por variaciones mínimas en época húmeda.</p>
+  <ol id="crit"></ol>
+</section>
+
+<details>
+  <summary>Metodología y formato de datos reales</summary>
+  <p>1) Hotspots de FIRMS agregados a grilla de 0,25° y semana. 2) k = Σ VIIRS / Σ MODIS en el solapamiento 2012–2025 sobre el AOI seleccionado. 3) Serie armonizada = MODIS×k antes de 2012 y VIIRS después. 4) Anomalía z contra la climatología de cada semana (±1 semana). Aquí todo se genera con una función sintética; para datos reales basta reemplazar <code>compute()</code> por la lectura de:</p>
+  <pre>data/harmonized.json
+[{"cell":"r-c","lat":..,"lon":..,"urban":false,
+  "modis":[[wk0..wk52] por año 2000-2025],
+  "viirs":[[wk0..wk52] por año 2012-2025]}]</pre>
+</details>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(()=>{
+const Y0=2000,Y1=2025,NY=Y1-Y0+1,NW=53,YV=2012,SENS=0.35;
+const LAT0=3,LAT1=9,LON0=-73,LON1=-66,STEP=0.25,NR=24,NC=28;
+const MONTHS=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const $=id=>document.getElementById(id);
+const S={src:'harm',view:'int',mask:true,hl:null};
+const fmt=n=>Math.round(n).toLocaleString('es');
+
+function rnd(a,b,c,d){
+  let h=Math.imul(a+1,374761393)^Math.imul(b+7,668265263)^Math.imul(c+13,1274126177)^Math.imul(d+29,2246822519);
+  h=Math.imul(h^(h>>>15),2246822519);h=Math.imul(h^(h>>>13),3266489917);h^=h>>>16;
+  return (h>>>0)/4294967296;
+}
+function gauss(u,v){return Math.sqrt(-2*Math.log(u+1e-9))*Math.cos(2*Math.PI*v);}
+
+/* ---------- modelo sintético ---------- */
+const seas=Array.from({length:NW},(_,w)=>Math.exp(1.8*(Math.cos(2*Math.PI*(w-5)/NW)-1)));
+const YF={2005:1.35,2010:1.5,2015:1.3,2016:1.45,2019:1.2,2020:1.3,2024:1.6};
+const yf=y=>YF[y]||1;
+const reg=new Float64Array(NY*NW);
+for(let y=0;y<NY;y++)for(let w=0;w<NW;w++)reg[y*NW+w]=gauss(rnd(y,w,77,0),rnd(y,w,78,0));
+
+const cells=[];
+for(let r=0;r<NR;r++)for(let c=0;c<NC;c++){
+  const g=gauss(rnd(r,c,1,0),rnd(r,c,2,0));
+  const smooth=.5+.5*Math.sin(r/3.5+1)*Math.cos(c/4.5);
+  const urban=rnd(r,c,3,0)<0.05;
+  cells.push({id:r*NC+c,r,c,urban,
+    base:urban?0.4:Math.exp(.8*g)*(.25+1.4*smooth),
+    lat0:LAT1-(r+1)*STEP,lat1:LAT1-r*STEP,lon0:LON0+c*STEP,lon1:LON0+(c+1)*STEP,sel:true});
+}
+
+function compute(){
+  const use=cells.filter(c=>c.sel&&!(S.mask&&c.urban));
+  const M=new Float64Array(NY*NW),V=new Float64Array(NY*NW);
+  for(const c of use){
+    for(let y=0;y<NY;y++){const yr=Y0+y;
+      for(let w=0;w<NW;w++){
+        const i=y*NW+w;
+        const T=c.urban?0.4:c.base*seas[w]*yf(yr)*Math.exp(.3*reg[i])*Math.exp(.5*(rnd(c.id,yr,w,1)-.5));
+        M[i]+=8*SENS*T*Math.exp(.5*(rnd(c.id,yr,w,2)-.5));
+        if(yr>=YV)V[i]+=8*T*Math.exp(.3*(rnd(c.id,yr,w,3)-.5));
+      }
+    }
+  }
+  let sv=0,sm=0;
+  for(let y=YV-Y0;y<NY;y++)for(let w=0;w<NW;w++){sv+=V[y*NW+w];sm+=M[y*NW+w];}
+  const k=sm>0?sv/sm:1;
+  const R=new Float64Array(NY*NW),H=new Float64Array(NY*NW);
+  for(let y=0;y<NY;y++)for(let w=0;w<NW;w++){
+    const i=y*NW+w,pre=Y0+y<YV;
+    R[i]=pre?M[i]:V[i];H[i]=pre?M[i]*k:V[i];
+  }
+  return {R,H,k,n:use.length,nUrb:cells.filter(c=>c.sel&&c.urban).length,empty:use.length===0};
+}
+
+function zscores(D){
+  const z=new Float64Array(NY*NW);
+  for(let w=0;w<NW;w++){
+    const w0=Math.max(0,w-1),w1=Math.min(NW-1,w+1);
+    let s=0,n=0;
+    for(let y=0;y<NY;y++)for(let k=w0;k<=w1;k++){s+=D[y*NW+k];n++;}
+    const m=s/n;let q=0;
+    for(let y=0;y<NY;y++)for(let k=w0;k<=w1;k++){const d=D[y*NW+k]-m;q+=d*d;}
+    const sd=Math.max(Math.sqrt(q/n),m*0.05+1e-9);
+    for(let y=0;y<NY;y++)z[y*NW+w]=(D[y*NW+w]-m)/sd;
+  }
+  return z;
+}
+
+function critical(zH,H){
+  const mean=new Float64Array(NW);
+  for(let w=0;w<NW;w++){let s=0;for(let y=0;y<NY;y++)s+=H[y*NW+w];mean[w]=s/NY;}
+  const thr=0.2*Math.max(...mean);
+  const act=w=>mean[w]>=thr;
+  const out=[];
+  for(let y=0;y<NY;y++){
+    let w=0;
+    while(w<NW){
+      if(act(w)&&zH[y*NW+w]>=1.5){
+        let w1=w,pk=zH[y*NW+w];
+        while(w1+1<NW&&act(w1+1)&&zH[y*NW+w1+1]>=1.2){w1++;pk=Math.max(pk,zH[y*NW+w1]);}
+        out.push({y,w0:w,w1,pk});w=w1+1;
+      }else w++;
+    }
+  }
+  out.sort((a,b)=>b.pk-a.pk);
+  return out.slice(0,6);
+}
+
+/* ---------- utilidades ---------- */
+function ds(y,w){
+  const a=new Date(Date.UTC(y,0,1+7*w));
+  return a.getUTCDate()+' '+MONTHS[a.getUTCMonth()];
+}
+function range(y,w0,w1){
+  w1=w1===undefined?w0:w1;
+  const e=w1>=NW-1?new Date(Date.UTC(y,11,31)):new Date(Date.UTC(y,0,7+7*w1));
+  return ds(y,w0)+' – '+e.getUTCDate()+' '+MONTHS[e.getUTCMonth()];
+}
+const HEAT=[[255,247,188],[254,196,79],[236,112,20],[153,52,4],[76,25,2]];
+const DIV=[[33,102,172],[146,197,222],[247,247,247],[244,165,130],[178,24,43]];
+function ramp(st,t){
+  t=Math.max(0,Math.min(1,t));
+  const x=t*(st.length-1),i=Math.min(st.length-2,Math.floor(x)),f=x-i,a=st[i],b=st[i+1];
+  return `rgb(${Math.round(a[0]+(b[0]-a[0])*f)},${Math.round(a[1]+(b[1]-a[1])*f)},${Math.round(a[2]+(b[2]-a[2])*f)})`;
+}
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||'#888';}
+function fit(cv,h){
+  const dpr=window.devicePixelRatio||1,w=cv.clientWidth||360;
+  cv.width=w*dpr;cv.height=h*dpr;cv.style.height=h+'px';
+  const g=cv.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);
+  return [g,w,h];
+}
+
+/* ---------- mapa ---------- */
+function cellStyle(c){
+  const t=Math.min(1,c.base/3);
+  return {color:c.sel?css('--ok'):'#999',weight:c.sel?1.4:.3,
+    fillColor:c.urban?'#6b7280':ramp(HEAT,t),fillOpacity:c.sel?.5:.08};
+}
+let map=null;
+function initMap(){
+  if(typeof L==='undefined'){$('map').innerHTML='<p class="small" style="padding:12px">No se pudo cargar el mapa (sin conexión). Usa los botones de selección.</p>';return;}
+  map=L.map('map').setView([(LAT0+LAT1)/2,(LON0+LON1)/2],6);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO',maxZoom:12}).addTo(map);
+  for(const c of cells){
+    c.rect=L.rectangle([[c.lat0,c.lon0],[c.lat1,c.lon1]],cellStyle(c)).addTo(map);
+    c.rect.on('click',()=>{c.sel=!c.sel;c.rect.setStyle(cellStyle(c));refresh();});
+  }
+  map.fitBounds([[LAT0,LON0],[LAT1,LON1]]);
+}
+function setSel(fn){
+  for(const c of cells){c.sel=fn(c);if(c.rect)c.rect.setStyle(cellStyle(c));}
+  refresh();
+}
+
+/* ---------- dibujo ---------- */
+let C=null,G=null,Dcur=null,Zcur=null;
+function drawCal(){
+  const [g,W]=fit($('cal'),16+NY*11+2);
+  const left=30,top=16,cw=(W-left)/NW,ch=11;
+  G={left,top,cw,ch};
+  g.clearRect(0,0,W,1000);
+  if(C.empty){g.fillStyle=css('--mut');g.font='13px system-ui';g.fillText('Selecciona al menos una celda',left,top+20);return;}
+  const anom=S.view==='anom';
+  let vmax=1;
+  if(!anom){const s=Array.from(Dcur).sort((a,b)=>a-b);vmax=s[Math.floor(s.length*0.98)]||1;}
+  for(let y=0;y<NY;y++)for(let w=0;w<NW;w++){
+    const i=y*NW+w;
+    g.fillStyle=anom?ramp(DIV,(Zcur[i]+3)/6):ramp(HEAT,Math.sqrt(Dcur[i]/vmax));
+    g.fillRect(left+w*cw,top+y*ch,Math.ceil(cw),ch-1);
+  }
+  g.fillStyle=css('--mut');g.font='9px system-ui';
+  for(let y=0;y<NY;y+=2)g.fillText(String(Y0+y),0,top+y*ch+9);
+  for(let m=0;m<12;m++){
+    const wk=Math.floor((Date.UTC(2001,m,1)-Date.UTC(2001,0,1))/864e5/7);
+    g.fillText(MONTHS[m][0].toUpperCase(),left+wk*cw,11);
+  }
+  g.strokeStyle=css('--fg');g.setLineDash([3,2]);g.lineWidth=1;
+  const yl=top+(YV-Y0)*ch-.5;g.beginPath();g.moveTo(left,yl);g.lineTo(W,yl);g.stroke();g.setLineDash([]);
+  if(S.hl){g.lineWidth=2;g.strokeStyle='#0b7285';
+    g.strokeRect(left+S.hl.w0*cw,top+S.hl.y*ch,(S.hl.w1-S.hl.w0+1)*cw,ch-1);}
+}
+function drawLegend(){
+  const anom=S.view==='anom',st=anom?DIV:HEAT;
+  $('legend').style.background='linear-gradient(90deg,'+[0,.25,.5,.75,1].map(t=>ramp(st,t)).join(',')+')';
+  $('lg0').textContent=anom?'−3σ (por debajo)':'bajo';
+  $('lg1').textContent=anom?'+3σ (por encima)':'alto (hotspots/semana, relativo)';
+}
+function drawBars(){
+  const [g,W,H]=fit($('bars'),160);
+  g.clearRect(0,0,W,H);
+  if(C.empty)return;
+  const tot=D=>Array.from({length:NY},(_,y)=>{let s=0;for(let w=0;w<NW;w++)s+=D[y*NW+w];return s;});
+  const tr=tot(C.R),th=tot(C.H),mx=Math.max(...tr,...th)||1;
+  const left=4,bot=18,top=12,gw=(W-left)/NY,bw=gw*.38;
+  for(let y=0;y<NY;y++){
+    const x=left+y*gw;
+    g.fillStyle='#9ca3af';g.fillRect(x+gw*.08,H-bot-(H-bot-top)*tr[y]/mx,bw,(H-bot-top)*tr[y]/mx);
+    g.fillStyle='#d9480f';g.fillRect(x+gw*.08+bw,H-bot-(H-bot-top)*th[y]/mx,bw,(H-bot-top)*th[y]/mx);
+  }
+  g.fillStyle=css('--mut');g.font='10px system-ui';
+  for(let y=0;y<NY;y+=4)g.fillText(String(Y0+y),left+y*gw,H-5);
+  const xv=left+(YV-Y0)*gw;
+  g.strokeStyle=css('--fg');g.setLineDash([3,2]);g.beginPath();g.moveTo(xv,top-4);g.lineTo(xv,H-bot);g.stroke();g.setLineDash([]);
+  g.fillText('VIIRS →',xv+3,top+4);
+}
+function renderText(){
+  if(C.empty){$('cards').innerHTML='';$('crit').innerHTML='<li class="small">Sin celdas seleccionadas.</li>';return;}
+  const mean=new Float64Array(NW);
+  for(let w=0;w<NW;w++){let s=0;for(let y=0;y<NY;y++)s+=C.H[y*NW+w];mean[w]=s/NY;}
+  let pw=0;for(let w=1;w<NW;w++)if(mean[w]>mean[pw])pw=w;
+  let by=0,bt=0;
+  for(let y=0;y<NY;y++){let s=0;for(let w=0;w<NW;w++)s+=C.H[y*NW+w];if(s>bt){bt=s;by=y;}}
+  $('cards').innerHTML=
+    `<div class="card"><b>k = ${C.k.toFixed(2)}</b><span>Calibración MODIS→VIIRS (2012–2025)</span></div>`+
+    `<div class="card"><b>${C.n} celdas</b><span>usadas${S.mask&&C.nUrb?` · ${C.nUrb} urbanas excluidas`:''}</span></div>`+
+    `<div class="card"><b>${range(2001,pw)}</b><span>semana pico climatológica</span></div>`+
+    `<div class="card"><b>${Y0+by}</b><span>año más intenso (armonizado)</span></div>`;
+  const cr=critical(zscores(C.H),C.H);
+  $('crit').innerHTML=cr.length?cr.map((p,i)=>`<li><button data-i="${i}">${Y0+p.y} · ${range(Y0+p.y,p.w0,p.w1)}</button> <span class="small">z máx +${p.pk.toFixed(1)}</span></li>`).join(''):'<li class="small">Sin periodos con z ≥ 1,5.</li>';
+  $('crit').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    const p=cr[+b.dataset.i];S.hl={y:p.y,w0:p.w0,w1:p.w1};drawCal();
+    $('tip').textContent=`${Y0+p.y} · ${range(Y0+p.y,p.w0,p.w1)} · z máx +${p.pk.toFixed(1)}`;
+  });
+}
+function render(){
+  const area=Math.round(cells.filter(c=>c.sel).length*774);
+  $('selinfo').textContent=`${cells.filter(c=>c.sel).length} celdas seleccionadas ≈ ${fmt(area)} km²`;
+  if(!C.empty){Dcur=S.src==='harm'?C.H:C.R;Zcur=zscores(Dcur);}
+  drawLegend();drawCal();drawBars();renderText();
+}
+let raf=0;
+function refresh(){cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{C=compute();S.hl=null;render();});}
+
+/* ---------- eventos ---------- */
+function seg(id,key){
+  $(id).querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    $(id).querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+    S[key]=b.dataset.v;render();
+  });
+}
+seg('segSrc','src');seg('segView','view');
+$('mask').onchange=e=>{S.mask=e.target.checked;refresh();};
+$('presets').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+  const p=b.dataset.p;
+  setSel(c=>p==='all'?true:p==='none'?false:p==='n'?c.lat0>=7:p==='c'?(c.lat0>=5&&c.lat0<7):c.lat0<5);
+});
+function pick(e){
+  if(!G||C.empty)return null;
+  const r=$('cal').getBoundingClientRect();
+  const w=Math.floor((e.clientX-r.left-G.left)/G.cw),y=Math.floor((e.clientY-r.top-G.top)/G.ch);
+  return (w<0||w>=NW||y<0||y>=NY)?null:{y,w};
+}
+function info(p){
+  const i=p.y*NW+p.w;
+  return `${Y0+p.y} · sem ${p.w+1} (${range(Y0+p.y,p.w)}) · ${fmt(Dcur[i])} hotspots · z ${Zcur[i]>=0?'+':''}${Zcur[i].toFixed(1)}`;
+}
+$('cal').addEventListener('pointermove',e=>{const p=pick(e);if(p)$('tip').textContent=info(p);});
+$('cal').addEventListener('pointerdown',e=>{const p=pick(e);if(p){S.hl={y:p.y,w0:p.w,w1:p.w};drawCal();$('tip').textContent=info(p);}});
+window.addEventListener('resize',()=>{if(C)render();});
+
+$('tip').textContent='Toca o pasa el cursor sobre el calendario.';
+initMap();
+C=compute();render();
+window.__fire={get C(){return C;},compute,zscores,critical};
+})();
+</script>
+</body>
+</html>
