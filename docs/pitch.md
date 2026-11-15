@@ -1,44 +1,40 @@
-# Guion del pitch (borrador) — ~3 min
+# Pitch script — ~3 min
 
-> Números calculados con datos reales (nominal + alta, sin fuentes fijas).
+> All numbers computed from real data (nominal + high confidence, static sources removed).
 
-## 1. Problema (30 s)
-- Los satélites detectan fuegos activos desde el año 2000, pero el registro está partido en dos:
-  **MODIS** (1 km, desde 2000) y **VIIRS** (375 m, desde 2012).
-- VIIRS ve fuegos más pequeños, así que detecta **~6× más hotspots** en el mismo lugar y semana.
-- Si se pegan las dos series sin corregir, en 2012 aparece un "aumento del fuego" que es en realidad
-  **un cambio de sensor**. Eso engaña a quien busca tendencias o periodos anómalos.
+## 1. Problem (30 s)
+- Satellites have detected active fires since 2000, but the record is split in two:
+  **MODIS** (1 km, since 2000) and **VIIRS** (375 m, since 2012).
+- VIIRS sees smaller fires, so it detects **~6× more hotspots** at the same place and week.
+- Gluing both series together creates a fake "fire increase" in 2012 that is really
+  **a sensor change**. That misleads anyone looking for trends or anomalous periods.
 
-## 2. Nuestra solución (45 s)
-- Un **calendario de actividad de quema** (año × semana) para el **Tolima, Colombia**, 2000–2025.
-- Armonización: en los años en que ambos sensores operan (2012–2025) calculamos
-  **k = Σ VIIRS / Σ MODIS** por **franja de latitud** (norte/centro/sur) y **mes**, y re-escalamos
-  MODIS antes de 2012. Resultado: una sola serie continua de 26 años en "unidades VIIRS".
-- Limpieza: quitamos **fuentes fijas** (zonas urbanas, industria, volcán) que no son quemas.
+## 2. Our solution (45 s)
+- A **burning-activity calendar** (year × month/week/day) for **Tolima, Colombia**, 2000–2025.
+- Harmonization: in the overlap years (2012–2025) we compute **k = Σ VIIRS / Σ MODIS** per
+  **latitude band** and **month**, and rescale MODIS before 2012 → one continuous 26-year series in "VIIRS units".
+- Cleaning: we remove the volcano, a cement kiln, oil flares and rice/coffee mills (588 hotspots), using a
+  curated catalog plus a persistent-heat test.
 
 ## 3. Demo (60 s)
-1. Elegir uno o varios municipios en el mapa (o un preset Norte/Centro/Sur); cada hotspot se ve a su resolución nativa, coloreado por confianza.
-2. Calendario **Crudo vs Armonizado**: mostrar el salto de 2012 que desaparece.
-3. Vista **Anomalía (z)**: qué semanas fueron inusuales respecto a su propia época del año.
-4. **Periodos críticos**: lista automática; clic y se resalta en el calendario.
-5. Mencionar la temporada típica del Tolima: dos temporadas, enero–marzo y agosto–septiembre (pico: 27 ago – 2 sep).
+1. Raw vs. harmonized calendar: the 2012 jump disappears.
+2. "Was it normal?" anomaly view: El Niño years (2015, 2024) light up.
+3. Fire events: Natagaima, 12–22 Sep 2024 — 99 detections, 11.4 km east of town, ~1,022 ha of savanna, very high severity.
+4. Before / after with Sentinel-2: green on 4 Sep → burn scar on 24 Sep.
+5. Quarterly 2000–2025 base map: cloud-free seasonal composites with dNBR burned areas.
 
-## 4. Validación (20 s)
-- En el solapamiento, MODIS×k reproduce VIIRS con **R² = 0,66 / 0,85 / 0,82** (norte/centro/sur, bloques de 4 semanas) y
-  k = 5,91 en todo el Tolima.
-- **Validación externa:** coincide con la Nota Regional CERE 21 (Universidad del Tolima): mismos años pico (2003 y 2015, El Niño), mismo reparto por municipios (24 % en Chaparral, Ortega, Natagaima y Ataco) y total de focos MODIS a menos de 5 %.
-- [Opcional] Un periodo crítico verificado con cicatrices de quema en Sentinel-2.
+## 4. Validation (20 s)
+- MODIS×k reproduces VIIRS with **R² = 0.66 / 0.85 / 0.82** (north/center/south, 4-week blocks); k = 5.91.
+- **External:** matches University of Tolima CERE Note 21 — same peak years (2003, 2015), same municipal shares (24 % Chaparral, Ortega, Natagaima, Ataco), total within 5 %.
 
-## 5. Limitaciones (15 s)
-- Un hotspot no es una hectárea quemada: medimos **actividad de detección**, no área.
-- Nubosidad y horario de paso del satélite afectan las detecciones (temporada húmeda andina).
-- k se asume constante en el tiempo; la serie MODIS×k es más ruidosa antes de 2012.
-- Solo VIIRS S-NPP; NOAA-20/21 quedan fuera.
+## 5. Limitations (15 s)
+- A hotspot is not a burned hectare: we measure **detection activity**; footprints are upper estimates.
+- Clouds and overpass time affect detections; k is assumed constant in time.
+- Only VIIRS S-NPP (NOAA-20/21 would create artificial jumps).
 
-## 6. Trabajo futuro (10 s)
-- Cualquier región del mundo (el pipeline solo cambia el `config.py`).
-- Añadir NOAA-20/21, área quemada (MCD64A1) y meteorología (sequía, ENSO).
-- Alertas: avisar cuando la semana actual supere el z crítico.
+## 6. Future work (10 s)
+- Any region of the world (only `config.py` changes).
+- NOAA-20/21, MCD64A1 burned area, drought indices; automatic weekly alerts when z ≥ 1.5.
 
-## Para quién
-Alerta temprana, respuesta a emergencias (bomberos, CAR, UNGRD), científicos y gestores de tierras.
+## Who it is for
+Early warning and emergency response (firefighters, CORTOLIMA, UNGRD), scientists and land managers.

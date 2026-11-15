@@ -25,11 +25,7 @@ from pathlib import Path
 
 from PIL import Image
 
-IGBP = {1: "bosque de coníferas", 2: "bosque húmedo de hoja ancha", 3: "bosque caducifolio de coníferas",
-        4: "bosque caducifolio", 5: "bosque mixto", 6: "arbustal denso", 7: "arbustal abierto",
-        8: "sabana arbolada", 9: "sabana", 10: "pastizal", 11: "humedal", 12: "cultivos",
-        13: "zona urbana", 14: "mosaico de cultivos y vegetación", 15: "nieve o hielo",
-        16: "suelo desnudo", 17: "agua"}
+IGBP = {1: 'evergreen needleleaf forest', 2: 'evergreen broadleaf forest', 3: 'deciduous needleleaf forest', 4: 'deciduous broadleaf forest', 5: 'mixed forest', 6: 'closed shrubland', 7: 'open shrubland', 8: 'woody savanna', 9: 'savanna', 10: 'grassland', 11: 'wetland', 12: 'cropland', 13: 'urban area', 14: 'cropland/natural vegetation mosaic', 15: 'snow and ice', 16: 'barren land', 17: 'water'}
 GRUPO = {1: "bosque", 2: "bosque", 3: "bosque", 4: "bosque", 5: "bosque", 6: "arbustal", 7: "arbustal",
          8: "sabana", 9: "sabana", 10: "pastizal", 11: "humedal", 12: "cultivo", 13: "urbano",
          14: "cultivo", 15: "otro", 16: "otro", 17: "agua"}
@@ -52,6 +48,28 @@ def main():
     names = [m["n"] for m in D["mpios"]]
     base = date(2000, 1, 1)
     idx = [i for i in range(n) if D["c"][i] >= 1 and D["t"][i] == 0]
+    # --- fuera fuentes industriales: (1) radio alrededor de cada fuente fija del catálogo,
+    #     (2) celdas de calor persistente (mismo lugar ≥ 4 años y ≥ 8 días distintos; criterio tipo
+    #     "persistent thermal anomaly", Liu et al. 2018), típicas de hornos, teas y trilladoras ---
+    FF = json.loads(Path("data/fuentes_fijas.json").read_text(encoding="utf-8"))
+    rad = lambda f: 5.0 if f["tipo"] == "volcan" else 1.5 if f["tipo"] in ("cemento", "petroleo") else 1.0
+    cerca = lambda i: any(km(D["la"][i] / 1e5, D["lo"][i] / 1e5, f["lat"], f["lon"]) <= rad(f) for f in FF)
+    C = 0.004
+    anios, dias = defaultdict(set), defaultdict(set)
+    for i in idx:
+        c = (round(D["la"][i] / 1e5 / C), round(D["lo"][i] / 1e5 / C))
+        anios[c].add(D["y"][i]); dias[c].add((D["y"][i], D["j"][i]))
+    pers = {c for c in anios if len(anios[c]) >= 4 and len(dias[c]) >= 8}
+    def persistente(i):
+        a, b = round(D["la"][i] / 1e5 / C), round(D["lo"][i] / 1e5 / C)
+        return any((a + u, b + v) in pers for u in (-1, 0, 1) for v in (-1, 0, 1))
+    n0 = len(idx)
+    sacF = [i for i in idx if cerca(i)]
+    sF = set(sacF)
+    sacP = [i for i in idx if i not in sF and persistente(i)]
+    fuera = sF | set(sacP)
+    idx = [i for i in idx if i not in fuera]
+    print(f"hotspots: {n0}; quitados por fuente fija {len(sacF)}, por calor persistente {len(sacP)} ({len(pers)} celdas); quedan {len(idx)}")
     la = {i: D["la"][i] / 1e5 for i in idx}
     lo = {i: D["lo"][i] / 1e5 for i in idx}
     dy = {i: (date(2000 + D["y"][i], 1, 1) + timedelta(D["j"][i] - 1) - base).days for i in idx}
@@ -148,7 +166,8 @@ def main():
         if k % 2000 == 0:
             print(k, "…")
     cols = ["lat", "lon", "d0", "d1", "n", "nv", "frp", "frpmax", "area", "m", "sev", "cob"]
-    out = {"meta": {"metodo": "≤1,5 km y ≤2 días; nominal/alta; sin fuentes fijas", "p50": p50, "p80": p80, "p95": p95,
+    out = {"meta": {"metodo": "≤1.5 km and ≤2 days; nominal/high confidence; excluding fixed industrial sources (catalog radius) and persistent thermal anomalies (≥4 years, ≥8 days)",
+                    "excl_fuente": len(sacF), "excl_persistente": len(sacP), "p50": p50, "p80": p80, "p95": p95,
                     "igbp": IGBP, "grupo": GRUPO, "cols": cols},
            **{c: [e[c] for e in ev] for c in cols}}
     Path("data/incendios.json").write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")

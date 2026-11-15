@@ -1,7 +1,7 @@
 """Genera la voz natural de Sati (MP3) a partir de audio/sati/textos.json.
 
 Uso:  pip install edge-tts
-      python pipeline/voz_sati.py [voz]      (por defecto es-CO-SalomeNeural; otra: es-CO-GonzaloNeural)
+      python pipeline/voz_sati.py [voz]      (default en-US-JennyNeural; another option: en-US-GuyNeural)
 
 Cada archivo se llama como el hash djb2 (base 36) del texto, igual que hashTxt() en index.html.
 Los textos se recolectan recorriendo la página (años, municipios, botones, industrias y la
@@ -15,7 +15,7 @@ import sys
 
 import edge_tts
 
-VOZ = sys.argv[1] if len(sys.argv) > 1 else "es-CO-SalomeNeural"
+VOZ = sys.argv[1] if len(sys.argv) > 1 else "en-US-JennyNeural"
 DIR = "audio/sati"
 
 
@@ -39,7 +39,7 @@ async def main():
     async def uno(t):
         k = h36(t)
         async with sem:
-            await edge_tts.Communicate(t, VOZ, rate="+4%", pitch="+3Hz").save(f"{DIR}/{k}.mp3")
+            await edge_tts.Communicate(t, VOZ, rate="+0%", pitch="+2Hz").save(f"{DIR}/{k}.mp3")
             hechos.append(k)
 
     await asyncio.gather(*[uno(t) for t in textos])

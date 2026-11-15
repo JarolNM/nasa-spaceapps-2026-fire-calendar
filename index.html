@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Calendario de Quema del Tolima · GeoElectronic</title>
-<meta name="description" content="26 años de fuegos activos MODIS + VIIRS armonizados en un calendario de quema para el Tolima, Colombia. NASA Space Apps Challenge 2026.">
+<title>Tolima Burn Calendar · GeoElectronic</title>
+<meta name="description" content="26 years of harmonized MODIS + VIIRS active fires in one burning calendar for Tolima, Colombia. NASA Space Apps Challenge 2026.">
 <link rel="icon" href="assets/logo.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -166,6 +166,7 @@ h2{font-size:clamp(22px,2.6vw,28px);letter-spacing:-.025em;margin:0 0 16px;font-
 .step .num{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--fire),var(--ember));margin-bottom:10px}
 .step h3{font-size:15px;margin:0 0 4px}
 .step p{margin:0;color:var(--ink2);font-size:13px}
+.refs h4{margin:14px 0 4px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}.refs ol{margin:0;padding-left:22px;font-size:12.5px;color:var(--ink2);line-height:1.55}.refs li{margin:3px 0}.refs a{color:var(--fire)}
 table.val{width:100%;border-collapse:collapse;font-size:13px}
 table.val th,table.val td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:left}
 table.val th{font-size:11px;color:var(--ink3);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
@@ -393,7 +394,7 @@ body.intro-on{overflow:hidden}
 </style>
 </head>
 <body class="intro-on">
-<div id="intro" role="dialog" aria-label="Introducción">
+<div id="intro" role="dialog" aria-label="Introduction">
   <div class="stars" id="stars"></div>
   <div class="earth"></div>
   <div class="fires" id="fires"></div>
@@ -402,30 +403,30 @@ body.intro-on{overflow:hidden}
     <rect x="58" y="90" width="84" height="6" fill="#dbe4ff"/><rect x="68" y="52" width="64" height="78" rx="20" fill="#dbe4ff"/>
     <rect x="76" y="62" width="48" height="36" rx="12" fill="#fff"/><ellipse class="eye" cx="90" cy="80" rx="5" ry="6.5" fill="#0b2a5b"/><ellipse class="eye" cx="110" cy="80" rx="5" ry="6.5" fill="#0b2a5b"/>
     <path d="M93 89Q100 95 107 89" stroke="#e8590c" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="100" cy="30" r="7" fill="#ff922b"/><path d="M100 52V36" stroke="#dbe4ff" stroke-width="3"/></svg></div>
-  <button class="skip" id="skipIntro">Saltar intro →</button>
+  <button class="skip" id="skipIntro">Skip intro →</button>
   <div class="intro-c">
     <div class="intro-logo" role="img" aria-label="GeoElectronic"></div>
     <div class="scenes">
-      <div class="scene"><span class="k">Cada día</span><p>Satélites de la NASA miran la Tierra<br>buscando <em>puntos de fuego</em>.</p></div>
-      <div class="scene"><span class="k">Desde el año 2000</span><p>Primero <em>MODIS</em>; desde 2012, <em>VIIRS</em>,<br>con una mirada mucho más fina.</p></div>
-      <div class="scene"><span class="k">El problema</span><p>Sus registros no se comparan directo:<br>el cambio de sensor <em>parece más fuego</em>.</p></div>
-      <div class="scene"><span class="k">Nuestra solución</span><p>Armonizamos 26 años de quemas<br>en el Tolima en <em>un solo calendario</em>.</p></div>
+      <div class="scene"><span class="k">Every day</span><p>NASA satellites scan the Earth<br>looking for <em>active fires</em>.</p></div>
+      <div class="scene"><span class="k">Since 2000</span><p>First <em>MODIS</em>; since 2012, <em>VIIRS</em>,<br>with a much sharper eye.</p></div>
+      <div class="scene"><span class="k">The problem</span><p>Their records are not directly comparable:<br>the sensor switch <em>looks like more fire</em>.</p></div>
+      <div class="scene"><span class="k">Our solution</span><p>We harmonized 26 years of burning<br>in Tolima into <em>one single calendar</em>.</p></div>
     </div>
     <div class="dots" id="dots"><i></i><i></i><i></i><i></i></div>
-    <div class="introbtns"><button class="startbtn" id="startBtn">Iniciar exploración <span class="ar">→</span></button><button class="startbtn howbtn" id="howBtn">Ver cómo funciona <span class="ar">▶</span></button></div>
+    <div class="introbtns"><button class="startbtn" id="startBtn">Start exploring <span class="ar">→</span></button><button class="startbtn howbtn" id="howBtn">See how it works <span class="ar">▶</span></button></div>
   </div>
-  <div class="credit">GeoElectronic · NASA Space Apps Challenge 2026 · Datos NASA FIRMS</div>
+  <div class="credit">GeoElectronic · NASA Space Apps Challenge 2026 · Data: NASA FIRMS</div>
 </div>
 
 <nav><div class="wrap">
-  <a class="brand" href="#top"><span class="lg" role="img" aria-label="Logo GeoElectronic"></span>Calendario de Quema</a>
-  <div id="fontPick" title="Prueba de tipografías"><b>Aa</b><select id="fontSel"><option>Inter</option><option>Manrope</option><option>Space Grotesk</option><option>DM Sans</option><option>IBM Plex Sans</option><option>Outfit</option></select></div>
-  <div class="links"><a href="#" id="navHow">▶ Cómo funciona</a><a href="#tablero">Tablero</a><a href="#metodo">Método</a><a href="#validacion">Validación</a></div>
+  <a class="brand" href="#top"><span class="lg" role="img" aria-label="GeoElectronic logo"></span>Burn Calendar</a>
+  <div id="fontPick" title="Typeface"><b>Aa</b><select id="fontSel"><option>Inter</option><option>Manrope</option><option>Space Grotesk</option><option>DM Sans</option><option>IBM Plex Sans</option><option>Outfit</option></select></div>
+  <div class="links"><a href="#" id="navHow">▶ How it works</a><a href="#tablero">Dashboard</a><a href="#metodo">Method</a><a href="#validacion">Validation</a><a href="#refs">References</a></div>
 </div></nav>
 
 <header class="hero" id="top"><div class="wrap">
   <div class="hero-grid">
-    <svg class="mascot" viewBox="0 0 200 200" aria-label="Sati, el satélite guía">
+    <svg class="mascot" viewBox="0 0 200 200" aria-label="Sati, the guide satellite">
       <defs><linearGradient id="pnl" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ff922b"/><stop offset="1" stop-color="#e8590c"/></linearGradient>
       <radialGradient id="bm" cx=".5" cy="0" r="1"><stop offset="0" stop-color="#f59f00"/><stop offset="1" stop-color="#f59f00" stop-opacity="0"/></radialGradient></defs>
       <polygon class="beam" points="88,128 112,128 150,200 50,200" fill="url(#bm)"/>
@@ -440,31 +441,31 @@ body.intro-on{overflow:hidden}
     </svg>
     <div>
       <span class="eyebrow"><span class="pulse"></span>NASA Space Apps 2026 · Tolima, Colombia</span>
-      <h1>26 años de fuego, <span class="grad">un solo calendario.</span></h1>
-      <p class="lead">Los satélites MODIS y VIIRS ven el fuego de forma distinta. Armonizamos sus registros para explorar cuándo y dónde se quema el Tolima.</p>
+      <h1>26 years of fire, <span class="grad">one single calendar.</span></h1>
+      <p class="lead">The MODIS and VIIRS satellites see fire differently. We harmonized their records to explore when and where Tolima burns.</p>
     </div>
     <div class="kpis">
-      <div class="kpi"><b id="k-hot">–</b><span>hotspots en el Tolima</span></div>
-      <div class="kpi"><b>26</b><span>años (2000–2025)</span></div>
-      <div class="kpi"><b id="k-k">–</b><span>VIIRS ve más que MODIS</span></div>
-      <div class="kpi"><b>2</b><span>temporadas de quema</span></div>
+      <div class="kpi"><b id="k-hot">–</b><span>hotspots in Tolima</span></div>
+      <div class="kpi"><b>26</b><span>years (2000–2025)</span></div>
+      <div class="kpi"><b id="k-k">–</b><span>VIIRS sees more than MODIS</span></div>
+      <div class="kpi"><b>2</b><span>burning seasons</span></div>
     </div>
   </div>
 </div></header>
 
 <main class="wrap" id="tablero">
   <div class="filters">
-    <div class="fg"><label for="fYear">Año</label>
+    <div class="fg"><label for="fYear">Year</label>
       <select id="fYear"></select></div>
-    <div class="fg"><label for="fMonth">Mes</label>
-      <select id="fMonth"><option value="-1">Todo el año</option></select></div>
+    <div class="fg"><label for="fMonth">Month</label>
+      <select id="fMonth"><option value="-1">Whole year</option></select></div>
     <div class="sep"></div>
-    <div class="fg"><label for="fFrom">Desde</label><input type="date" id="fFrom" min="2000-01-01" max="2025-12-31"></div>
-    <div class="fg"><label for="fTo">Hasta</label><input type="date" id="fTo" min="2000-01-01" max="2025-12-31"></div>
+    <div class="fg"><label for="fFrom">From</label><input type="date" id="fFrom" min="2000-01-01" max="2025-12-31"></div>
+    <div class="fg"><label for="fTo">To</label><input type="date" id="fTo" min="2000-01-01" max="2025-12-31"></div>
     <div class="sep"></div>
-    <div class="fg"><label>Zona</label>
-      <div class="chips" id="presets"><span class="chip on" data-p="all">Todo el Tolima</span><span class="chip" data-p="n">Norte</span><span class="chip" data-p="c">Centro</span><span class="chip" data-p="s">Sur</span></div></div>
-    <button class="firebtn" id="fireBtn" title="Ver los incendios ocurridos en el periodo">
+    <div class="fg"><label>Zone</label>
+      <div class="chips" id="presets"><span class="chip on" data-p="all">All of Tolima</span><span class="chip" data-p="n">North</span><span class="chip" data-p="c">Center</span><span class="chip" data-p="s">South</span></div></div>
+    <button class="firebtn" id="fireBtn" title="Show the fires that occurred in the period">
       <svg viewBox="0 0 78 54" aria-hidden="true"><rect width="78" height="54" rx="10" fill="#1a0803"/><circle cx="62" cy="12" r="6" fill="#ffd8a8" opacity=".6"/>
         <path d="M0 54V40l8-4 9 5 10-6 9 4 10-5 11 5 10-3 11 4v14Z" fill="#2b1a0e"/>
         <path d="M12 46V36M30 46V33M50 46V35M66 46V38" stroke="#3b2a1a" stroke-width="2.5"/>
@@ -474,68 +475,68 @@ body.intro-on{overflow:hidden}
         <g class="fl c"><path d="M52 21c5 6 6 10 1 14-1-4-3-5-4-6 0 4-2 6-4 6-2-6 1-10 7-14Z" fill="#fa5252"/></g>
         <circle class="ember" cx="32" cy="10" r="1.6" fill="#ffd43b"/><circle class="ember b" cx="24" cy="14" r="1.2" fill="#ff922b"/><circle class="ember c" cx="40" cy="12" r="1.3" fill="#ffd43b"/>
       </svg>
-      <div><b>Incendios ocurridos</b><span id="fireCount">Cargando…</span></div>
+      <div><b>Fire events</b><span id="fireCount">Loading…</span></div>
     </button>
     <div id="rangeTxt"></div>
   </div>
 
   <div class="dash">
-    <div class="card mapcard"><div id="map"><div class="loading">Cargando 34.000 hotspots…</div></div></div>
+    <div class="card mapcard"><div id="map"><div class="loading">Loading 34,000 hotspots…</div></div></div>
 
     <div class="card charts">
       <div class="tabs" id="tabs">
-        <button data-t="cal" class="on">📅 Calendario</button>
-        <button data-t="season">〰 Temporadas</button>
-        <button data-t="years">▮ Por año</button>
-        <button data-t="mun">🏘 Municipios</button>
-        <button data-t="inc">🔥 Incendios</button>
-        <button data-t="crit">⚠ Periodos críticos</button>
+        <button data-t="cal" class="on">📅 Calendar</button>
+        <button data-t="season">〰 Seasons</button>
+        <button data-t="years">▮ By year</button>
+        <button data-t="mun">🏘 Municipalities</button>
+        <button data-t="inc">🔥 Fires</button>
+        <button data-t="crit">⚠ Critical periods</button>
       </div>
       <div class="tabbody">
         <div class="pane on" id="p-cal">
           <div class="ph">
-            <div><h3 id="calTitle">Calendario de quema</h3><p id="calSub"></p></div>
+            <div><h3 id="calTitle">Burning calendar</h3><p id="calSub"></p></div>
             <div class="ctrls" style="align-items:center">
-              <button class="ensob" id="ensoBadge" title="Fenómeno de El Niño / La Niña en el periodo elegido (NOAA, índice ONI)"></button>
-              <div class="seg" id="segGran"><button data-v="m" class="on">Mes</button><button data-v="w">Semana</button><button data-v="d">Día</button></div>
+              <button class="ensob" id="ensoBadge" title="El Niño / La Niña in the selected period (NOAA ONI index)"></button>
+              <div class="seg" id="segGran"><button data-v="m" class="on">Month</button><button data-v="w">Week</button><button data-v="d">Day</button></div>
             </div>
           </div>
           <div class="ctrls" style="margin-bottom:10px">
-            <div class="seg" id="segView"><button data-v="int" class="on">¿Cuánto fuego?</button><button data-v="anom">¿Fue normal?</button></div>
-            <div class="seg" id="segSrc"><button data-v="harm" class="on">Armonizado</button><button data-v="raw">Sin armonizar</button></div>
+            <div class="seg" id="segView"><button data-v="int" class="on">How much fire?</button><button data-v="anom">Was it normal?</button></div>
+            <div class="seg" id="segSrc"><button data-v="harm" class="on">Harmonized</button><button data-v="raw">Not harmonized</button></div>
           </div>
           <canvas id="cal"></canvas>
           <div class="calleg"><span id="rl0"></span><div class="ramp" id="ramp"></div><span id="rl1"></span></div>
-          <div class="climleg"><span><i style="background:#f4b860"></i>Temporada seca</span><span><i style="background:#cfd6de"></i>Transición</span><span><i style="background:#6fa8dc"></i>Temporada de lluvias</span><span class="src">Régimen bimodal andino (referencia general)</span></div>
+          <div class="climleg"><span><i style="background:#f4b860"></i>Dry season</span><span><i style="background:#cfd6de"></i>Transition</span><span><i style="background:#6fa8dc"></i>Rainy season</span><span class="src">Bimodal Andean rainfall regime (IDEAM; general reference)</span></div>
           <div class="hint">👆 <span id="calHint"></span></div>
         </div>
 
         <div class="pane" id="p-season">
-          <div class="ph"><div><h3>Temporadas de quema</h3><p>Hotspots por semana: el año elegido frente al promedio de 2001–2025 (equivalente VIIRS).</p></div></div>
+          <div class="ph"><div><h3>Burning seasons</h3><p>Hotspots per week: the selected year against the 2001–2025 average (VIIRS equivalent).</p></div></div>
           <svg class="chart" id="season"></svg>
-          <div class="legend"><span><i class="ln" style="background:var(--ink)"></i>Promedio 2001–2025 (línea punteada)</span><span><i class="ln" style="background:var(--fire)"></i><b id="seasonYr"></b></span></div>
-          <div class="hint">💡 <span>Hay dos temporadas: <b>enero–marzo</b> y <b>agosto–septiembre</b>, las épocas secas del Tolima. Cambia el año arriba para comparar.</span></div>
+          <div class="legend"><span><i class="ln" style="background:var(--ink)"></i>2001–2025 average (dashed line)</span><span><i class="ln" style="background:var(--fire)"></i><b id="seasonYr"></b></span></div>
+          <div class="hint">💡 <span>There are two seasons: <b>January–March</b> and <b>August–September</b>, the dry periods in Tolima. Change the year above to compare.</span></div>
         </div>
 
         <div class="pane" id="p-years">
-          <div class="ph"><div><h3>Total por año</h3><p>Sin armonizar, en 2012 aparece un salto que es solo el cambio de satélite. Armonizado, los 26 años se comparan en la misma escala.</p></div></div>
+          <div class="ph"><div><h3>Total per year</h3><p>Not harmonized, a jump appears in 2012 that is only the satellite switch. Harmonized, all 26 years share the same scale.</p></div></div>
           <svg class="chart" id="bars"></svg>
-          <div class="legend"><span><i style="background:var(--gray)"></i>Sin armonizar (MODIS → VIIRS en 2012)</span><span><i style="background:var(--fire)"></i>Armonizado</span><span><i style="background:rgba(224,49,49,.35)"></i>Año El Niño</span><span><i style="background:rgba(28,126,214,.4)"></i>Año La Niña</span></div>
-          <div class="hint">👆 Toca un año para verlo en el mapa. Fíjate cómo los años de El Niño (rojo) suelen tener más fuego. Fuente: NOAA, índice ONI.</div>
+          <div class="legend"><span><i style="background:var(--gray)"></i>Not harmonized (MODIS → VIIRS in 2012)</span><span><i style="background:var(--fire)"></i>Harmonized</span><span><i style="background:rgba(224,49,49,.35)"></i>El Niño year</span><span><i style="background:rgba(28,126,214,.4)"></i>La Niña year</span></div>
+          <div class="hint">👆 Tap a year to see it on the map. Notice how El Niño years (red) tend to have more fire. Source: NOAA ONI index.</div>
         </div>
 
         <div class="pane" id="p-mun">
-          <div class="ph"><div><h3>Municipios con más actividad</h3><p>Hotspots VIIRS por cada 100 km² en el periodo elegido (o 2012–2025 si es antes de 2012).</p></div></div>
+          <div class="ph"><div><h3>Most active municipalities</h3><p>VIIRS hotspots per 100 km² in the selected period (or 2012–2025 if it is before 2012).</p></div></div>
           <svg class="chart" id="topm"></svg>
-          <div class="hint">👆 Toca un municipio para ir a él en el mapa.</div>
+          <div class="hint">👆 Tap a municipality to fly to it on the map.</div>
         </div>
 
         <div class="pane" id="p-inc">
-          <div class="ph"><div><h3>Incendios ocurridos</h3><p>Los incendios más intensos del periodo y zona elegidos (hotspots agrupados a ≤ 1,5 km y ≤ 2 días). Toca uno para verlo en el mapa.</p></div></div>
+          <div class="ph"><div><h3>Fire events</h3><p>The most intense fires in the selected period and zone (hotspots grouped within ≤ 1.5 km and ≤ 2 days; industrial and persistent heat sources removed). Tap one to see it on the map.</p></div></div>
           <div class="firelist" id="fireList"></div>
         </div>
         <div class="pane" id="p-crit">
-          <div class="ph"><div><h3>Periodos críticos</h3><p>Semanas con mucho más fuego que lo normal para esa época (anomalía z ≥ 1,5). Varias coinciden con años de El Niño.</p></div></div>
+          <div class="ph"><div><h3>Critical periods</h3><p>Weeks with much more fire than normal for that time of year (anomaly z ≥ 1.5). Several coincide with El Niño years.</p></div></div>
           <div class="crit" id="crit"></div>
         </div>
       </div>
@@ -544,48 +545,80 @@ body.intro-on{overflow:hidden}
 </main>
 
 <section class="block" id="metodo"><div class="wrap">
-  <p class="kicker">Método</p>
-  <h2>¿Cómo funciona?</h2>
+  <p class="kicker">Method</p>
+  <h2>How does it work?</h2>
   <div class="steps">
-    <div class="card step"><div class="num">1</div><h3>Dos ojos distintos</h3><p>MODIS (desde 2000) ve píxeles de 1 km. VIIRS (desde 2012) ve píxeles de 375 m y detecta fuegos más pequeños.</p></div>
-    <div class="card step"><div class="num">2</div><h3>Limpiar</h3><p>Quitamos duplicados, recortamos al Tolima con límites del DANE y ocultamos volcán y fuentes fijas marcados por FIRMS.</p></div>
-    <div class="card step"><div class="num">3</div><h3>Calibrar</h3><p>De 2012 a 2025 ambos miran el Tolima: VIIRS ve <b id="kStep">~6</b> veces más. Lo medimos por zona y mes (k).</p></div>
-    <div class="card step"><div class="num">4</div><h3>Una sola serie</h3><p>Antes de 2012, MODIS×k; desde 2012, VIIRS. Así 26 años se comparan en la misma escala.</p></div>
+    <div class="card step"><div class="num">1</div><h3>Two different eyes</h3><p>MODIS (since 2000) sees 1 km pixels. VIIRS (since 2012) sees 375 m pixels and detects smaller fires.</p></div>
+    <div class="card step"><div class="num">2</div><h3>Clean</h3><p>We remove duplicates, clip to Tolima with DANE boundaries, and hide the volcano and static industrial sources.</p></div>
+    <div class="card step"><div class="num">3</div><h3>Calibrate</h3><p>From 2012 to 2025 both watch Tolima: VIIRS sees <b id="kStep">~6</b> times more. We measure it by zone and month (k).</p></div>
+    <div class="card step"><div class="num">4</div><h3>One single series</h3><p>Before 2012, MODIS×k; since 2012, VIIRS. That way 26 years share the same scale.</p></div>
   </div>
   <details class="more">
-    <summary>Detalles técnicos y limitaciones</summary>
-    <p><b>Datos.</b> NASA FIRMS, productos estándar MODIS C6.1 (Terra y Aqua) y VIIRS S-NPP 375 m. NOAA-20 y NOAA-21 no se incluyen: empiezan en 2018 y 2024 y crearían saltos artificiales en la serie. Por eso el visor de FIRMS puede mostrar más puntos para un mismo incendio. Confianza: VIIRS baja/nominal/alta; MODIS &lt;30 baja, 30–79 nominal, ≥80 alta.</p>
-    <p><b>Armonización.</b> k = Σ VIIRS / Σ MODIS en 2012–2025 por franja de latitud (norte ≥4,5°, centro, sur &lt;3,75°) y mes, con los filtros activos. Anomalías contra la climatología de cada periodo, por separado en la era MODIS (2001–2011) y la era VIIRS (2012–2025).</p>
-    <p><b>Limitaciones.</b> Un hotspot es una detección térmica al paso del satélite, no área quemada. La nubosidad y la hora de paso influyen. k se supone constante en el tiempo. El año 2000 está casi vacío.</p>
+    <summary>Technical details and limitations</summary>
+    <p><b>Data.</b> NASA FIRMS standard products MODIS C6.1 (Terra and Aqua; Giglio et al. 2016) and VIIRS S-NPP 375 m (Schroeder et al. 2014). NOAA-20 and NOAA-21 are not included: they start in 2018 and 2024 and would create artificial jumps in the series. That is why the FIRMS viewer may show more points for the same fire. Confidence: VIIRS low/nominal/high; MODIS &lt;30 low, 30–79 nominal, ≥80 high.</p>
+    <p><b>Harmonization.</b> k = Σ VIIRS / Σ MODIS over 2012–2025 per latitude band (north ≥4.5°, center, south &lt;3.75°) and month, with the active filters. Anomalies are computed against each period's climatology, separately for the MODIS era (2001–2011) and the VIIRS era (2012–2025).</p>
+    <p><b>Limitations.</b> A hotspot is a thermal detection at overpass time, not burned area. Cloud cover and overpass time matter. k is assumed constant over time. The year 2000 is almost empty.</p>
   </details>
 </div></section>
 
 <section class="block" id="validacion" style="padding-top:0"><div class="wrap">
-  <p class="kicker">Validación</p>
-  <h2>Coincide con la Universidad del Tolima</h2>
+  <p class="kicker">Validation</p>
+  <h2>It matches the University of Tolima</h2>
   <div class="card" style="padding:16px;max-width:760px">
     <table class="val">
-      <tr><th>MODIS 2001–2022</th><th>Nota CERE 21</th><th>Esta app</th></tr>
-      <tr><td>Total de focos</td><td>7.334</td><td>7.678</td></tr>
-      <tr><td>Año pico</td><td>2003</td><td class="ok">2003 ✓</td></tr>
-      <tr><td>Segundo año</td><td>2015</td><td class="ok">2015 ✓</td></tr>
-      <tr><td>Chaparral, Ortega, Natagaima, Ataco</td><td>24 %</td><td class="ok">23,9 % ✓</td></tr>
-      <tr><td>Espinal, Ibagué, San Luis, Rovira</td><td>15,4 %</td><td class="ok">15,8 % ✓</td></tr>
+      <tr><th>MODIS 2001–2022</th><th>CERE Note 21</th><th>This app</th></tr>
+      <tr><td>Total hotspots</td><td>7,334</td><td>7,678</td></tr>
+      <tr><td>Peak year</td><td>2003</td><td class="ok">2003 ✓</td></tr>
+      <tr><td>Second year</td><td>2015</td><td class="ok">2015 ✓</td></tr>
+      <tr><td>Chaparral, Ortega, Natagaima, Ataco</td><td>24 %</td><td class="ok">23.9 % ✓</td></tr>
+      <tr><td>Espinal, Ibagué, San Luis, Rovira</td><td>15.4 %</td><td class="ok">15.8 % ✓</td></tr>
     </table>
   </div>
 </div></section>
 
+<section class="block" id="refs" style="padding-top:0"><div class="wrap">
+  <p class="kicker">References</p>
+  <h2>Data sources and literature</h2>
+  <div class="card refs" style="padding:16px 20px">
+  <h4>Fire data and algorithms</h4>
+  <ol>
+   <li>NASA FIRMS — Fire Information for Resource Management System, LANCE/EOSDIS. MODIS C6.1 (MCD14ML) and VIIRS S-NPP 375 m (VNP14IMGTDL) archives. <a href="https://firms.modaps.eosdis.nasa.gov/" target="_blank" rel="noopener">firms.modaps.eosdis.nasa.gov</a></li>
+   <li>Giglio, L., Schroeder, W., Justice, C.O. (2016). The collection 6 MODIS active fire detection algorithm and fire products. <i>Remote Sensing of Environment</i> 178, 31–41. <a href="https://doi.org/10.1016/j.rse.2016.02.054" target="_blank" rel="noopener">doi:10.1016/j.rse.2016.02.054</a></li>
+   <li>Schroeder, W., Oliva, P., Giglio, L., Csiszar, I.A. (2014). The New VIIRS 375 m active fire detection data product: Algorithm description and initial assessment. <i>Remote Sensing of Environment</i> 143, 85–96. <a href="https://doi.org/10.1016/j.rse.2013.12.008" target="_blank" rel="noopener">doi:10.1016/j.rse.2013.12.008</a></li>
+   <li>Liu, T., Marlier, M.E., Karambelas, A., et al. (2019). Missing emissions from post-monsoon agricultural fires in northwestern India: regional limitations of MODIS burned area and active fire products. <i>Environmental Research Communications</i> 1, 011007 — persistent-anomaly and industrial-source screening approach. <a href="https://doi.org/10.1088/2515-7620/ab056c" target="_blank" rel="noopener">doi:10.1088/2515-7620/ab056c</a></li>
+   <li>Key, C.H., Benson, N.C. (2006). Landscape Assessment: Sampling and analysis methods (dNBR). USDA Forest Service Gen. Tech. Rep. RMRS-GTR-164-CD.</li>
+  </ol>
+  <h4>Imagery and harmonization</h4>
+  <ol start="6">
+   <li>Claverie, M., Ju, J., Masek, J.G., et al. (2018). The Harmonized Landsat and Sentinel-2 surface reflectance data set. <i>Remote Sensing of Environment</i> 219, 145–161. <a href="https://doi.org/10.1016/j.rse.2018.09.002" target="_blank" rel="noopener">doi:10.1016/j.rse.2018.09.002</a> — NASA HLS via GIBS.</li>
+   <li>Roy, D.P., Kovalskyy, V., Zhang, H.K., et al. (2016). Characterization of Landsat-7 to Landsat-8 reflective wavelength and normalized difference vegetation index continuity. <i>Remote Sensing of Environment</i> 185, 57–70. <a href="https://doi.org/10.1016/j.rse.2015.12.024" target="_blank" rel="noopener">doi:10.1016/j.rse.2015.12.024</a></li>
+   <li>Gorelick, N., Hancher, M., Dixon, M., et al. (2017). Google Earth Engine: Planetary-scale geospatial analysis for everyone. <i>Remote Sensing of Environment</i> 202, 18–27 — quarterly composites. <a href="https://doi.org/10.1016/j.rse.2017.06.031" target="_blank" rel="noopener">doi:10.1016/j.rse.2017.06.031</a></li>
+   <li>Pasquarella, V.J., Brown, C.F., Czerwinski, W., Rucklidge, W.J. (2023). Comprehensive quality assessment of optical satellite imagery using weakly supervised video learning (Cloud Score+). <i>CVPR Workshops</i>.</li>
+   <li>Gutman, G., et al. (2013). Towards monitoring land-cover and land-use changes at a global scale: the Global Land Survey 2005. <i>Photogrammetric Engineering &amp; Remote Sensing</i> 74 — Landsat GLS 2000 base (NASA/USGS, served by Esri).</li>
+   <li>Sentinel-2 cloudless mosaics © EOX IT Services GmbH (contains modified Copernicus Sentinel data), CC BY-NC-SA 4.0. <a href="https://s2maps.eu" target="_blank" rel="noopener">s2maps.eu</a> · Esri World Imagery Wayback. <a href="https://livingatlas.arcgis.com/wayback/" target="_blank" rel="noopener">livingatlas.arcgis.com/wayback</a></li>
+   <li>Friedl, M., Sulla-Menashe, D. (2019). MODIS/Terra+Aqua Land Cover Type Yearly L3 Global 500 m (MCD12Q1 v006), IGBP classes. NASA LP DAAC. <a href="https://doi.org/10.5067/MODIS/MCD12Q1.006" target="_blank" rel="noopener">doi:10.5067/MODIS/MCD12Q1.006</a></li>
+  </ol>
+  <h4>Context, boundaries and validation</h4>
+  <ol start="13">
+   <li>NOAA Climate Prediction Center. Oceanic Niño Index (ONI), ERSSTv5. <a href="https://origin.cpc.ncep.noaa.gov/products/analysis_monitoring/ensostuff/ONI_v5.php" target="_blank" rel="noopener">cpc.ncep.noaa.gov</a></li>
+   <li>DANE — Marco Geoestadístico Nacional (MGN), municipal boundaries of Tolima. <a href="https://geoportal.dane.gov.co/" target="_blank" rel="noopener">geoportal.dane.gov.co</a></li>
+   <li>IDEAM — Colombian climate atlas: bimodal rainfall regime of the Andean region. <a href="http://atlas.ideam.gov.co/" target="_blank" rel="noopener">atlas.ideam.gov.co</a></li>
+   <li>Perea-Ardila, M.A., Murillo-Sandoval, P.J. Nota Regional CERE 21: fire hotspots in Tolima (MODIS 2001–2022). Universidad del Tolima.</li>
+   <li>Servicio Geológico Colombiano — Nevado del Ruiz volcano activity bulletins. <a href="https://www.sgc.gov.co/volcanes" target="_blank" rel="noopener">sgc.gov.co/volcanes</a></li>
+   <li>Base map © OpenStreetMap contributors (ODbL). Sati's voice: Microsoft neural voice (en-US, Jenny) generated with edge-tts. Map library: Leaflet 1.9.4.</li>
+  </ol>
+  </div>
+</div></section>
+
 <footer><div class="wrap">
-  <span class="lg" role="img" aria-label="Logo GeoElectronic"></span>
+  <span class="lg" role="img" aria-label="GeoElectronic logo"></span>
   <div><b style="color:var(--ink)">GeoElectronic</b> · NASA Space Apps Challenge 2026<br>
-  Datos: NASA FIRMS (LANCE/EOSDIS) · DANE, Marco Geoestadístico Nacional · Mapa base: Sentinel-2 cloudless 2020 © EOX (uso no comercial), © OpenStreetMap.<br>
-  Validación: Perea-Ardila &amp; Murillo-Sandoval, Nota Regional CERE 21, Universidad del Tolima.<br>
-  Voz de Sati: voz neuronal de Microsoft (es-CO, Salomé), generada con edge-tts. Clima: NOAA CPC (ONI). Imágenes: NASA GIBS, Esri Wayback, Sentinel-2 cloudless (EOX).</div>
+  Data: NASA FIRMS (LANCE/EOSDIS) · NASA GIBS (HLS, MODIS) · USGS/NASA Landsat · Copernicus Sentinel-2 · NOAA CPC · DANE. Full list in <a href="#refs">References</a>.</div>
 </div></footer>
 
-<div id="howto" role="dialog" aria-label="Cómo funciona">
+<div id="howto" role="dialog" aria-label="How it works">
  <div class="hw">
-  <div class="hw-top"><b>¿Cómo funciona?</b><span id="hwStep">1 / 6</span><button class="x" id="hwClose" aria-label="Cerrar">✕</button></div>
+  <div class="hw-top"><b>How does it work?</b><span id="hwStep">1 / 7</span><button class="x" id="hwClose" aria-label="Close">✕</button></div>
   <div class="stage"><svg viewBox="0 0 800 450" aria-hidden="true">
 <defs>
  <radialGradient id="eg2" cx=".5" cy=".05" r=".9"><stop offset="0" stop-color="#2f7a5a"/><stop offset=".3" stop-color="#1b4d4a"/><stop offset="1" stop-color="#0a1f3a"/></radialGradient>
@@ -602,42 +635,42 @@ body.intro-on{overflow:hidden}
  <text x="400" y="278" text-anchor="middle" class="sub" style="fill:#ffd8a8">Tolima</text></g>
  <g id="hsat1"><polygon points="0,14 -70,130 70,130" fill="url(#beam2)"/><g transform="translate(0,0) scale(1)"><rect x="-46" y="-12" width="30" height="18" rx="3" fill="#ff922b"/><rect x="16" y="-12" width="30" height="18" rx="3" fill="#ff922b"/><rect x="-18" y="-24" width="36" height="44" rx="11" fill="#dbe4ff"/><rect x="-13" y="-18" width="26" height="19" rx="7" fill="#fff"/><circle cx="-5" cy="-9" r="2.6" fill="#0b2a5b"/><circle cx="5" cy="-9" r="2.6" fill="#0b2a5b"/><path d="M-4 -4Q0 -1 4 -4" stroke="#e8590c" stroke-width="1.6" fill="none"/><circle cx="0" cy="13" r="4" fill="#0b2a5b" stroke="#ff922b" stroke-width="1.6"/></g>
   <animateMotion dur="9s" repeatCount="indefinite" begin="indefinite" rotate="0" keyPoints="0;1" keyTimes="0;1"><mpath href="#orbP"/></animateMotion></g>
- <g class="fx d1"><text x="40" y="50" class="ttl">PASO 1 · EN EL ESPACIO</text><text x="40" y="78" class="lbl">Satélites en órbita polar</text></g>
- <g class="fx d2"><text x="40" y="104" class="sub">Terra y Aqua (MODIS) · Suomi-NPP (VIIRS)</text></g>
- <g class="fx d3"><text x="40" y="124" class="sub">≈ 700–830 km de altura · ~14 vueltas al día</text></g>
- <g class="fx d4"><text x="760" y="104" class="sub" text-anchor="end">Franja de observación &gt; 2.000 km</text><text x="760" y="124" class="sub" text-anchor="end">Pasa por Colombia de día y de noche</text></g>
+ <g class="fx d1"><text x="40" y="50" class="ttl">STEP 1 · IN SPACE</text><text x="40" y="78" class="lbl">Sun-synchronous polar orbits</text></g>
+ <g class="fx d2"><text x="40" y="104" class="sub">Terra &amp; Aqua (MODIS): 705 km altitude · Suomi-NPP (VIIRS): 824 km</text></g>
+ <g class="fx d3"><text x="40" y="124" class="sub">~14 orbits per day · one lap every ~100 minutes at ~7.5 km/s</text></g>
+ <g class="fx d4"><text x="760" y="104" class="sub" text-anchor="end">Swath: MODIS 2,330 km · VIIRS 3,040 km</text><text x="760" y="124" class="sub" text-anchor="end">Tolima (23,562 km²) seen ~4 times a day: ~10:30, 13:30, 22:30, 01:30</text></g>
 </g>
 
 <!-- 2 detección -->
 <g class="sc" id="hs2">
- <g class="fx"><text x="40" y="50" class="ttl">PASO 2 · DETECCIÓN</text><text x="40" y="78" class="lbl">El sensor mide el calor de cada píxel</text></g>
+ <g class="fx"><text x="40" y="50" class="ttl">STEP 2 · DETECTION</text><text x="40" y="78" class="lbl">The sensor measures the heat of every pixel</text></g>
  <g transform="translate(200,120)">
   <rect x="0" y="0" width="41" height="41" rx="4" fill="#2f7a4a" class=""/><rect x="43" y="0" width="41" height="41" rx="4" fill="#3b8a55" class=""/><rect x="86" y="0" width="41" height="41" rx="4" fill="#2a6b42" class=""/><rect x="129" y="0" width="41" height="41" rx="4" fill="#357f4d" class=""/><rect x="172" y="0" width="41" height="41" rx="4" fill="#2f7a4a" class=""/><rect x="215" y="0" width="41" height="41" rx="4" fill="#3b8a55" class=""/><rect x="258" y="0" width="41" height="41" rx="4" fill="#2a6b42" class=""/><rect x="301" y="0" width="41" height="41" rx="4" fill="#357f4d" class=""/><rect x="0" y="43" width="41" height="41" rx="4" fill="#3b8a55" class=""/><rect x="43" y="43" width="41" height="41" rx="4" fill="#2a6b42" class=""/><rect x="86" y="43" width="41" height="41" rx="4" fill="#357f4d" class=""/><rect x="129" y="43" width="41" height="41" rx="4" fill="#2f7a4a" class=""/><rect x="172" y="43" width="41" height="41" rx="4" fill="#3b8a55" class=""/><rect x="215" y="43" width="41" height="41" rx="4" fill="#2a6b42" class=""/><rect x="258" y="43" width="41" height="41" rx="4" fill="#357f4d" class=""/><rect x="301" y="43" width="41" height="41" rx="4" fill="#2f7a4a" class=""/><rect x="0" y="86" width="41" height="41" rx="4" fill="#2a6b42" class=""/><rect x="43" y="86" width="41" height="41" rx="4" fill="#357f4d" class=""/><rect x="86" y="86" width="41" height="41" rx="4" fill="#2f7a4a" class=""/><rect x="129" y="86" width="41" height="41" rx="4" fill="#3b8a55" class=""/><rect x="172" y="86" width="41" height="41" rx="4" fill="#2a6b42" class=""/><rect x="215" y="86" width="41" height="41" rx="4" fill="#357f4d" class="hotpx"/><rect x="258" y="86" width="41" height="41" rx="4" fill="#2f7a4a" class=""/><rect x="301" y="86" width="41" height="41" rx="4" fill="#3b8a55" class=""/><rect x="0" y="129" width="41" height="41" rx="4" fill="#357f4d" class=""/><rect x="43" y="129" width="41" height="41" rx="4" fill="#2f7a4a" class=""/><rect x="86" y="129" width="41" height="41" rx="4" fill="#3b8a55" class=""/><rect x="129" y="129" width="41" height="41" rx="4" fill="#2a6b42" class=""/><rect x="172" y="129" width="41" height="41" rx="4" fill="#357f4d" class=""/><rect x="215" y="129" width="41" height="41" rx="4" fill="#2f7a4a" class=""/><rect x="258" y="129" width="41" height="41" rx="4" fill="#3b8a55" class=""/><rect x="301" y="129" width="41" height="41" rx="4" fill="#2a6b42" class=""/><rect x="0" y="172" width="41" height="41" rx="4" fill="#2f7a4a" class=""/><rect x="43" y="172" width="41" height="41" rx="4" fill="#3b8a55" class=""/><rect x="86" y="172" width="41" height="41" rx="4" fill="#2a6b42" class=""/><rect x="129" y="172" width="41" height="41" rx="4" fill="#357f4d" class=""/><rect x="172" y="172" width="41" height="41" rx="4" fill="#2f7a4a" class=""/><rect x="215" y="172" width="41" height="41" rx="4" fill="#3b8a55" class=""/><rect x="258" y="172" width="41" height="41" rx="4" fill="#2a6b42" class=""/><rect x="301" y="172" width="41" height="41" rx="4" fill="#357f4d" class=""/>
   <rect class="scan" x="-6" y="-8" width="6" height="231" fill="#ffd43b" opacity=".85" rx="3"/>
-  <g class="fx d3"><circle cx="236" cy="107" r="34" fill="none" stroke="#ff6b00" stroke-width="3"/><text x="236" y="168" text-anchor="middle" class="lbl" style="fill:#ffb347">¡Hotspot!</text></g>
+  <g class="fx d3"><circle cx="236" cy="107" r="34" fill="none" stroke="#ff6b00" stroke-width="3"/><text x="236" y="168" text-anchor="middle" class="lbl" style="fill:#ffb347">Hotspot!</text></g>
  </g>
  <g transform="translate(610,120)">
   <rect x="0" y="0" width="26" height="200" rx="13" fill="rgba(255,255,255,.1)"/>
   <rect class="therm" x="4" y="4" width="18" height="192" rx="9" fill="#ff6b00"/>
   <circle cx="13" cy="210" r="18" fill="#ff6b00"/>
-  <text x="44" y="20" class="sub">caliente</text><text x="44" y="196" class="sub">normal</text>
+  <text x="44" y="20" class="sub">hot</text><text x="44" y="196" class="sub">normal</text>
  </g>
- <g class="fx d2"><text x="40" y="380" class="sub">Infrarrojo medio (~4 µm): el fuego brilla mucho más que su entorno.</text></g>
- <g class="fx d4"><text x="40" y="402" class="sub">VIIRS: píxel de 375 m · MODIS: píxel de 1 km → VIIRS ve fuegos más pequeños.</text></g>
+ <g class="fx d2"><text x="40" y="380" class="sub">Mid-infrared (~4 µm) vs. thermal (~11 µm): a fire at ~800 °C outshines its ~30 °C surroundings.</text></g>
+ <g class="fx d4"><text x="40" y="402" class="sub">VIIRS pixel 375 m (≈14 ha) · MODIS pixel 1 km (≈100 ha): VIIRS sees fires ~7× smaller.</text></g>
 </g>
 
 <!-- 3 transmisión -->
 <g class="sc" id="hs3">
- <g class="fx"><text x="40" y="50" class="ttl">PASO 3 · DEL SATÉLITE A INTERNET</text><text x="40" y="78" class="lbl">Los datos bajan, se procesan y se publican</text></g>
+ <g class="fx"><text x="40" y="50" class="ttl">STEP 3 · FROM SATELLITE TO THE WEB</text><text x="40" y="78" class="lbl">Data are downlinked, processed and published</text></g>
  <g transform="translate(140,150) scale(1.2)"><rect x="-46" y="-12" width="30" height="18" rx="3" fill="#ff922b"/><rect x="16" y="-12" width="30" height="18" rx="3" fill="#ff922b"/><rect x="-18" y="-24" width="36" height="44" rx="11" fill="#dbe4ff"/><rect x="-13" y="-18" width="26" height="19" rx="7" fill="#fff"/><circle cx="-5" cy="-9" r="2.6" fill="#0b2a5b"/><circle cx="5" cy="-9" r="2.6" fill="#0b2a5b"/><path d="M-4 -4Q0 -1 4 -4" stroke="#e8590c" stroke-width="1.6" fill="none"/><circle cx="0" cy="13" r="4" fill="#0b2a5b" stroke="#ff922b" stroke-width="1.6"/></g>
  <path id="p31" d="M150 175 Q220 260 300 300" fill="none" stroke="#ff922b" stroke-dasharray="4 5" opacity=".7"/>
  <path id="p32" d="M330 310 L470 310" fill="none" stroke="#ff922b" stroke-dasharray="4 5" opacity=".7"/>
  <path id="p33" d="M570 310 L650 310" fill="none" stroke="#ff922b" stroke-dasharray="4 5" opacity=".7"/>
- <g class="fx d1" transform="translate(300,280)"><path d="M0 60 L14 20 L28 60 Z" fill="none" stroke="#dbe4ff" stroke-width="3"/><path d="M-6 26 Q14 -6 34 26" fill="#dbe4ff"/><text x="14" y="84" text-anchor="middle" class="sub">Estación en tierra</text></g>
- <g class="fx d2" transform="translate(470,268)"><rect width="100" height="84" rx="10" fill="#13284d" stroke="#ff922b"/><rect x="14" y="14" width="72" height="12" rx="3" fill="#2b4a7f"/><rect x="14" y="34" width="72" height="12" rx="3" fill="#2b4a7f"/><rect x="14" y="54" width="72" height="12" rx="3" fill="#2b4a7f"/><text x="50" y="106" text-anchor="middle" class="sub">NASA LANCE</text></g>
- <g class="fx d3" transform="translate(650,268)"><circle cx="40" cy="42" r="40" fill="#13284d" stroke="#ff922b"/><path d="M0 42H80M40 2V82M12 18Q40 34 68 18M12 66Q40 50 68 66" stroke="#9fb0cc" fill="none"/><text x="40" y="106" text-anchor="middle" class="sub">FIRMS (abierto)</text></g>
- <g class="fx d4"><text x="400" y="140" text-anchor="middle" class="lbl" style="fill:#ffd43b">≈ 3 horas</text><text x="400" y="160" text-anchor="middle" class="sub">desde que el satélite pasa hasta que el dato es público</text></g>
- <g class="fx d5"><text x="400" y="190" text-anchor="middle" class="sub">Cada hotspot trae: ubicación · fecha y hora · confianza · potencia del fuego (FRP)</text></g>
+ <g transform="translate(300,280)"><g class="fx d1"><path d="M0 60 L14 20 L28 60 Z" fill="none" stroke="#dbe4ff" stroke-width="3"/><path d="M-6 26 Q14 -6 34 26" fill="#dbe4ff"/><text x="14" y="84" text-anchor="middle" class="sub">Ground station (Svalbard)</text></g></g>
+ <g transform="translate(470,268)"><g class="fx d2"><rect width="100" height="84" rx="10" fill="#13284d" stroke="#ff922b"/><rect x="14" y="14" width="72" height="12" rx="3" fill="#2b4a7f"/><rect x="14" y="34" width="72" height="12" rx="3" fill="#2b4a7f"/><rect x="14" y="54" width="72" height="12" rx="3" fill="#2b4a7f"/><text x="50" y="106" text-anchor="middle" class="sub">NASA LANCE</text></g></g>
+ <g transform="translate(650,268)"><g class="fx d3"><circle cx="40" cy="42" r="40" fill="#13284d" stroke="#ff922b"/><path d="M0 42H80M40 2V82M12 18Q40 34 68 18M12 66Q40 50 68 66" stroke="#9fb0cc" fill="none"/><text x="40" y="106" text-anchor="middle" class="sub">FIRMS (open data)</text></g></g>
+ <g class="fx d4"><text x="400" y="140" text-anchor="middle" class="lbl" style="fill:#ffd43b">&lt; 3 hours</text><text x="400" y="160" text-anchor="middle" class="sub">from satellite overpass to public data (NASA LANCE near real time)</text></g>
+ <g class="fx d5"><text x="400" y="190" text-anchor="middle" class="sub">Each hotspot carries: latitude/longitude · date &amp; time · confidence · fire radiative power (FRP, MW)</text></g>
  <circle r="5" fill="#ffd43b"><animateMotion dur="2s" repeatCount="indefinite" begin="indefinite"><mpath href="#p31"/></animateMotion></circle>
  <circle r="5" fill="#ffd43b"><animateMotion dur="1.4s" repeatCount="indefinite" begin="indefinite"><mpath href="#p32"/></animateMotion></circle>
  <circle r="5" fill="#ffd43b"><animateMotion dur="1s" repeatCount="indefinite" begin="indefinite"><mpath href="#p33"/></animateMotion></circle>
@@ -645,62 +678,91 @@ body.intro-on{overflow:hidden}
 
 <!-- 4 procesamiento -->
 <g class="sc" id="hs4">
- <g class="fx"><text x="40" y="50" class="ttl">PASO 4 · NUESTRO PROCESAMIENTO</text><text x="40" y="78" class="lbl">De datos crudos a un calendario confiable</text></g>
- <g class="fx d1" transform="translate(40,160)"><rect class="lit" style="animation-delay:1.0s" width="160" height="130" rx="14" fill="#13284d" stroke="#2b4a7f" stroke-width="2"/>
-  <text x="16" y="34" class="ttl" style="font-size:22px">1</text><text x="16" y="66" class="lbl">Descargar</text><text x="16" y="90" class="sub">66.192 detecciones</text><text x="16" y="108" class="sub">2000–2025 · NASA FIRMS</text></g><g class="fx d2" transform="translate(228,160)"><rect class="lit" style="animation-delay:3.6s" width="160" height="130" rx="14" fill="#13284d" stroke="#2b4a7f" stroke-width="2"/>
-  <text x="16" y="34" class="ttl" style="font-size:22px">2</text><text x="16" y="66" class="lbl">Limpiar</text><text x="16" y="90" class="sub">duplicados · DANE</text><text x="16" y="108" class="sub">volcán y fuentes fijas</text></g><g class="fx d3" transform="translate(416,160)"><rect class="lit" style="animation-delay:6.2s" width="160" height="130" rx="14" fill="#13284d" stroke="#2b4a7f" stroke-width="2"/>
-  <text x="16" y="34" class="ttl" style="font-size:22px">3</text><text x="16" y="66" class="lbl">Armonizar</text><text x="16" y="90" class="sub">MODIS × k ≈ 6</text><text x="16" y="108" class="sub">calibrado 2012–2025</text></g><g class="fx d4" transform="translate(604,160)"><rect class="lit" style="animation-delay:8.8s" width="160" height="130" rx="14" fill="#13284d" stroke="#2b4a7f" stroke-width="2"/>
-  <text x="16" y="34" class="ttl" style="font-size:22px">4</text><text x="16" y="66" class="lbl">Visualizar</text><text x="16" y="90" class="sub">mapa · calendario</text><text x="16" y="108" class="sub">anomalías y alertas</text></g>
+ <g class="fx"><text x="40" y="50" class="ttl">STEP 4 · OUR PROCESSING</text><text x="40" y="78" class="lbl">From raw data to a reliable calendar</text></g>
+ <g transform="translate(40,160)"><g class="fx d1"><rect class="lit" style="animation-delay:1.0s" width="160" height="130" rx="14" fill="#13284d" stroke="#2b4a7f" stroke-width="2"/>
+  <text x="16" y="34" class="ttl" style="font-size:22px">1</text><text x="16" y="66" class="lbl">Download</text><text x="16" y="90" class="sub">66,192 detections</text><text x="16" y="108" class="sub">2000–2025 · NASA FIRMS</text></g></g><g transform="translate(228,160)"><g class="fx d2"><rect class="lit" style="animation-delay:3.6s" width="160" height="130" rx="14" fill="#13284d" stroke="#2b4a7f" stroke-width="2"/>
+  <text x="16" y="34" class="ttl" style="font-size:22px">2</text><text x="16" y="66" class="lbl">Clean</text><text x="16" y="90" class="sub">clip to 47 DANE towns</text><text x="16" y="108" class="sub">−588 industrial hits</text></g></g><g transform="translate(416,160)"><g class="fx d3"><rect class="lit" style="animation-delay:6.2s" width="160" height="130" rx="14" fill="#13284d" stroke="#2b4a7f" stroke-width="2"/>
+  <text x="16" y="34" class="ttl" style="font-size:22px">3</text><text x="16" y="66" class="lbl">Harmonize</text><text x="16" y="90" class="sub">MODIS × k ≈ 5.9</text><text x="16" y="108" class="sub">calibrated 2012–2025</text></g></g><g transform="translate(604,160)"><g class="fx d4"><rect class="lit" style="animation-delay:8.8s" width="160" height="130" rx="14" fill="#13284d" stroke="#2b4a7f" stroke-width="2"/>
+  <text x="16" y="34" class="ttl" style="font-size:22px">4</text><text x="16" y="66" class="lbl">Visualize</text><text x="16" y="90" class="sub">map · calendar</text><text x="16" y="108" class="sub">anomalies · fire events</text></g></g>
  <path class="fx d2" d="M200 225 L226 225" stroke="#ff922b" stroke-width="3" marker-end="url(#arw)"/><path class="fx d3" d="M388 225 L414 225" stroke="#ff922b" stroke-width="3" marker-end="url(#arw)"/><path class="fx d4" d="M576 225 L602 225" stroke="#ff922b" stroke-width="3" marker-end="url(#arw)"/>
- <g class="fx d6"><text x="400" y="350" text-anchor="middle" class="lbl">34.439 hotspots dentro del Tolima · 26 años en la misma escala</text></g>
- <g class="fx d7"><text x="400" y="374" text-anchor="middle" class="sub">Validado con la Universidad del Tolima (mismos años pico: 2003 y 2015)</text></g>
+ <g class="fx d6"><text x="400" y="350" text-anchor="middle" class="lbl">34,439 hotspots inside Tolima · 26 years on the same scale</text></g>
+ <g class="fx d7"><text x="400" y="374" text-anchor="middle" class="sub">Validated against the University of Tolima (same peak years: 2003 and 2015; totals within 5 %)</text></g>
 </g>
 
-<!-- 5 alerta temprana -->
+<!-- 5 caso real -->
+<g class="sc" id="hs4b">
+ <g class="fx"><text x="40" y="50" class="ttl">STEP 5 · A REAL CASE</text><text x="40" y="78" class="lbl">Natagaima, 12–22 September 2024</text></g>
+ <g transform="translate(40,98) scale(0.86)">
+  <rect width="420" height="290" rx="14" fill="#16331f" stroke="#2b4a7f" stroke-width="2"/>
+  <path d="M300 0 C285 60 320 110 300 170 S310 250 296 290" fill="none" stroke="#4dabf7" stroke-width="6" opacity=".7"/>
+  <text x="312" y="24" class="sub" style="fill:#a5d8ff">Magdalena River</text>
+  <g class="fx d1"><circle cx="90" cy="200" r="7" fill="#fff"/><text x="102" y="205" class="lbl" style="font-size:13px">Natagaima (town)</text></g>
+  <g class="fx d2"><circle cx="230" cy="120" r="46" fill="#ff6b00" opacity=".18" stroke="#ff6b00" stroke-dasharray="6 5" stroke-width="2"/>
+   <circle cx="215" cy="110" r="4" fill="#ffd43b"/><circle cx="228" cy="104" r="4" fill="#ff922b"/><circle cx="240" cy="118" r="4" fill="#ffd43b"/><circle cx="222" cy="126" r="4" fill="#ff6b00"/><circle cx="246" cy="132" r="4" fill="#ff922b"/><circle cx="234" cy="140" r="4" fill="#ffd43b"/><circle cx="208" cy="132" r="4" fill="#ff6b00"/><circle cx="252" cy="108" r="4" fill="#ff922b"/>
+   <text x="230" y="186" text-anchor="middle" class="sub" style="fill:#ffd8a8">99 detections · ~1,022 ha</text></g>
+  <g class="fx d3"><path d="M97 196 L196 140" stroke="#fff" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arw)"/><text x="122" y="158" class="lbl" style="font-size:13px;fill:#ffd43b">11.4 km</text></g>
+  <g class="fx d4"><path d="M60 40 L60 12" stroke="#fff" stroke-width="2" marker-end="url(#arw)"/><text x="70" y="26" class="sub">Ibagué 95 km north</text></g>
+  <g class="fx d4"><rect x="20" y="262" width="80" height="5" fill="#fff"/><text x="20" y="256" class="sub">0</text><text x="100" y="256" class="sub" text-anchor="middle">10 km</text></g>
+ </g>
+ <g transform="translate(470,98) scale(0.86)"><g class="fx d5">
+  <rect width="270" height="290" rx="14" fill="#13284d" stroke="#ff922b"/>
+  <text x="16" y="30" class="ttl">WHAT THE SATELLITES MEASURED</text>
+  <text x="16" y="62" class="sub">Detections</text><text x="254" y="62" class="lbl" text-anchor="end" style="font-size:13px">99 (85 VIIRS)</text>
+  <text x="16" y="90" class="sub">Duration</text><text x="254" y="90" class="lbl" text-anchor="end" style="font-size:13px">11 days</text>
+  <text x="16" y="118" class="sub">Total fire power</text><text x="254" y="118" class="lbl" text-anchor="end" style="font-size:13px">1,558 MW</text>
+  <text x="16" y="146" class="sub">Strongest pixel</text><text x="254" y="146" class="lbl" text-anchor="end" style="font-size:13px">203 MW</text>
+  <text x="16" y="174" class="sub">Thermal footprint</text><text x="254" y="174" class="lbl" text-anchor="end" style="font-size:13px">~1,022 ha</text>
+  <text x="16" y="202" class="sub">Land cover (MODIS)</text><text x="254" y="202" class="lbl" text-anchor="end" style="font-size:13px">Savanna</text>
+  <text x="16" y="230" class="sub">Severity</text><text x="254" y="230" class="lbl" text-anchor="end" style="font-size:13px;fill:#ff8787">Very high (top 5 %)</text>
+  <text x="16" y="262" class="sub">Sentinel-2: green on 4 Sep →</text><text x="16" y="280" class="sub">gray-brown burn scar on 24 Sep</text>
+ </g></g>
+</g>
+
+<!-- 6 alerta temprana -->
 <g class="sc" id="hs5">
- <g class="fx"><text x="40" y="50" class="ttl">PASO 5 · ALERTA TEMPRANA (PROPUESTA)</text><text x="40" y="78" class="lbl">Comparar cada semana con lo normal</text></g>
+ <g class="fx"><text x="40" y="50" class="ttl">STEP 6 · EARLY WARNING (PROPOSAL)</text><text x="40" y="78" class="lbl">Compare every week with what is normal</text></g>
  <g transform="translate(60,110)">
   <path d="M0 210 C60 200,100 150,150 170 S240 200,300 150 S380 140,420 160 L420 230 C380 215,340 220,300 215 S220 240,150 225 S60 235,0 235Z" fill="rgba(159,176,204,.25)"/>
-  <line x1="0" x2="440" y1="110" y2="110" stroke="#ff6b6b" stroke-dasharray="6 5"/><text x="440" y="102" text-anchor="end" class="sub" style="fill:#ffa8a8">umbral: muy por encima de lo normal</text>
+  <line x1="0" x2="440" y1="110" y2="110" stroke="#ff6b6b" stroke-dasharray="6 5"/><text x="440" y="102" text-anchor="end" class="sub" style="fill:#ffa8a8">threshold: z ≥ 1.5 above normal</text>
   <path class="draw" d="M0 222 C60 214,100 170,150 190 S240 205,290 150 S360 70,420 40" fill="none" stroke="#ff922b" stroke-width="4" stroke-dasharray="560" stroke-dashoffset="560" stroke-linecap="round"/>
   <circle class="pulse2" cx="335" cy="108" r="7" fill="#ff6b6b" opacity="0"/>
   <line x1="0" x2="440" y1="250" y2="250" stroke="rgba(255,255,255,.2)"/>
-  <text x="0" y="272" class="sub">semanas →</text><text x="200" y="272" class="sub">gris = rango normal (26 años) · naranja = este año</text>
+  <text x="0" y="272" class="sub">weeks →</text><text x="200" y="272" class="sub">gray = normal range (26 years) · orange = this year</text>
  </g>
  <g class="slide" transform="translate(548,110)">
   <rect width="214" height="250" rx="26" fill="#0b1630" stroke="#2b4a7f" stroke-width="3"/>
   <rect x="12" y="40" width="190" height="118" rx="12" fill="#fff"/>
   <g class="ring" transform="translate(32,58)"><path d="M0 18 Q0 0 10 0 Q20 0 20 18 L24 22 L-4 22Z" fill="#e8590c"/><circle cx="10" cy="25" r="3" fill="#e8590c"/></g>
-  <text x="62" y="70" style="fill:#c92a2a;font-size:11px;font-weight:800">ALERTA TEMPRANA</text>
+  <text x="62" y="70" style="fill:#c92a2a;font-size:11px;font-weight:800">EARLY WARNING</text>
   <text x="24" y="100" style="fill:#0f1f3d;font-size:12px;font-weight:700">Natagaima</text>
-  <text x="24" y="118" style="fill:#4a5568;font-size:11px">3× más hotspots de lo normal</text>
-  <text x="24" y="136" style="fill:#4a5568;font-size:11px">Temporada seca · revisar zona</text>
-  <text x="107" y="200" text-anchor="middle" class="sub">Bomberos · CAR · UNGRD</text>
+  <text x="24" y="118" style="fill:#4a5568;font-size:11px">3× more hotspots than normal</text>
+  <text x="24" y="136" style="fill:#4a5568;font-size:11px">Dry season · check the area</text>
+  <text x="107" y="200" text-anchor="middle" class="sub">Firefighters · CORTOLIMA · UNGRD</text>
  </g>
- <g class="fx d7"><text x="40" y="100" class="sub">Ejemplo ilustrativo. La app ya calcula las anomalías; enviar alertas automáticas sería el siguiente paso.</text></g>
+ <g class="fx d7"><text x="40" y="100" class="sub">Illustrative example. The app already computes the anomalies; automatic alerts would be the next step.</text></g>
 </g>
 
 <!-- 6 cierre -->
 <g class="sc" id="hs6">
  <circle cx="400" cy="700" r="460" fill="url(#eg2)"/>
  <g transform="translate(400,170) scale(2.2)"><rect x="-46" y="-12" width="30" height="18" rx="3" fill="#ff922b"/><rect x="16" y="-12" width="30" height="18" rx="3" fill="#ff922b"/><rect x="-18" y="-24" width="36" height="44" rx="11" fill="#dbe4ff"/><rect x="-13" y="-18" width="26" height="19" rx="7" fill="#fff"/><circle cx="-5" cy="-9" r="2.6" fill="#0b2a5b"/><circle cx="5" cy="-9" r="2.6" fill="#0b2a5b"/><path d="M-4 -4Q0 -1 4 -4" stroke="#e8590c" stroke-width="1.6" fill="none"/><circle cx="0" cy="13" r="4" fill="#0b2a5b" stroke="#ff922b" stroke-width="1.6"/></g>
- <g class="fx d1"><text x="400" y="300" text-anchor="middle" style="font-size:30px;font-weight:800">¡Ahora explora tú!</text></g>
- <g class="fx d2"><text x="400" y="330" text-anchor="middle" class="sub" style="font-size:14px">26 años de fuego en el Tolima, en un solo calendario.</text></g>
+ <g class="fx d1"><text x="400" y="300" text-anchor="middle" style="font-size:30px;font-weight:800">Now it's your turn!</text></g>
+ <g class="fx d2"><text x="400" y="330" text-anchor="middle" class="sub" style="font-size:14px">26 years of fire in Tolima, in one single calendar.</text></g>
 </g>
 </svg><div class="caption" id="hwCap"></div></div>
   <div class="hw-ctl">
-   <button id="hwPrev" aria-label="Anterior">◀</button><button id="hwPlay" aria-label="Pausa">⏸</button><button id="hwNext" aria-label="Siguiente">▶</button>
+   <button id="hwPrev" aria-label="Previous">◀</button><button id="hwPlay" aria-label="Pause">⏸</button><button id="hwNext" aria-label="Next">▶</button>
    <div class="hdots" id="hwDots"></div>
-   <button id="hwMute" aria-label="Silenciar">🔊 Voz</button>
-   <button class="go" id="hwGo">Explorar el tablero →</button>
+   <button id="hwMute" aria-label="Mute">🔊 Voice</button>
+   <button class="go" id="hwGo">Explore the dashboard →</button>
   </div>
  </div>
 </div>
 <div id="tt"></div>
 
 <div id="guide">
-  <button id="guideMute" title="Activar o silenciar la voz de Sati" style="pointer-events:auto;align-self:flex-start;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;width:34px;height:34px;cursor:pointer;font-size:15px;box-shadow:0 4px 12px rgba(0,0,0,.15)">🔊</button>
-  <div class="bubble" id="guideText">¡Hola! Soy <b>Sati</b>. Elige un año arriba y explora el mapa y las gráficas.</div>
+  <button id="guideMute" title="Turn Sati's voice on or off" style="pointer-events:auto;align-self:flex-start;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;width:34px;height:34px;cursor:pointer;font-size:15px;box-shadow:0 4px 12px rgba(0,0,0,.15)">🔊</button>
+  <div class="bubble" id="guideText">Hi! I'm <b>Sati</b>. Pick a year above and explore the map and the charts.</div>
   <svg class="mini" viewBox="60 20 80 120" id="guideBot" aria-hidden="true">
     <path d="M100 52V36" stroke="#0b2a5b" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="32" r="6" fill="#e8590c"/>
     <rect x="68" y="52" width="64" height="78" rx="20" fill="#0b2a5b"/><rect x="76" y="62" width="48" height="36" rx="12" fill="#fff"/>
@@ -715,23 +777,24 @@ body.intro-on{overflow:hidden}
 /* ---------- explicación animada con voz ---------- */
 (function(){
   const SC=[
-    'Todo empieza en el espacio. Satélites de la NASA, como Terra, Aqua y Suomi NPP, giran alrededor de la Tierra de polo a polo, a unos setecientos u ochocientos kilómetros de altura. Cada uno pasa sobre Colombia de día y de noche, observando una franja de más de dos mil kilómetros de ancho.',
-    'A bordo llevan sensores que miden el calor de la superficie en el infrarrojo. Cuando un píxel está mucho más caliente que sus vecinos, el algoritmo lo marca como un punto de calor, o hotspot. VIIRS mira con píxeles de trescientos setenta y cinco metros, y MODIS de un kilómetro. Por eso VIIRS detecta fuegos más pequeños.',
-    'Los datos bajan a estaciones en tierra y el sistema LANCE de la NASA los procesa. En unas tres horas, cada hotspot queda publicado en FIRMS con su ubicación, fecha, hora, confianza y potencia del fuego, abierto para todo el mundo.',
-    'Nosotros descargamos veintiséis años de esos datos para el Tolima. Quitamos duplicados, recortamos con los límites del DANE y separamos el volcán y las fuentes fijas. Luego armonizamos: como VIIRS ve unas seis veces más que MODIS, ajustamos los años antiguos para que toda la serie se compare en la misma escala.',
-    'Con esa historia sabemos qué es normal para cada semana del año. Si una semana supera mucho ese valor, sobre todo en temporada seca, el sistema podría enviar una alerta temprana a bomberos, corporaciones ambientales y gestión del riesgo, antes de que el incendio se salga de control.',
-    'Ahora te toca a ti. Explora el mapa y el calendario, y descubre cómo se ha quemado el Tolima en los últimos veintiséis años.'
-  ];
-  window.__howtoTexts=SC.flatMap(t=>t.match(/[^.!?]+[.!?]+/g).map(x=>x.trim()));
+     "It all starts in space. NASA satellites Terra and Aqua fly at 705 kilometers, and Suomi NPP at 824 kilometers, circling the Earth from pole to pole about 14 times a day. Their sensors sweep strips 2,330 and 3,040 kilometers wide, so Tolima, with 23,562 square kilometers, is seen about four times every day and night.",
+     "On board, infrared sensors measure the heat of every pixel. A fire at about 800 degrees glows far brighter than its 30 degree surroundings in the 4 micrometer band. VIIRS pixels are 375 meters, about 14 hectares, while MODIS pixels are 1 kilometer, about 100 hectares. That is why VIIRS detects fires roughly seven times smaller.",
+     "The data are sent down to ground stations and processed by NASA's LANCE system. In less than three hours each hotspot is published on FIRMS with its coordinates, date, time, confidence, and fire radiative power in megawatts, open to everyone.",
+     "We downloaded 66,192 detections from 2000 to 2025. We clipped them to the 47 municipalities of Tolima with DANE boundaries, and removed 588 detections from the Nevado del Ruiz volcano, a cement plant, oil fields and rice mills. Then we harmonized: since VIIRS sees about 5.9 times more than MODIS, older years are scaled so that all 26 years share the same scale.",
+     "Here is a real case. Between the 12th and 22nd of September 2024, satellites detected 99 hotspots 11.4 kilometers east of the town of Natagaima, 95 kilometers south of Ibagué. Together they released 1,558 megawatts, over a thermal footprint of about 1,022 hectares of savanna. Sentinel-2 shows green vegetation on September 4th and a gray-brown burn scar on September 24th.",
+     "With 26 years of history we know what is normal for every week. If a week goes far above that, especially in the dry season, the system could send an early warning to firefighters, CORTOLIMA and the national risk agency, before the fire gets out of control.",
+     "Now it's your turn. Explore the map and the calendar, and discover how Tolima has burned over the last 26 years."
+    ];
+  window.__howtoTexts=SC.flatMap(t=>t.split(/(?<=[.!?])\s+/).map(x=>x.trim()).filter(Boolean));
   const box=document.getElementById('howto');if(!box)return;
   const cap=document.getElementById('hwCap'),dots=document.getElementById('hwDots'),stepT=document.getElementById('hwStep');
   SC.forEach((_,i)=>{const d=document.createElement('i');d.onclick=()=>go(i);dots.appendChild(d);});
   const synth=window.speechSynthesis;let voice=null,muted=false,paused=false,cur=0,timer=0,token=0;
-  function pickVoice(){if(!synth)return;const vs=synth.getVoices().filter(v=>/^es/i.test(v.lang));
-    voice=vs.find(v=>/es-(CO|MX|US|419)/i.test(v.lang)&&/natural|online|google/i.test(v.name))||vs.find(v=>/natural|online|google/i.test(v.name))||vs.find(v=>/es-(CO|MX|US|419)/i.test(v.lang))||vs[0]||null;}
+  function pickVoice(){if(!synth)return;const vs=synth.getVoices().filter(v=>/^en/i.test(v.lang));
+    voice=vs.find(v=>/en-US/i.test(v.lang)&&/natural|online|google/i.test(v.name))||vs.find(v=>/natural|online|google/i.test(v.name))||vs.find(v=>/en-US/i.test(v.lang))||vs[0]||null;}
   if(synth){pickVoice();synth.onvoiceschanged=pickVoice;}
-  if(!synth)document.getElementById('hwMute').textContent='🔇 Sin voz';
-  const sentences=t=>t.match(/[^.!?]+[.!?]+/g).map(x=>x.trim());
+  if(!synth)document.getElementById('hwMute').textContent='🔇 No voice';
+  const sentences=t=>t.split(/(?<=[.!?])\s+/).map(x=>x.trim()).filter(Boolean);
   const estimate=t=>Math.max(5000,t.split(/\s+/).length/2.6*1000+1200);
   function restart(g){g.classList.remove('play');void g.getBoundingClientRect();g.classList.add('play');
     g.querySelectorAll('animateMotion').forEach(a=>{try{a.beginElement();}catch(e){}});}
@@ -752,9 +815,9 @@ body.intro-on{overflow:hidden}
     const say=()=>{if(tk!==token)return;if(k>=parts.length)return done();
       cap.textContent=parts[k];
       let fired=false;const nxt=()=>{if(fired)return;fired=true;k++;say();};
-      setTimeout(nxt,estimate(parts[k])+6000); // respaldo si el audio no avisa el final
+      setTimeout(nxt,estimate(parts[k])+6000); // fallback if the audio never reports its end
       if(window.satiSpeak)window.satiSpeak(parts[k],nxt);
-      else{const u=new SpeechSynthesisUtterance(parts[k]);u.lang=voice?voice.lang:'es-ES';if(voice)u.voice=voice;u.onend=nxt;u.onerror=nxt;synth.speak(u);}};
+      else{const u=new SpeechSynthesisUtterance(parts[k]);u.lang=voice?voice.lang:'en-US';if(voice)u.voice=voice;u.onend=nxt;u.onerror=nxt;synth.speak(u);}};
     say();
   }
   window.openHowto=()=>{box.classList.add('on');document.body.style.overflow='hidden';go(0);};
@@ -772,7 +835,7 @@ body.intro-on{overflow:hidden}
     if(!paused&&muted)go(cur);
   };
   document.getElementById('hwMute').onclick=()=>{if(!synth)return;muted=!muted;
-    document.getElementById('hwMute').textContent=muted?'🔇 Voz':'🔊 Voz';go(cur);};
+    document.getElementById('hwMute').textContent=muted?'🔇 Voice':'🔊 Voice';go(cur);};
   addEventListener('keydown',e=>{if(!box.classList.contains('on'))return;
     if(e.key==='Escape')closeH();else if(e.key==='ArrowRight')go(cur+1);else if(e.key==='ArrowLeft')go(cur-1);});
   document.getElementById('navHow').onclick=e=>{e.preventDefault();window.openHowto();};
@@ -801,16 +864,17 @@ body.intro-on{overflow:hidden}
 
 (()=>{
 const Y0=2000,Y1=2025,NY=Y1-Y0+1,NW=53,YV=2012;
-const MONTHS=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-const MONTHL=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-const CONF=['Baja','Nominal','Alta'],SAT=['Terra','Aqua','S-NPP'];
-const TYPE=['Vegetación','Volcán','Fuente fija','Costa afuera'];
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONTHL=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const CONF=['Low','Nominal','High'],SAT=['Terra','Aqua','S-NPP'];
+const TYPE=['Vegetation','Volcano','Static land source','Offshore'];
 const $=id=>document.getElementById(id);
-const fmt=n=>Math.round(n).toLocaleString('es-CO');
+const fmt=n=>Math.round(n).toLocaleString('en-US');
 const DAY0=Date.UTC(2000,0,1),dayOf=(y,m,d)=>Math.round((Date.UTC(y,m,d)-DAY0)/864e5);
 const dateOf=n=>new Date(DAY0+n*864e5);
 const iso=n=>dateOf(n).toISOString().slice(0,10);
 const nice=n=>{const d=dateOf(n);return d.getUTCDate()+' '+MONTHS[d.getUTCMonth()]+' '+d.getUTCFullYear();};
+const FZ={'débil':'weak','moderado':'moderate','moderada':'moderate','fuerte':'strong','muy fuerte':'very strong'};
 const S={fires:false,src:'harm',view:'int',gran:'m',conf:[false,true,true],excl:true,sens:[true,true],
   year:2024,month:-1,from:dayOf(2024,0,1),to:dayOf(2024,11,31),tab:'cal',hl:null};
 let D=null,N=0,BAND_CUTS=[4.5,3.75],DA,YY,MO,WK,BAND,SEL;
@@ -832,26 +896,26 @@ const hideTT=()=>tt.style.opacity=0;
 
 /* ---------- guía ---------- */
 const TIPS={
-  cal:'Cada cuadro es un periodo. <b>Más oscuro = más fuego.</b> Tócalo y el mapa te muestra esos hotspots.',
-  season:'La línea naranja es el año que elegiste; la gris, lo normal. Si la naranja va <b>muy por encima</b>, fue un año fuerte.',
-  years:'¿Ves el salto gris en 2012? No es más fuego: es que llegó <b>VIIRS</b>, que ve más. Lo naranja ya está corregido.',
-  mun:'Comparamos por cada 100 km², así un municipio grande no gana solo por tamaño.',
-  inc:'Aquí están los <b>incendios más intensos</b> del periodo. Toca uno y te llevo hasta él en el mapa.',
-  crit:'Estos periodos tuvieron mucho más fuego de lo normal. 2015 y 2024 fueron años de <b>El Niño</b>.'
+  cal:'Each cell is a period. <b>Darker = more fire.</b> Tap it and the map shows you those hotspots.',
+  season:'The orange line is the year you picked; the gray one is normal. If orange goes <b>far above</b>, it was a strong year.',
+  years:'See the gray jump in 2012? It is not more fire: that is when <b>VIIRS</b> arrived, and it sees more. The orange bars are already corrected.',
+  mun:'We compare per 100 km², so a big municipality does not win just because of its size.',
+  inc:'Here are the <b>most intense fires</b> of the period. Tap one and I will take you there on the map.',
+  crit:'These periods had much more fire than normal. 2015 and 2024 were <b>El Niño</b> years.'
 };
 let sayT=0,voiceOn=true,satiVoice=null;
 try{voiceOn=localStorage.getItem('satiVoz')!=='0';}catch(e){}
-function pickSatiVoice(){if(!window.speechSynthesis)return;const vs=speechSynthesis.getVoices().filter(v=>/^es/i.test(v.lang));
-  satiVoice=vs.find(v=>/es-(CO|MX|US|419)/i.test(v.lang)&&/natural|online|google/i.test(v.name))||vs.find(v=>/natural|online|google/i.test(v.name))||vs.find(v=>/es-(CO|MX|US|419)/i.test(v.lang))||vs[0]||null;}
+function pickSatiVoice(){if(!window.speechSynthesis)return;const vs=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang));
+  satiVoice=vs.find(v=>/en-US/i.test(v.lang)&&/natural|online|google/i.test(v.name))||vs.find(v=>/natural|online|google/i.test(v.name))||vs.find(v=>/en-US/i.test(v.lang))||vs[0]||null;}
 if(window.speechSynthesis){pickSatiVoice();speechSynthesis.addEventListener('voiceschanged',pickSatiVoice);}
-function vozNorm(html){return html.replace(/<br\s*\/?>/g,'. ').replace(/<[^>]+>/g,'').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,'').replace(/k ≈ 6/g,'k cercano a 6').replace(/#(\d+)/g,'número $1').replace(/ONI/g,'O N I').replace(/ \+(\d)/g,' más $1').replace(/ −(\d)/g,' menos $1').replace(/\s+/g,' ').trim();}
-// Voz natural pregrabada (audio/sati/<hash>.mp3, voz neuronal es-CO); si no hay audio, voz del navegador
+function vozNorm(html){return html.replace(/<br\s*\/?>/g,'. ').replace(/<[^>]+>/g,'').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,'').replace(/k ≈ 6/g,'k close to 6').replace(/#(\d+)/g,'number $1').replace(/ONI/g,'O N I').replace(/ \+(\d)/g,' plus $1').replace(/ −(\d)/g,' minus $1').replace(/km²/g,'square kilometers').replace(/ km\b/g,' kilometers').replace(/ ha\b/g,' hectares').replace(/ MW\b/g,' megawatts').replace(/\s+/g,' ').trim();}
+// Pre-recorded natural voice (audio/sati/<hash>.mp3, en-US neural voice); falls back to the browser voice
 let VOZ=null,curAudio=null;window.__voz=[];
 fetch('audio/sati/index.json').then(r=>r.ok?r.json():[]).then(l=>{VOZ=new Set(l);}).catch(()=>{VOZ=new Set();});
 function hashTxt(t){let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))>>>0;return h.toString(36);}
 function ttsSpeak(t,onend){
   if(!window.speechSynthesis){if(onend)setTimeout(onend,Math.max(2500,t.split(' ').length*380));return;}
-  const u=new SpeechSynthesisUtterance(t);u.lang=satiVoice?satiVoice.lang:'es-ES';if(satiVoice)u.voice=satiVoice;u.rate=1.05;u.pitch=1.1;
+  const u=new SpeechSynthesisUtterance(t);u.lang=satiVoice?satiVoice.lang:'en-US';if(satiVoice)u.voice=satiVoice;u.rate=1.05;u.pitch=1.1;
   if(onend){u.onend=onend;u.onerror=onend;}speechSynthesis.speak(u);}
 window.satiStop=()=>{if(curAudio){curAudio.onended=null;curAudio.pause();curAudio=null;}if(window.speechSynthesis)speechSynthesis.cancel();};
 window.satiPause=p=>{if(curAudio){p?curAudio.pause():curAudio.play().catch(()=>{});}else if(window.speechSynthesis){p?speechSynthesis.pause():speechSynthesis.resume();}};
@@ -866,50 +930,50 @@ function speak(html){
   const t=vozNorm(html);
   if(!voiceOn){window.__voz.push(t);return;}const hw=document.getElementById('howto');if(hw&&hw.classList.contains('on'))return;
   window.satiSpeak(t);}
-function say(html,title='Sati te cuenta',ms=11000){speak(html);const g=$('guideText');clearTimeout(sayT);g.style.display='';
+function say(html,title='Sati says',ms=11000){speak(html);const g=$('guideText');clearTimeout(sayT);g.style.display='';
   g.classList.remove('pop');void g.offsetWidth;g.innerHTML=`<span class="gt">${title}</span>${html}`;g.style.opacity=1;g.classList.add('pop');
   sayT=setTimeout(()=>g.style.opacity=0,ms);}
 const EVENTOS={
-  2000:'El satélite Terra (MODIS) empezó a enviar datos a comienzos de 2000; por eso este año casi no tiene registros.',
-  2002:'En mayo de 2002 la NASA lanzó <b>Aqua</b>, el segundo satélite con MODIS: desde entonces hay dos pasadas MODIS al día.',
-  2003:'Según la Universidad del Tolima, 2003 fue el año con más focos MODIS del periodo 2001–2022. Venía de El Niño 2002–2003.',
-  2007:'Comenzó una La Niña fuerte (2007–2008): más lluvias en los Andes colombianos.',
-  2009:'El Niño 2009–2010 trajo sequía a Colombia a finales de 2009 y comienzos de 2010.',
-  2010:'La Niña 2010–2011 causó la "ola invernal", una de las temporadas de lluvias más graves de la historia de Colombia.',
-  2012:'Llegó <b>VIIRS</b> (satélite Suomi NPP, lanzado en octubre de 2011): ve fuegos más pequeños, por eso los datos sin armonizar "saltan" este año.',
-  2015:'El Niño 2015–2016 fue uno de los más fuertes registrados por la NOAA (ONI hasta +2,6). En el Tolima se nota en agosto–septiembre.',
-  2016:'El Niño 2015–2016 terminó hacia abril de 2016; los primeros meses del año siguieron secos.',
-  2020:'Comenzó una La Niña que duró tres años seguidos (2020–2023), algo poco común.',
-  2023:'El Niño regresó a mediados de 2023.',
-  2024:'En enero de 2024, en pleno El Niño, Colombia sufrió una ola de incendios forestales y el Gobierno declaró situación de desastre.'
+  2000:'Terra (MODIS) started sending data in early 2000 (launched December 1999), so this year has almost no records. [NASA]',
+  2002:'In May 2002 NASA launched <b>Aqua</b>, the second satellite carrying MODIS: since then there are two MODIS passes per day. [NASA]',
+  2003:'According to the University of Tolima (CERE Note 21), 2003 had the most MODIS hotspots of 2001–2022. It followed El Niño 2002–2003.',
+  2007:'A strong La Niña began (2007–2008): more rain in the Colombian Andes. [NOAA ONI]',
+  2009:'El Niño 2009–2010 brought drought to Colombia in late 2009 and early 2010. [NOAA ONI, IDEAM]',
+  2010:'La Niña 2010–2011 caused the "ola invernal", one of the worst rainy seasons in Colombian history. [IDEAM, UNGRD]',
+  2012:'<b>VIIRS</b> arrived (Suomi NPP satellite, launched October 2011): it sees smaller fires, so the non-harmonized data "jump" this year. [Schroeder et al. 2014]',
+  2015:'El Niño 2015–2016 was one of the strongest on NOAA record (ONI up to +2.6). In Tolima it shows in August–September. [NOAA ONI]',
+  2016:'El Niño 2015–2016 ended around April 2016; the first months of the year stayed dry. [NOAA ONI]',
+  2020:'A La Niña began that lasted three years in a row (2020–2023), something rare. [NOAA ONI]',
+  2023:'El Niño returned in mid-2023. [NOAA ONI]',
+  2024:'In January 2024, in the middle of El Niño, Colombia suffered a wave of wildfires and the Government declared a national disaster. [UNGRD, Decree 0037 of 2024]'
 };
 function sayYear(y){
   if(!C)return;const tot=k=>{let s=0;for(let m=0;m<12;m++)s+=C.M.H[(k-Y0)*12+m];return s;};
   const vals=[];for(let k=2001;k<=Y1;k++)vals.push(tot(k));const avg=vals.reduce((a,b)=>a+b,0)/vals.length;
   const t=tot(y),rank=[...vals].sort((a,b)=>b-a).indexOf(t)+1;let pm=0;for(let m=1;m<12;m++)if(C.M.H[(y-Y0)*12+m]>C.M.H[(y-Y0)*12+pm])pm=m;
-  const ea=CLIMA&&CLIMA.anual[y],en=ea&&ea.fase!=='neutral'?` Fue año de <b>${ea.fase==='nino'?'El Niño':'La Niña'} ${ea.fuerza}</b>.`:'';
+  const ea=CLIMA&&CLIMA.anual[y],en=ea&&ea.fase!=='neutral'?` It was a <b>${FZ[ea.fuerza]||ea.fuerza} ${ea.fase==='nino'?'El Niño':'La Niña'}</b> year.`:'';
   const pct=Math.round((t/avg-1)*100);
-  const stat=y===2000?'':`Se registraron <b>${fmt(t)}</b> hotspots (armonizados), ${Math.abs(pct)} % ${pct>=0?'más':'menos'} que el promedio; es el puesto <b>#${rank}</b> de 25 años. Mes más activo: <b>${MONTHL[pm].toLowerCase()}</b>.`;
-  say(`${stat}${en}${EVENTOS[y]?'<br><br>📌 '+EVENTOS[y]:''}`,`En ${y}…`,13000);
+  const stat=y===2000?'':`<b>${fmt(t)}</b> hotspots were recorded (harmonized), ${Math.abs(pct)} % ${pct>=0?'above':'below'} average; it ranks <b>#${rank}</b> of 25 years. Most active month: <b>${MONTHL[pm]}</b>.`;
+  say(`${stat}${en}${EVENTOS[y]?'<br><br>📌 '+EVENTOS[y]:''}`,`In ${y}…`,13000);
 }
 const FXFACT={
-  volcan:'¿Sabías que el 13 de noviembre de 1985 una erupción del <b>Nevado del Ruiz</b> generó flujos de lodo que sepultaron <b>Armero</b>, en el Tolima? Murieron unas 23.000 personas. Hoy el Servicio Geológico Colombiano lo vigila las 24 horas, y desde el espacio la NASA detecta su calor.',
-  cemento:'¿Sabías que un horno de cemento trabaja a más de 1.400 °C sin parar? Por eso los satélites de la NASA lo detectan casi todos los días… ¡aunque no sea un incendio!',
-  petroleo:'¿Sabías que las <b>teas</b> petroleras queman el gas que sale con el crudo? VIIRS las ve incluso de noche, y el Banco Mundial y la NOAA usan estos datos para medir la quema de gas en el mundo.',
-  arroz:'¿Sabías que el Tolima es uno de los mayores productores de arroz de Colombia? Muchos molinos queman la <b>cascarilla</b> para secar el grano, y ese calor también lo ven los satélites.',
-  cafe:'¿Sabías que las trilladoras secan el café quemando su propia cascarilla (el <b>cisco</b>)? Ese calor repetido aparece como hotspot.',
-  sin_identificar:'Este punto se calienta una y otra vez durante años en el mismo lugar. Un incendio real no se repite así: probablemente es un horno o una industria. ¿Sabes qué hay aquí?'
+  volcan:'Did you know that on 13 November 1985 an eruption of <b>Nevado del Ruiz</b> triggered mudflows that buried the town of <b>Armero</b>, in Tolima? About 23,000 people died. Today the Colombian Geological Survey monitors it 24 hours a day, and NASA detects its heat from space. [SGC]',
+  cemento:'Did you know that a cement kiln runs non-stop at more than 1,400 °C? That is why NASA satellites detect it almost every day… even though it is not a wildfire!',
+  petroleo:'Did you know that oil <b>flares</b> burn the gas that comes out with crude oil? VIIRS sees them even at night, and the World Bank and NOAA use these data to measure global gas flaring. [Elvidge et al. 2016]',
+  arroz:'Did you know that Tolima is one of the largest rice producers in Colombia? Many mills burn rice <b>husks</b> to dry the grain, and satellites see that heat too. [Fedearroz]',
+  cafe:'Did you know that coffee mills dry the beans by burning their own husks (called <b>cisco</b>)? That repeated heat shows up as a hotspot.',
+  sin_identificar:'This spot heats up again and again for years in the same place. A real wildfire does not repeat like that: it is probably a kiln or an industry. Do you know what is here?'
 };
 let hsSaid=0;
-function tip(k){say(TIPS[k],({cal:'Calendario',season:'Temporadas',years:'Por año',mun:'Municipios',crit:'Periodos críticos',inc:'Incendios'})[k]||'Sati te cuenta');}
+function tip(k){say(TIPS[k],({cal:'Calendar',season:'Seasons',years:'By year',mun:'Municipalities',crit:'Critical periods',inc:'Fires'})[k]||'Sati says');}
 setTimeout(()=>{$('guideText').style.opacity=0;},9000);
 const gm=$('guideMute');const setMuteIcon=()=>gm.textContent=voiceOn?'🔊':'🔇';setMuteIcon();
 gm.onclick=()=>{voiceOn=!voiceOn;try{localStorage.setItem('satiVoz',voiceOn?'1':'0');}catch(e){}setMuteIcon();
-  if(!voiceOn&&window.satiStop)window.satiStop();else say('¡Listo! Ahora te hablo cuando hagas algo en el tablero.','Voz activada',6000);};
+  if(!voiceOn&&window.satiStop)window.satiStop();else say('Done! I will talk to you whenever you do something on the dashboard.','Voice on',6000);};
 $('guideBot').onclick=()=>{const g=$('guideText');g.style.display=g.style.display==='none'?'':'none';};
 
 function countUp(el,to,dec=0,suf=''){const t0=performance.now();
-  const st=t=>{const p=Math.min(1,(t-t0)/1300),e=1-Math.pow(1-p,3);el.textContent=(dec?(to*e).toFixed(dec).replace('.',','):fmt(to*e))+suf;if(p<1)requestAnimationFrame(st);};
+  const st=t=>{const p=Math.min(1,(t-t0)/1300),e=1-Math.pow(1-p,3);el.textContent=(dec?(to*e).toFixed(dec):fmt(to*e))+suf;if(p<1)requestAnimationFrame(st);};
   requestAnimationFrame(st);}
 
 /* ---------- datos ---------- */
@@ -1002,29 +1066,29 @@ function ensoRange(){
   for(let y=d0.getUTCFullYear(),m=d0.getUTCMonth();y<d1.getUTCFullYear()||(y===d1.getUTCFullYear()&&m<=d1.getUTCMonth());m===11?(y++,m=0):m++){
     const v=CLIMA.mensual[`${y}-${String(m+1).padStart(2,'0')}`];if(!v)continue;sum+=v[0];n++;if(v[1]>0){ni++;pkN=Math.max(pkN,v[0]);}if(v[1]<0){na++;pkA=Math.min(pkA,v[0]);}if(n>400)break;}
   if(!n)return null;const avg=sum/n,fase=ni>n/2?'nino':na>n/2?'nina':'neutral';
-  const a=fase==='nino'?pkN:fase==='nina'?-pkA:Math.abs(avg),fz=a>=2?'muy fuerte':a>=1.5?'fuerte':a>=1?'moderado':a>=.5?'débil':'';
+  const a=fase==='nino'?pkN:fase==='nina'?-pkA:Math.abs(avg),fz=a>=2?'very strong':a>=1.5?'strong':a>=1?'moderate':a>=.5?'weak':'';
   return {fase,avg,fz,n,peak:a};
 }
-let hlsLabel='🛰 Buscando la imagen más despejada…',hlsTok=0;
+let hlsLabel='🛰 Searching for the clearest image…',hlsTok=0;
 async function updateHls(){
   if(!map||!baseHls)return;if(useGls()){hlsTok++;return;}const tk=++hlsTok,c=map.getCenter(),gap=s2Gap();
   if(gap){const Y=S.year,mid=dayOf(Y,7,15),y0=Math.max(HLS0,dayOf(Y,0,1)),y1=Math.min(dayOf(Y,11,31),dayOf(2026,1,28));
     let r=await hlsFind(c.lat,c.lng,mid,-1,mid-y0+1);if(!r)r=await hlsFind(c.lat,c.lng,mid+1,+1,y1-mid);
     if(tk!==hlsTok||!s2Gap())return;
-    if(r){baseHls.setUrl(hlsUrl(r.lay,r.d));hlsLabel=`🛰 ${HLSN[r.lay]} 30 m · ${nice(r.d)} · ${r.cloud} % nubes (imagen más despejada de ${Y}; no hay mosaico Sentinel-2 10 m de ese año)`;}
-    else hlsLabel=`🛰 No hallé una imagen despejada de ${Y}`;
+    if(r){baseHls.setUrl(hlsUrl(r.lay,r.d));hlsLabel=`🛰 ${HLSN[r.lay]} 30 m · ${nice(r.d)} · ${r.cloud} % clouds (clearest image of ${Y}; there is no 10 m Sentinel-2 mosaic for that year)`;}
+    else hlsLabel=`🛰 No clear image found for ${Y}`;
     const el=$('mapInfo');if(el&&baseMode==='nasa')el.innerHTML=`<div class="img" style="border:0;margin:0;padding:0">${hlsLabel}</div>`;return;}
   const t=Math.min(S.to,dayOf(2026,1,28));
-  if(t<HLS0+5){hlsLabel='🛰 Imagen del día: disponible desde abril de 2013';baseHls.setUrl('');const el=$('mapInfo');if(el&&baseMode==='hls')el.innerHTML=`<div class="img" style="border:0;margin:0;padding:0">${hlsLabel}</div>`;return;}
+  if(t<HLS0+5){hlsLabel='🛰 Image of the day: available since April 2013';baseHls.setUrl('');const el=$('mapInfo');if(el&&baseMode==='hls')el.innerHTML=`<div class="img" style="border:0;margin:0;padding:0">${hlsLabel}</div>`;return;}
   let r=await hlsFind(c.lat,c.lng,t,-1,60);if(!r)r=await hlsFind(c.lat,c.lng,t+1,+1,30);
   if(tk!==hlsTok||useGls())return;
-  if(r){baseHls.setUrl(hlsUrl(r.lay,r.d));hlsLabel=`🛰 ${HLSN[r.lay]} 30 m · ${nice(r.d)} · ${r.cloud} % nubes (la más despejada cerca de la fecha, en el centro del mapa)`;}
-  else hlsLabel='🛰 No hallé una imagen despejada cerca de esa fecha';
+  if(r){baseHls.setUrl(hlsUrl(r.lay,r.d));hlsLabel=`🛰 ${HLSN[r.lay]} 30 m · ${nice(r.d)} · ${r.cloud} % clouds (the clearest near that date, at the map center)`;}
+  else hlsLabel='🛰 No clear image found near that date';
   const el=$('mapInfo');if(el&&baseMode==='hls')el.innerHTML=`<div class="img" style="border:0;margin:0;padding:0">${hlsLabel}</div>`;
 }
 // Serie trimestral por temporada (pipeline/trimestral_gee.py): DEF seca, MAM lluvias, JJA seca, SON lluvias
 let TRIMI=null,baseTrim=null,baseTrimD=null;
-const TRN=['dic–feb · temporada seca','mar–may · temporada de lluvias','jun–ago · temporada seca','sep–nov · temporada de lluvias'];
+const TRN=['Dec–Feb · dry season','Mar–May · rainy season','Jun–Aug · dry season','Sep–Nov · rainy season'];
 function trimPick(){const d=dateOf(S.to),m=d.getUTCMonth();let y=d.getUTCFullYear();const t=m===11||m<2?0:m<5?1:m<8?2:3;if(m===11)y++;
   return {y,t,it:TRIMI&&TRIMI.items.find(i=>i.y===y&&i.t===t)};}
 // Landsat 7 (GLS 2000, NASA/USGS vía Esri) para 2000–2009: una sola imagen del Tolima con contraste uniforme
@@ -1034,11 +1098,11 @@ const useGls=()=>S.year<=2012&&(baseMode==='nasa'||baseMode==='hls');
 const s2Gap=()=>baseMode==='nasa'&&S.year>=2013&&!S2Y.includes(S.year);
 function syncBase(){
   if(!map||CMP)return;
-  if(!baseGls)baseGls=L.imageOverlay('assets/landsat7_2000_tolima.jpg',[[2.82,-76.24378],[5.37,-74.32622]],{attribution:'Landsat 7 · Global Land Survey 2000 (NASA/USGS), servicio Esri',opacity:1,zIndex:1});
+  if(!baseGls)baseGls=L.imageOverlay('assets/landsat7_2000_tolima.jpg',[[2.82,-76.24378],[5.37,-74.32622]],{attribution:'Landsat 7 · Global Land Survey 2000 (NASA/USGS), served by Esri',opacity:1,zIndex:1});
   const tp=baseMode==='trim'?trimPick():null;
-  if(tp&&tp.it){const u=`data/trimestral/${tp.it.id}_rgb.jpg`,b=TRIMI.bounds;
-    if(!baseTrim)baseTrim=L.imageOverlay(u,b,{attribution:'Composición trimestral Landsat 5/7/8/9 + Sentinel-2 (USGS/NASA, Copernicus) · Google Earth Engine',zIndex:1});else if(baseTrim._url!==u)baseTrim.setUrl(u);
-    const ud=tp.it.dnbr?`data/trimestral/${tp.it.id}_dnbr.png`:null;
+  if(tp&&tp.it){const u=`data/trimestral/${tp.it.id}_rgb.webp`,b=TRIMI.bounds;
+    if(!baseTrim)baseTrim=L.imageOverlay(u,b,{attribution:'Quarterly composite Landsat 5/7/8/9 + Sentinel-2 (USGS/NASA, Copernicus) · Google Earth Engine',zIndex:1});else if(baseTrim._url!==u)baseTrim.setUrl(u);
+    const ud=tp.it.dnbr?`data/trimestral/${tp.it.id}_dnbr.webp`:null;
     if(ud){if(!baseTrimD)baseTrimD=L.imageOverlay(ud,b,{zIndex:2,opacity:.85});else if(baseTrimD._url!==ud)baseTrimD.setUrl(ud);}
     if(baseTrimD){const on=!!ud&&S.dnbr!==false;if(on&&!map.hasLayer(baseTrimD))baseTrimD.addTo(map);if(!on&&map.hasLayer(baseTrimD))map.removeLayer(baseTrimD);}}
   else if(baseTrimD&&map.hasLayer(baseTrimD))map.removeLayer(baseTrimD);
@@ -1052,26 +1116,25 @@ function updateBase(){
   if(baseNasa){const y=s2Year();baseNasa.setUrl(s2Url(y));baseNasa.options.attribution=`Sentinel-2 cloudless ${y} by <a href="https://s2maps.eu" target="_blank">EOX IT Services GmbH</a> (Contains modified Copernicus Sentinel data ${y})`;}
   const el=$('mapInfo');if(!el)return;
   const e=ensoRange();
-  const lab=e?{nino:`El Niño ${e.fz}`,nina:`La Niña ${e.fz}`,neutral:'Condiciones neutrales'}[e.fase]:'';
-  const ex=e?{nino:'Menos lluvias en el Tolima: más riesgo de incendios.',nina:'Más lluvias en el Tolima: menos incendios.',neutral:'Ni El Niño ni La Niña en este periodo.'}[e.fase]:'';
+  const lab=e?{nino:`El Niño ${e.fz}`,nina:`La Niña ${e.fz}`,neutral:'Neutral conditions'}[e.fase]:'';
+  const ex=e?{nino:'Less rain in Tolima: higher fire risk.',nina:'More rain in Tolima: fewer fires.',neutral:'Neither El Niño nor La Niña in this period.'}[e.fase]:'';
   let img='';
   if(baseMode==='year')img='🛰 '+ysrc.lab;
-  else if(useGls())img='🛰 Landsat 7 · 30 m · 16 jul 2001 (mosaico GLS 2000 de NASA/USGS). Para 2002–2012 no hay imágenes nítidas del Tolima: Landsat 7 quedó con franjas desde 2003 y Landsat 5 casi siempre está nublado.';
+  else if(useGls())img='🛰 Landsat 7 · 30 m · 16 Jul 2001 (NASA/USGS GLS 2000 mosaic). There are no sharp images of Tolima for 2002–2012: Landsat 7 has stripes since 2003 (SLC failure) and Landsat 5 is almost always cloudy. Use “Quarterly” for those years.';
   else if(baseMode==='hls'){img=hlsLabel;updateHls();}
   else if(baseMode==='trim'){const p=trimPick();
-    img=!TRIMI?'🛰 La serie trimestral aún no se ha generado (pipeline/trimestral_gee.py con Google Earth Engine)'
-      :p.it?`🛰 Trimestral ${p.y} · ${TRN[p.t]} · mediana sin nubes de ${p.it.n} imágenes Landsat/Sentinel-2 · ${p.it.cob} % del Tolima con dato${p.it.dnbr?` · <label style="cursor:pointer"><input type="checkbox" id="dnbrCb" ${S.dnbr!==false?'checked':''}> quemado (dNBR: <span style="color:#fd8d3c">■</span> leve <span style="color:#e31a1c">■</span> moderado <span style="color:#7f0000">■</span> alto)</label>`:''}`
-      :`🛰 No hay composición trimestral para ${TRN[p.t].split(' · ')[0]} ${p.y}`;}
+    img=!TRIMI?'🛰 The quarterly series has not been generated yet (pipeline/trimestral_gee.py with Google Earth Engine)'
+      :p.it?`🛰 Quarterly ${p.y} · ${TRN[p.t]} · cloud-free median of ${p.it.n} Landsat/Sentinel-2 scenes · ${p.it.cob} % of Tolima with data${p.it.dnbr?` · <label style="cursor:pointer"><input type="checkbox" id="dnbrCb" ${S.dnbr!==false?'checked':''}> burned vs. previous season (dNBR, Key &amp; Benson 2006: <span style="color:#fd8d3c">■</span> low <span style="color:#e31a1c">■</span> moderate <span style="color:#7f0000">■</span> high)</label>`:''}`
+      :`🛰 No quarterly composite for ${TRN[p.t].split(' · ')[0]} ${p.y}`;}
   else if(s2Gap()){img=hlsLabel;updateHls();}
-  else if(baseMode==='nasa'){const y=s2Year();img=`🛰 Sentinel-2 10 m · mosaico sin nubes ${y}${y!==S.year?` (el más cercano a ${S.year})`:''}`;}
-  else if(false){img=`🛰 NASA MODIS del ${nice(nasaPick.d)}${nasaPick.pct!=null?` · ${nasaPick.pct} % nubes`:''}${nasaPick.why==='cerca'?' (día más cercano con menos de 30 % de nubes)':nasaPick.why==='nublado'?' (no hubo días con menos de 30 % de nubes cerca; este es el menos nublado)':''}`;}
+  else if(baseMode==='nasa'){const y=s2Year();img=`🛰 Sentinel-2 10 m · cloudless mosaic ${y}${y!==S.year?` (closest to ${S.year})`:''}`;}
   else img='🗺 OpenStreetMap';
   el.innerHTML=`<div class="img" style="border:0;margin:0;padding:0">${img}</div>`;
   const cb=$('dnbrCb');if(cb)cb.onchange=()=>{S.dnbr=cb.checked;syncBase();};
   const bd=$('ensoBadge');
   if(bd){if(e){bd.style.display='inline-flex';bd.className='ensob '+e.fase;
-      bd.innerHTML=`<i></i>${lab}<small>ONI ${e.fase==='neutral'?(e.avg>=0?'+':'')+e.avg.toFixed(1).replace('.',','):(e.fase==='nino'?'+':'−')+e.peak.toFixed(1).replace('.',',')}</small>`;
-      bd.onclick=()=>say(`<b>${lab}</b> en el periodo elegido. ${ex} El índice ONI de la NOAA mide cuánto se calienta (+) o enfría (−) el océano Pacífico; desde 0,5 °C hay El Niño o La Niña.`,'Clima');}
+      bd.innerHTML=`<i></i>${lab}<small>ONI ${e.fase==='neutral'?(e.avg>=0?'+':'')+e.avg.toFixed(1):(e.fase==='nino'?'+':'−')+e.peak.toFixed(1)}</small>`;
+      bd.onclick=()=>say(`<b>${lab}</b> in the selected period. ${ex} NOAA's ONI index measures how much the Pacific Ocean warms (+) or cools (−); from 0.5 °C there is El Niño or La Niña.`,'Climate');}
     else bd.style.display='none';}
 }
 function applyYM(){
@@ -1090,10 +1153,10 @@ const wbAt=day=>{if(!WBALL||!WBALL.length)return null;const t=iso(day);let k=WBA
 const wbTile=num=>'https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/'+num+'/{z}/{y}/{x}';
 function yearSource(){
   const k=wbAt(S.to);
-  if(!k)return {key:'esri',url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',mz:17,att:'Imágenes © Esri, Maxar, Earthstar Geographics',lab:'Esri alta resolución (actual)'};
+  if(!k)return {key:'esri',url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',mz:17,att:'Imagery © Esri, Maxar, Earthstar Geographics',lab:'Esri high resolution (current)'};
   const antes=iso(S.to)<WBALL[0][0];
-  return {key:'esri'+k[1],url:wbTile(k[1]),mz:17,att:'Imágenes © Esri World Imagery (Wayback), Maxar, Earthstar Geographics',
-    lab:`Esri alta resolución · versión del ${nice(dayOf(+k[0].slice(0,4),+k[0].slice(5,7)-1,+k[0].slice(8,10)))}${antes?' (la más antigua: Esri empieza en 2014)':''}`};
+  return {key:'esri'+k[1],url:wbTile(k[1]),mz:17,att:'Imagery © Esri World Imagery (Wayback), Maxar, Earthstar Geographics',
+    lab:`Esri high resolution · release of ${nice(dayOf(+k[0].slice(0,4),+k[0].slice(5,7)-1,+k[0].slice(8,10)))}${antes?' (the oldest: Esri starts in 2014)':''}`};
 }
 function s2Year(){let best=S2Y[0];for(const y of S2Y)if(Math.abs(y-S.year)<Math.abs(best-S.year)||(Math.abs(y-S.year)===Math.abs(best-S.year)&&y<best))best=y;return best;}
 const s2Url=y=>`https://tiles.maps.eox.at/wmts/1.0.0/${y===2016?'s2cloudless_3857':'s2cloudless-'+y+'_3857'}/default/g/{z}/{y}/{x}.jpg`;
@@ -1132,16 +1195,16 @@ const stop=e=>{L.DomEvent.disableClickPropagation(e);L.DomEvent.disableScrollPro
 function layersControl(){
   const C=L.Control.extend({options:{position:'topright'},onAdd(){
     const d=stop(L.DomUtil.create('div','mctl layers'+(innerWidth<700?' closed':'')));
-    d.innerHTML=`<div class="head"><span>⚙ Capas y filtros</span><span id="lyTog">${innerWidth<700?'▾':'▴'}</span></div>
+    d.innerHTML=`<div class="head"><span>⚙ Layers &amp; filters</span><span id="lyTog">${innerWidth<700?'▾':'▴'}</span></div>
     <div class="body">
-      <div class="blk"><h4>Mapa base</h4><div class="seg" id="segBase"><button data-b="trim" style="grid-column:1/-1" title="Mediana sin nubes por temporada (dic–feb, mar–may, jun–ago, sep–nov) de Landsat 5/7/8/9 y Sentinel-2, 2000–2025, con zonas quemadas (dNBR)">Trimestral 2000–2025</button><button data-b="nasa" class="on" title="Cambia cada año: mosaico Sentinel-2 sin nubes (2016, 2018–2025); 2013–2015 y 2017: imagen más despejada de ese año; 2000–2012: Landsat 7">Sentinel-2 anual</button><button data-b="hls" title="Imagen de 30 m (Sentinel-2/Landsat) más despejada cerca de la fecha elegida (desde 2013)">Imagen del día</button><button data-b="year" title="Esri alta resolución (se actualiza cada pocos años)">Esri</button><button data-b="osm">Mapa</button></div></div>
-      <div class="blk"><h4>Confianza</h4><div class="chips" id="confChips">
-        <span class="chip" data-c="0"><span class="dot" style="background:var(--c0)"></span>Baja</span>
+      <div class="blk"><h4>Base map</h4><div class="seg" id="segBase"><button data-b="trim" style="grid-column:1/-1" title="Cloud-free median per season (Dec–Feb, Mar–May, Jun–Aug, Sep–Nov) of Landsat 5/7/8/9 and Sentinel-2, 2000–2025, with burned areas (dNBR)">Quarterly 2000–2025</button><button data-b="nasa" class="on" title="Changes every year: Sentinel-2 cloudless mosaic (2016, 2018–2025); 2013–2015 and 2017: clearest image of that year; 2000–2012: Landsat 7">Sentinel-2 yearly</button><button data-b="hls" title="Clearest 30 m image (Sentinel-2/Landsat, NASA HLS) near the selected date (since 2013)">Image of the day</button><button data-b="year" title="Esri high resolution (updated every few years)">Esri</button><button data-b="osm">Map</button></div></div>
+      <div class="blk"><h4>Confidence</h4><div class="chips" id="confChips">
+        <span class="chip" data-c="0"><span class="dot" style="background:var(--c0)"></span>Low</span>
         <span class="chip on" data-c="1"><span class="dot" style="background:var(--c1)"></span>Nominal</span>
-        <span class="chip on" data-c="2"><span class="dot" style="background:var(--c2)"></span>Alta</span></div></div>
-      <div class="blk"><h4>Satélite</h4><div class="chips" id="sensChips">
+        <span class="chip on" data-c="2"><span class="dot" style="background:var(--c2)"></span>High</span></div></div>
+      <div class="blk"><h4>Satellite</h4><div class="chips" id="sensChips">
         <span class="chip on" data-s="1">VIIRS 375 m</span><span class="chip on" data-s="0">MODIS 1 km</span></div></div>
-      <div class="blk"><h4>Falsos positivos</h4><div class="chips"><span class="chip on" id="exclChip"><span class="dot" style="background:var(--cx)"></span>Ocultar volcán y fuentes fijas</span><span class="chip on" id="indChip">🏭 Mostrar industrias y volcán</span></div></div>
+      <div class="blk"><h4>False positives</h4><div class="chips"><span class="chip on" id="exclChip"><span class="dot" style="background:var(--cx)"></span>Hide volcano &amp; static sources</span><span class="chip on" id="indChip">🏭 Show industries &amp; volcano</span></div></div>
       <div class="blk" style="font-size:11.5px;color:var(--ink3)" id="mapCount"></div>
     </div>`;
     return d;}});
@@ -1151,21 +1214,21 @@ function searchControl(){
   const C=L.Control.extend({options:{position:'topleft'},onAdd(){
     const d=stop(L.DomUtil.create('div',''));
     d.innerHTML=`<div class="search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input id="sIn" placeholder="Buscar municipio…" autocomplete="off"><div class="sres" id="sRes"></div></div>
+      <input id="sIn" placeholder="Search municipality…" autocomplete="off"><div class="sres" id="sRes"></div></div>
       <div class="selpill" id="selPill"></div>`;
     return d;}});
   new C().addTo(map);
 }
 function northControl(){
   const C=L.Control.extend({options:{position:'bottomright'},onAdd(){
-    const d=L.DomUtil.create('div','mctl north');d.title='Norte';
+    const d=L.DomUtil.create('div','mctl north');d.title='North';
     d.innerHTML=`<svg width="26" height="30" viewBox="0 0 26 30"><text x="13" y="9" text-anchor="middle" font-size="9" font-weight="800" fill="currentColor" font-family="sans-serif">N</text><path d="M13 11 19 28 13 24 7 28Z" fill="var(--fire)"/><path d="M13 11 13 24 7 28Z" fill="var(--ember)"/></svg>`;
     return d;}});
   new C().addTo(map);
 }
 function initMap(){
   $('map').innerHTML='';
-  if(typeof L==='undefined'){$('map').innerHTML='<div class="loading">No se pudo cargar el mapa (sin conexión).</div>';return;}
+  if(typeof L==='undefined'){$('map').innerHTML='<div class="loading">The map could not be loaded (offline).</div>';return;}
   map=L.map('map',{preferCanvas:true,zoomControl:false});
   canvasR=L.canvas({padding:.3});
   setYearLayer();
@@ -1193,16 +1256,16 @@ function initMap(){
   map.on('zoomend',drawHotspots);
   map.on('popupopen',e=>{const el=e.popup.getElement();if(!el||!el.querySelector('table.attr')||hsSaid>=3)return;hsSaid++;
     const v=/VIIRS/.test(el.textContent);
-    say(v?'Este hotspot lo vio <b>VIIRS</b>: cada píxel mide 375 × 375 m, unas <b>14 hectáreas</b>. El fuego puede ser mucho más pequeño que el píxel, pero su calor basta para detectarlo.':'Este hotspot lo vio <b>MODIS</b>: cada píxel mide 1 × 1 km, unas <b>100 hectáreas</b>. Por eso MODIS no ve fuegos tan pequeños como VIIRS.','Dato curioso');});
+    say(v?'This hotspot was seen by <b>VIIRS</b>: each pixel is 375 × 375 m, about <b>14 hectares</b>. The fire can be much smaller than the pixel, but its heat is enough to detect it.':'This hotspot was seen by <b>MODIS</b>: each pixel is 1 × 1 km, about <b>100 hectares</b>. That is why MODIS misses fires as small as the ones VIIRS sees.','Fun fact');});
 }
 function popup(i){
   const d=dateOf(DA[i]),hm=String(D.hm[i]).padStart(4,'0');
   const color=D.t[i]!==0?css('--cx'):css('--c'+D.c[i]);
-  const rows=[['ID',i],['Fecha',`${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')}/${d.getUTCFullYear()}`],
-    ['Hora UTC',`${hm.slice(0,2)}:${hm.slice(2)} (${D.dn[i]?'noche':'día'})`],
+  const rows=[['ID',i],['Date',`${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')}/${d.getUTCFullYear()}`],
+    ['Time UTC',`${hm.slice(0,2)}:${hm.slice(2)} (${D.dn[i]?'night':'day'})`],
     ['Lat, lon',`${(D.la[i]/1e5).toFixed(4)}, ${(D.lo[i]/1e5).toFixed(4)}`],
-    ['Satélite',`${D.s[i]?'VIIRS':'MODIS'} · ${SAT[D.sat[i]]}`],['Confianza',CONF[D.c[i]]],
-    ['Tipo',TYPE[D.t[i]]||D.t[i]],['FRP',(D.f[i]/10).toFixed(1)+' MW'],['Municipio',D.mpios[D.m[i]].n]];
+    ['Satellite',`${D.s[i]?'VIIRS':'MODIS'} · ${SAT[D.sat[i]]}`],['Confidence',CONF[D.c[i]]],
+    ['Type',TYPE[D.t[i]]||D.t[i]],['FRP',(D.f[i]/10).toFixed(1)+' MW'],['Municipality',D.mpios[D.m[i]].n]];
   return `<div class="pop-h"><i style="background:${color}"></i>Hotspot</div><table class="attr">${rows.map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join('')}</table>`;
 }
 function drawHotspots(){
@@ -1223,14 +1286,14 @@ function drawHotspots(){
     hsLayer.addLayer(l);n++;D.s[i]?nv++:nm++;
   }
   const days=S.to-S.from+1;
-  $('rangeTxt').innerHTML=`<b>${fmt(n)}</b> hotspots en el mapa<br>${days===1?nice(S.from):nice(S.from)+' → '+nice(S.to)}`;
+  $('rangeTxt').innerHTML=`<b>${fmt(n)}</b> hotspots on the map<br>${days===1?nice(S.from):nice(S.from)+' → '+nice(S.to)}`;
   const mc=$('mapCount');if(mc)mc.textContent=`VIIRS ${fmt(nv)} · MODIS ${fmt(nm)}`;
 }
 
 /* ---------- temporadas climáticas (régimen bimodal andino, referencia general) ---------- */
 // 0 = seca, 1 = transición, 2 = lluviosa
 const CLIM=[0,0,1,2,2,1,0,0,0,2,2,1];
-const CLIMC=['#f4b860','#cfd6de','#6fa8dc'],CLIMT=['☀ Seca','Transición','🌧 Lluvias'];
+const CLIMC=['#f4b860','#cfd6de','#6fa8dc'],CLIMT=['☀ Dry','Transition','🌧 Rainy'];
 function seasonStrip(g,y,h,xs,xe,font){
   let m=0;
   while(m<12){let m1=m;while(m1+1<12&&CLIM[m1+1]===CLIM[m])m1++;
@@ -1258,11 +1321,11 @@ function calData(){
 function drawCal(){
   const cv=$('cal'),W0=cv.clientWidth||500,anom=S.view==='anom'&&S.gran!=='d';
   const cd=calData();
-  const sub={m:'Cada fila es un año y cada columna un mes.',w:'Cada fila es un año y cada columna una de las 52 semanas.',d:`Cada cuadro es un día de ${S.year}. Columnas = semanas; filas = lunes a domingo.`}[S.gran];
-  $('calSub').textContent=sub+(anom?' Azul = menos fuego de lo normal; rojo = más.':' Más oscuro = más hotspots.');
-  $('calHint').textContent={m:'Toca un mes para verlo en el mapa. Fíjate: las columnas más oscuras caen en las temporadas secas. La línea punteada marca 2012, cuando llega VIIRS.',w:'Toca una semana para verla en el mapa. La línea punteada marca 2012, cuando llega VIIRS.',d:'Toca un día para ver sus hotspots en el mapa. Cambia el año en la barra de filtros.'}[S.gran];
+  const sub={m:'Each row is a year and each column a month.',w:'Each row is a year and each column one of the 52 weeks.',d:`Each cell is a day of ${S.year}. Columns = weeks; rows = Monday to Sunday.`}[S.gran];
+  $('calSub').textContent=sub+(anom?' Blue = less fire than normal; red = more.':' Darker = more hotspots.');
+  $('calHint').textContent={m:'Tap a month to see it on the map. Notice: the darkest columns fall in the dry seasons. The dashed line marks 2012, when VIIRS arrives.',w:'Tap a week to see it on the map. The dashed line marks 2012, when VIIRS arrives.',d:'Tap a day to see its hotspots on the map. Change the year in the filter bar.'}[S.gran];
   if(S.gran==='d'){$('segView').style.opacity=.4;}else $('segView').style.opacity=1;
-  if(C.empty){const [g]=fitCanvas(cv,80);g.fillStyle=css('--ink3');g.font='14px sans-serif';g.fillText('Selecciona al menos un municipio',10,40);return;}
+  if(C.empty){const [g]=fitCanvas(cv,80);g.fillStyle=css('--ink3');g.font='14px sans-serif';g.fillText('Select at least one municipality',10,40);return;}
   const font=getComputedStyle(document.body).fontFamily;
   if(cd.day){
     const left=26,top=18+SH+6,cols=Math.ceil((cd.nd+cd.off)/7),cs=Math.min(18,(W0-left)/cols),H=top+7*cs+4;
@@ -1274,16 +1337,16 @@ function drawCal(){
       g.beginPath();g.roundRect(left+c*cs,top+r*cs,cs-2,cs-2,3);g.fill();
       if(sel){g.strokeStyle=css('--ink');g.lineWidth=2;g.stroke();}}
     g.fillStyle=css('--ink3');g.font=`500 10px ${font}`;g.textBaseline='middle';
-    ['L','','X','','V','','D'].forEach((s,r)=>g.fillText(s,4,top+r*cs+cs/2));
+    ['M','','W','','F','','S'].forEach((s,r)=>g.fillText(s,4,top+r*cs+cs/2));
     for(let m=0;m<12;m++){const p=dayOf(S.year,m,1)-cd.n0+cd.off;g.fillText(MONTHS[m],left+Math.floor(p/7)*cs,8);}
     const dx=m=>left+Math.floor((dayOf(S.year,m,1)-cd.n0+cd.off)/7)*cs;
     seasonStrip(g,16,SH,dx,m=>m===11?left+cols*cs:dx(m+1),font);
-    $('calTitle').textContent=`Calendario diario · ${S.year}`;
+    $('calTitle').textContent=`Daily calendar · ${S.year}`;
     $('ramp').style.background='linear-gradient(90deg,'+[0,.25,.5,.75,1].map(t=>ramp(HEAT,t)).join(',')+')';
-    $('rl0').textContent='0';$('rl1').textContent=`${mx.toFixed(mx%1?1:0)} hotspots/día`;
+    $('rl0').textContent='0';$('rl1').textContent=`${mx.toFixed(mx%1?1:0)} hotspots/day`;
     return;
   }
-  $('calTitle').textContent=S.gran==='m'?'Calendario mensual · 2000–2025':'Calendario semanal · 2000–2025';
+  $('calTitle').textContent=S.gran==='m'?'Monthly calendar · 2000–2025':'Weekly calendar · 2000–2025';
   const nc=cd.nc,nr=cd.nr,left=36,top=18+SH+6,cw=(W0-left)/nc,ch=S.gran==='m'?Math.max(14,Math.min(20,cw*.55)):Math.max(9,Math.min(14,cw*1.4));
   const [g,W]=fitCanvas(cv,top+nr*ch+4);G={left,top,cw,ch,nc,nr};
   let vmax=1;if(!anom){const s=Array.from(cd.X).sort((a,b)=>a-b);vmax=s[Math.floor(s.length*.985)]||1;}
@@ -1314,7 +1377,7 @@ function drawCal(){
   g.beginPath();g.moveTo(left-6,yl);g.lineTo(W,yl);g.stroke();g.setLineDash([]);
 
   $('ramp').style.background='linear-gradient(90deg,'+[0,.25,.5,.75,1].map(t=>ramp(anom?DIV:HEAT,t)).join(',')+')';
-  $('rl0').textContent=anom?'Menos de lo normal':'Poco';$('rl1').textContent=anom?'Más de lo normal':'Mucho fuego';
+  $('rl0').textContent=anom?'Less than normal':'Little';$('rl1').textContent=anom?'More than normal':'A lot of fire';
 }
 function calPick(e){
   if(!G||C.empty)return null;
@@ -1352,7 +1415,7 @@ function drawSeason(){
     vl.setAttribute('x1',x(w));vl.setAttribute('x2',x(w));vl.setAttribute('opacity',1);
     d1.setAttribute('cx',x(w));d1.setAttribute('cy',y(cur[w]));d1.setAttribute('opacity',1);
     d2.setAttribute('cx',x(w));d2.setAttribute('cy',y(mean[w]));d2.setAttribute('opacity',1);
-    showTT(`<b>Semana ${w+1}</b> · ${nice(wkStart(yi,w)).replace(/ \d{4}$/,'')}<br>${S.year}: ${cur[w].toFixed(cur[w]%1?1:0)}<br>Promedio: ${mean[w].toFixed(1)}`,e);});
+    showTT(`<b>Week ${w+1}</b> · ${nice(wkStart(yi,w)).replace(/ \d{4}$/,'')}<br>${S.year}: ${cur[w].toFixed(cur[w]%1?1:0)}<br>Average: ${mean[w].toFixed(1)}`,e);});
   hit.addEventListener('pointerleave',()=>{[vl,d1,d2].forEach(o=>o.setAttribute('opacity',0));hideTT();});
   hit.addEventListener('click',e=>{const w=wAt(e);setRange(wkStart(yi,w),wkEnd(yi,w));});
 }
@@ -1376,7 +1439,7 @@ function drawBars(){
     if(Y0+i===S.year)el('rect',{x:ml+i*gw,y:mt-4,width:gw,height:base-mt+4,rx:4,fill:'none',stroke:'var(--ink3)','stroke-width':1.5},svg);
     bar(x0,tr[i],'var(--gray)',i*20);bar(x0+bw+2,th[i],'var(--fire)',i*20+50);
     const hit=el('rect',{x:ml+i*gw,y:mt,width:gw,height:H-mt-mb,fill:'transparent',style:'cursor:pointer'},svg);
-    hit.addEventListener('pointermove',e=>showTT(`<b>${Y0+i}</b> · ${Y0+i<YV?'MODIS':'VIIRS'}${ea&&ea.fase!=='neutral'?` · ${ea.fase==='nino'?'🔴 El Niño':'🔵 La Niña'} ${ea.fuerza}`:''}<br>Sin armonizar: ${fmt(tr[i])}<br>Armonizado: ${fmt(th[i])}`,e));
+    hit.addEventListener('pointermove',e=>showTT(`<b>${Y0+i}</b> · ${Y0+i<YV?'MODIS':'VIIRS'}${ea&&ea.fase!=='neutral'?` · ${ea.fase==='nino'?'🔴 El Niño':'🔵 La Niña'} ${FZ[ea.fuerza]||ea.fuerza}`:''}<br>Not harmonized: ${fmt(tr[i])}<br>Harmonized: ${fmt(th[i])}`,e));
     hit.addEventListener('pointerleave',hideTT);
     hit.addEventListener('click',()=>{S.year=Y0+i;S.month=-1;applyYM();});
     if(i%5===0||Y0+i===S.year)txt(svg,ml+i*gw+gw/2,H-8,Y0+i,{'text-anchor':'middle','font-weight':Y0+i===S.year?700:400});
@@ -1394,7 +1457,7 @@ function drawTop(){
   const rows=D.mpios.map((m,k)=>({n:m.n,k,v:cnt[k]/m.area*100,c:cnt[k]})).filter(r=>r.c>0).sort((p,q)=>q.v-p.v).slice(0,12);
   const W=svg.clientWidth||500,rh=26,H=Math.max(40,rows.length*rh+6),ml=Math.min(140,W*.34),mr=46;
   svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.setAttribute('height',H);
-  if(!rows.length){txt(svg,0,20,'Sin hotspots VIIRS en este periodo.');return;}
+  if(!rows.length){txt(svg,0,20,'No VIIRS hotspots in this period.');return;}
   const mx=rows[0].v;
   rows.forEach((r,j)=>{const yy=j*rh+3,w=(W-ml-mr)*r.v/mx;
     txt(svg,ml-8,yy+rh/2+1,r.n,{'text-anchor':'end','dominant-baseline':'middle',fill:'var(--ink2)'});
@@ -1402,7 +1465,7 @@ function drawTop(){
     bb.style.transition=`width .7s cubic-bezier(.2,.8,.2,1) ${j*40}ms`;requestAnimationFrame(()=>requestAnimationFrame(()=>bb.setAttribute('width',Math.max(2,w))));
     txt(svg,ml+w+6,yy+rh/2+1,r.v<10?r.v.toFixed(1):fmt(r.v),{'dominant-baseline':'middle','font-weight':600,fill:'var(--ink)'});
     const hit=el('rect',{x:0,y:yy,width:W,height:rh,fill:'transparent',style:'cursor:pointer'},svg);
-    hit.addEventListener('pointermove',e=>showTT(`<b>${r.n}</b><br>${fmt(r.c)} hotspots VIIRS<br>${r.v.toFixed(1)} por 100 km²`,e));
+    hit.addEventListener('pointermove',e=>showTT(`<b>${r.n}</b><br>${fmt(r.c)} VIIRS hotspots<br>${r.v.toFixed(1)} per 100 km²`,e));
     hit.addEventListener('pointerleave',hideTT);
     hit.addEventListener('click',()=>goMpio(r.k,false));
   });
@@ -1410,11 +1473,11 @@ function drawTop(){
 
 /* ---------- críticos ---------- */
 function renderCrit(){
-  if(C.empty){$('crit').innerHTML='<p style="color:var(--ink3)">Selecciona al menos un municipio.</p>';return;}
+  if(C.empty){$('crit').innerHTML='<p style="color:var(--ink3)">Select at least one municipality.</p>';return;}
   const cr=critical();
   $('crit').innerHTML=cr.length?cr.map((p,i)=>{const on=S.from===wkStart(p.y,p.w0)&&S.to===wkEnd(p.y,p.w1);
-    return `<button class="critc${on?' on':''}" data-i="${i}"><div class="yr">${Y0+p.y}</div><div class="rg">${nice(wkStart(p.y,p.w0)).replace(/ \d{4}$/,'')} – ${nice(wkEnd(p.y,p.w1)).replace(/ \d{4}$/,'')}</div><span class="z">${p.pk.toFixed(1)}× lo normal (z)</span></button>`;}).join('')
-    :'<p style="color:var(--ink3)">Sin periodos con z ≥ 1,5 en esta selección.</p>';
+    return `<button class="critc${on?' on':''}" data-i="${i}"><div class="yr">${Y0+p.y}</div><div class="rg">${nice(wkStart(p.y,p.w0)).replace(/ \d{4}$/,'')} – ${nice(wkEnd(p.y,p.w1)).replace(/ \d{4}$/,'')}</div><span class="z">z = ${p.pk.toFixed(1)} above normal</span></button>`;}).join('')
+    :'<p style="color:var(--ink3)">No periods with z ≥ 1.5 in this selection.</p>';
   $('crit').querySelectorAll('.critc').forEach(b=>b.onclick=()=>{const p=cr[+b.dataset.i];setRange(wkStart(p.y,p.w0),wkEnd(p.y,p.w1));});
 }
 
@@ -1430,10 +1493,10 @@ function markPreset(p){$('presets').querySelectorAll('.chip').forEach(c=>c.class
   const pill=$('selPill');if(pill&&p!=='one')pill.style.display='none';}
 function goMpio(k,only=true){
   if(only){SEL.fill(0);SEL[k]=1;markPreset('one');
-    const pill=$('selPill');pill.textContent=`Solo ${D.mpios[k].n}  ✕`;pill.style.display='block';}
+    const pill=$('selPill');pill.textContent=`Only ${D.mpios[k].n}  ✕`;pill.style.display='block';}
   {const cnt=new Float64Array(D.mpios.length);for(let i=0;i<N;i++)if(D.s[i]===1&&passes(i))cnt[D.m[i]]++;
    const dens=D.mpios.map((m,j)=>({j,v:cnt[j]/m.area*100})).sort((a,b)=>b.v-a.v),r=dens.findIndex(x=>x.j===k)+1;
-   say(`<b>${D.mpios[k].n}</b> (${fmt(D.mpios[k].area)} km²) tuvo <b>${fmt(cnt[k])}</b> hotspots VIIRS entre 2012 y 2025: es el puesto <b>#${r}</b> de 47 municipios en fuego por km².`,'Municipio');}
+   say(`<b>${D.mpios[k].n}</b> (${fmt(D.mpios[k].area)} km²) had <b>${fmt(cnt[k])}</b> VIIRS hotspots between 2012 and 2025: it ranks <b>#${r}</b> of 47 municipalities in fire per km².`,'Municipality');}
   map.flyToBounds(mpLayers[k].getBounds(),{padding:[30,30],duration:.8});
   styleMpios();refresh();
 }
@@ -1442,7 +1505,7 @@ function bindSearch(){
   const inp=$('sIn'),res=$('sRes');let act=0,list=[];
   const show=()=>{const q=norm(inp.value.trim());
     list=D.mpios.map((m,k)=>({n:m.n,k})).filter(m=>!q||norm(m.n).includes(q)).sort((a,b)=>a.n.localeCompare(b.n,'es')).slice(0,47);
-    act=0;res.innerHTML=list.map((m,j)=>`<div data-k="${m.k}" class="${j===0?'act':''}">${m.n}</div>`).join('')||'<div style="color:var(--ink3)">Sin resultados</div>';
+    act=0;res.innerHTML=list.map((m,j)=>`<div data-k="${m.k}" class="${j===0?'act':''}">${m.n}</div>`).join('')||'<div style="color:var(--ink3)">No results</div>';
     res.style.display='block';};
   const choose=k=>{inp.value=D.mpios[k].n;res.style.display='none';inp.blur();goMpio(k);};
   inp.addEventListener('focus',show);inp.addEventListener('input',show);
@@ -1459,12 +1522,12 @@ function bindSearch(){
 /* ---------- capa de industrias y volcán ---------- */
 let fxLayer=null;
 const FX={
-  cemento:{lab:'Industria · cemento',pc:'rgba(205,205,205,.95)',x:'62%',y:'80%',svg:`<svg viewBox="0 0 44 44"><rect x="26" y="4" width="7" height="34" fill="#64748b"/><rect x="25" y="2" width="9" height="3" rx="1" fill="#334155"/><path d="M2 40V24l9-5v5l9-5v21Z" fill="#94a3b8"/><g class="kiln"><circle cx="13" cy="33" r="5" fill="#475569"/><path d="M13 28v10M8 33h10" stroke="#cbd5e1" stroke-width="1.5"/></g><rect x="35" y="22" width="6" height="18" rx="3" fill="#64748b"/><path d="M1 40.5h42" stroke="#1f2937" stroke-width="2"/></svg>`},
-  petroleo:{lab:'Petróleo y gas · tea',pc:'rgba(70,70,70,.85)',x:'44%',y:'92%',sd:'2.4s',svg:`<svg viewBox="0 0 44 44"><path d="M14 42L20 12h4l6 30Z" fill="none" stroke="#1f2937" stroke-width="2.4"/><path d="M16 32h12M17.5 24h9M19 17h6" stroke="#1f2937" stroke-width="1.8"/><rect x="21" y="5" width="2.5" height="8" fill="#1f2937"/><g class="flame"><path d="M22 -4C27 2 26 6 22.2 7 18 6 17.5 2 22 -4Z" fill="#ff922b"/><path d="M22.2 0c2 2.5 1.6 4.5 0 5-1.7-.5-2-2.5 0-5Z" fill="#ffe066"/></g><path d="M4 42h36" stroke="#1f2937" stroke-width="2"/></svg>`},
-  volcan:{lab:'Volcán activo',pc:'rgba(190,190,190,.9)',x:'40%',y:'70%',svg:`<svg viewBox="0 0 44 44"><path d="M1 42L16 13h12l15 29Z" fill="#7c5a3c"/><path d="M8 42l9-17 4 5 4-6 10 18Z" fill="#5c4030"/><ellipse class="glow" cx="22" cy="13.5" rx="6.5" ry="2.4" fill="#ff6b00"/><path class="glow" d="M19 14l-2 9 3-3 2 6 2-6 3 3-2-9Z" fill="#ff922b"/><path d="M14 17l4 1-6 6Z M30 18l-2 6 4-3Z" fill="#fff" opacity=".5"/></svg>`},
-  arroz:{lab:'Agroindustria · molino de arroz',pc:'rgba(255,255,255,.95)',x:'66%',y:'82%',svg:`<svg viewBox="0 0 44 44"><rect x="4" y="14" width="13" height="27" rx="2" fill="#e9c46a"/><path d="M4 14q6.5-9 13 0Z" fill="#d4a017"/><rect x="18" y="20" width="22" height="21" fill="#f4a261"/><path d="M18 20l11-7 11 7Z" fill="#e76f51"/><rect x="31" y="6" width="5" height="15" fill="#b5651d"/><rect x="22" y="27" width="5" height="5" fill="#fff8e1"/><rect x="30" y="27" width="5" height="5" fill="#fff8e1"/><ellipse class="bean" cx="10.5" cy="25" rx="2.4" ry="4.5" fill="#fff" transform="rotate(25 10.5 25)"/><path d="M1 41.5h42" stroke="#1f2937" stroke-width="2"/></svg>`},
-  cafe:{lab:'Agroindustria · trilladora de café',pc:'rgba(160,110,70,.9)',x:'64%',y:'82%',svg:`<svg viewBox="0 0 44 44"><rect x="4" y="18" width="30" height="23" fill="#a47148"/><path d="M2 19l17-10 17 10Z" fill="#6f4518"/><rect x="29" y="6" width="5" height="14" fill="#4a2c0f"/><g class="bean"><ellipse cx="17" cy="29" rx="6" ry="8" fill="#3d2108"/><path d="M17 21.5c-3 3-3 12 0 15" stroke="#c08a5a" stroke-width="1.6" fill="none"/></g><path d="M1 41.5h42" stroke="#1f2937" stroke-width="2"/></svg>`},
-  sin_identificar:{lab:'Fuente fija sin identificar',pc:'rgba(225,225,225,.85)',x:'58%',y:'80%',svg:`<svg viewBox="0 0 44 44"><rect x="3" y="22" width="14" height="19" fill="#868e96"/><rect x="18" y="14" width="12" height="27" fill="#adb5bd"/><rect x="31" y="26" width="10" height="15" fill="#868e96"/><rect x="25" y="5" width="4" height="10" fill="#495057"/><g fill="#f8f9fa" opacity=".8"><rect x="6" y="26" width="3" height="3"/><rect x="11" y="26" width="3" height="3"/><rect x="21" y="18" width="3" height="3"/><rect x="21" y="25" width="3" height="3"/><rect x="34" y="30" width="3" height="3"/></g><path d="M1 41.5h42" stroke="#1f2937" stroke-width="2"/></svg>`}
+  cemento:{lab:'Industry · cement',pc:'rgba(205,205,205,.95)',x:'62%',y:'80%',svg:`<svg viewBox="0 0 44 44"><rect x="26" y="4" width="7" height="34" fill="#64748b"/><rect x="25" y="2" width="9" height="3" rx="1" fill="#334155"/><path d="M2 40V24l9-5v5l9-5v21Z" fill="#94a3b8"/><g class="kiln"><circle cx="13" cy="33" r="5" fill="#475569"/><path d="M13 28v10M8 33h10" stroke="#cbd5e1" stroke-width="1.5"/></g><rect x="35" y="22" width="6" height="18" rx="3" fill="#64748b"/><path d="M1 40.5h42" stroke="#1f2937" stroke-width="2"/></svg>`},
+  petroleo:{lab:'Oil & gas · flare',pc:'rgba(70,70,70,.85)',x:'44%',y:'92%',sd:'2.4s',svg:`<svg viewBox="0 0 44 44"><path d="M14 42L20 12h4l6 30Z" fill="none" stroke="#1f2937" stroke-width="2.4"/><path d="M16 32h12M17.5 24h9M19 17h6" stroke="#1f2937" stroke-width="1.8"/><rect x="21" y="5" width="2.5" height="8" fill="#1f2937"/><g class="flame"><path d="M22 -4C27 2 26 6 22.2 7 18 6 17.5 2 22 -4Z" fill="#ff922b"/><path d="M22.2 0c2 2.5 1.6 4.5 0 5-1.7-.5-2-2.5 0-5Z" fill="#ffe066"/></g><path d="M4 42h36" stroke="#1f2937" stroke-width="2"/></svg>`},
+  volcan:{lab:'Active volcano',pc:'rgba(190,190,190,.9)',x:'40%',y:'70%',svg:`<svg viewBox="0 0 44 44"><path d="M1 42L16 13h12l15 29Z" fill="#7c5a3c"/><path d="M8 42l9-17 4 5 4-6 10 18Z" fill="#5c4030"/><ellipse class="glow" cx="22" cy="13.5" rx="6.5" ry="2.4" fill="#ff6b00"/><path class="glow" d="M19 14l-2 9 3-3 2 6 2-6 3 3-2-9Z" fill="#ff922b"/><path d="M14 17l4 1-6 6Z M30 18l-2 6 4-3Z" fill="#fff" opacity=".5"/></svg>`},
+  arroz:{lab:'Agro-industry · rice mill',pc:'rgba(255,255,255,.95)',x:'66%',y:'82%',svg:`<svg viewBox="0 0 44 44"><rect x="4" y="14" width="13" height="27" rx="2" fill="#e9c46a"/><path d="M4 14q6.5-9 13 0Z" fill="#d4a017"/><rect x="18" y="20" width="22" height="21" fill="#f4a261"/><path d="M18 20l11-7 11 7Z" fill="#e76f51"/><rect x="31" y="6" width="5" height="15" fill="#b5651d"/><rect x="22" y="27" width="5" height="5" fill="#fff8e1"/><rect x="30" y="27" width="5" height="5" fill="#fff8e1"/><ellipse class="bean" cx="10.5" cy="25" rx="2.4" ry="4.5" fill="#fff" transform="rotate(25 10.5 25)"/><path d="M1 41.5h42" stroke="#1f2937" stroke-width="2"/></svg>`},
+  cafe:{lab:'Agro-industry · coffee mill',pc:'rgba(160,110,70,.9)',x:'64%',y:'82%',svg:`<svg viewBox="0 0 44 44"><rect x="4" y="18" width="30" height="23" fill="#a47148"/><path d="M2 19l17-10 17 10Z" fill="#6f4518"/><rect x="29" y="6" width="5" height="14" fill="#4a2c0f"/><g class="bean"><ellipse cx="17" cy="29" rx="6" ry="8" fill="#3d2108"/><path d="M17 21.5c-3 3-3 12 0 15" stroke="#c08a5a" stroke-width="1.6" fill="none"/></g><path d="M1 41.5h42" stroke="#1f2937" stroke-width="2"/></svg>`},
+  sin_identificar:{lab:'Unidentified static source',pc:'rgba(225,225,225,.85)',x:'58%',y:'80%',svg:`<svg viewBox="0 0 44 44"><rect x="3" y="22" width="14" height="19" fill="#868e96"/><rect x="18" y="14" width="12" height="27" fill="#adb5bd"/><rect x="31" y="26" width="10" height="15" fill="#868e96"/><rect x="25" y="5" width="4" height="10" fill="#495057"/><g fill="#f8f9fa" opacity=".8"><rect x="6" y="26" width="3" height="3"/><rect x="11" y="26" width="3" height="3"/><rect x="21" y="18" width="3" height="3"/><rect x="21" y="25" width="3" height="3"/><rect x="34" y="30" width="3" height="3"/></g><path d="M1 41.5h42" stroke="#1f2937" stroke-width="2"/></svg>`}
 };
 function fxIcon(f){
   const t=FX[f.tipo]||FX.sin_identificar,cls=f.identificacion==='contexto'?' ctx':f.tipo==='sin_identificar'?' small':'';
@@ -1475,15 +1538,15 @@ function fxIcon(f){
 }
 function fxPopup(f){
   const t=FX[f.tipo]||FX.sin_identificar,idc=f.identificacion==='sin identificar'?'sin':f.identificacion;
-  const idl={confirmada:'✓ Identificación confirmada',probable:'≈ Identificación probable',contexto:'Industria cercana',sin:'? Sin identificar'}[idc];
-  const ev=f.n?`<p class="ev">🔥 ${fmt(f.n)} hotspots ${f.tipo==='volcan'?'volcánicos':'de fuente fija'} ${f.identificacion==='contexto'?'a ≤ 1,5 km':'aquí'} (${f.desde_det}–${f.hasta_det})${f.viirs?` · ${fmt(f.viirs)} de VIIRS`:''}</p>`:'<p style="color:#6b7280">Sin detecciones de fuente fija propias.</p>';
-  const rows=[['Empresa',f.empresa],['Produce',f.produce],['Desde',f.desde],['Municipio',f.municipio]].filter(r=>r[1]&&r[1]!=='—');
+  const idl={confirmada:'✓ Confirmed identification',probable:'≈ Probable identification',contexto:'Nearby industry',sin:'? Unidentified'}[idc];
+  const ev=f.n?`<p class="ev">🔥 ${fmt(f.n)} ${f.tipo==='volcan'?'volcanic':'static-source'} hotspots ${f.identificacion==='contexto'?'within ≤ 1.5 km':'here'} (${f.desde_det}–${f.hasta_det})${f.viirs?` · ${fmt(f.viirs)} from VIIRS`:''}</p>`:'<p style="color:#6b7280">No static-source detections of its own.</p>';
+  const rows=[['Company',f.empresa],['Produces',f.produce],['Since',f.desde],['Municipality',f.municipio]].filter(r=>r[1]&&r[1]!=='—');
   return `<div class="fx-pop"><div class="hd"><div class="ic">${t.svg}</div><div><h5>${f.nombre}</h5><span class="tag ${idc}">${idl}</span> <span style="color:#6b7280;font-size:10.5px">${t.lab}</span></div></div>
     ${ev}<table>${rows.map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join('')}</table>
     ${f.datos&&f.datos.length?`<ul>${f.datos.map(d=>`<li>${d}</li>`).join('')}</ul>`:''}
-    <div class="why"><b>¿Por qué aparece como hotspot?</b><br>${f.porque}</div>
-    ${f.fuentes&&f.fuentes.length?`<div class="src">Fuentes: ${f.fuentes.map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${x[0]} ↗</a>`).join('')}</div>`:''}
-    <button data-fx="${f.id}">🔍 Ver sus hotspots (2000–2025)</button></div>`;
+    <div class="why"><b>Why does it show up as a hotspot?</b><br>${f.porque}</div>
+    ${f.fuentes&&f.fuentes.length?`<div class="src">Sources: ${f.fuentes.map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${x[0]} ↗</a>`).join('')}</div>`:''}
+    <button data-fx="${f.id}">🔍 Show its hotspots (2000–2025)</button></div>`;
 }
 let FXL=[];
 function initFx(){
@@ -1493,7 +1556,7 @@ function initFx(){
     fxLayer=L.layerGroup(list.map(f=>L.marker([f.lat,f.lon],{icon:fxIcon(f),title:f.nombre,riseOnHover:true,zIndexOffset:400+100*(order[f.tipo]||0)})
       .bindPopup(fxPopup(f),{maxWidth:320,minWidth:250,autoPanPaddingTopLeft:L.point(20,80),autoPanPaddingBottomRight:L.point(250,20)}))).addTo(map);
     map.on('popupopen',e=>{const b=e.popup.getElement().querySelector('[data-fx]');if(!b)return;
-      const ff=FXL.find(x=>x.id===b.dataset.fx);if(ff)say(FXFACT[ff.tipo]||'', ff.tipo==='volcan'?'¿Sabías que…?':'Dato curioso');
+      const ff=FXL.find(x=>x.id===b.dataset.fx);if(ff)say(FXFACT[ff.tipo]||'', ff.tipo==='volcan'?'Did you know…?':'Fun fact');
       b.onclick=()=>{const f=FXL.find(x=>x.id===b.dataset.fx);
         if(S.excl){S.excl=false;$('exclChip').classList.remove('on');}
         setRange(dayOf(Y0,0,1),dayOf(Y1,11,31));refresh();map.closePopup();map.flyTo([f.lat,f.lon],f.tipo==='volcan'?13:14,{duration:.8});};});
@@ -1538,9 +1601,9 @@ async function hlsFind(lat,lon,start,dir,maxDays=90){
 
 /* ---------- incendios ocurridos ---------- */
 let INC=null,fireLayer=null,FIRE_IDX=[];
-const SEV=['Baja','Moderada','Alta','Muy alta'],SEVC=['#e0a800','#f76707','#e03131','#7b1d1d'];
+const SEV=['Low','Moderate','High','Very high'],SEVC=['#e0a800','#f76707','#e03131','#7b1d1d'];
 const COVG=c=>INC&&INC.meta.grupo[c]||'otro';
-const COVN=c=>{if(!INC||c<0)return 'vegetación';const n=INC.meta.igbp[c];return c===9?'sabana (pasto con arbustos)':c===8?'sabana arbolada':n;};
+const COVN=c=>{if(!INC||c<0)return 'vegetation';const n=INC.meta.igbp[c];return c===9?'savanna (grass with shrubs)':c===8?'woody savanna':n;};
 function fireSVG(g,sev){
   const fl=`<g class="fl"><path d="M22 4c6 7 7 12 2 17-1-4-3-5-4-6 0 4-3 6-5 7-2-6 1-12 7-18Z" fill="${['#ffd43b','#ff922b','#f03e3e','#c92a2a'][sev]}"/><path d="M21 12c3 4 3 7 0 9-2-2-3-4 0-9Z" fill="#fff3bf"/></g>`;
   const base={
@@ -1564,46 +1627,46 @@ function firePopup(k){
   const clima=e?{nino:'🔴 El Niño',nina:'🔵 La Niña',neutral:'Neutral'}[e.fase]+(e.fz?' '+e.fz:''):'—';
   const pct=Math.min(100,Math.round(100*Math.log10(1+INC.frp[k])/Math.log10(1+2000)));
   const canCmp=d0>HLS0+5;
-  return `<div class="fire-pop"><div class="hd">${fireSVG(g,sev)}<div><h5>🔥 Incendio ocurrido sobre ${COVN(INC.cob[k])}</h5>
-    <span class="sev" style="background:${SEVC[sev]}">Severidad ${SEV[sev].toLowerCase()}</span></div></div>
+  return `<div class="fire-pop"><div class="hd">${fireSVG(g,sev)}<div><h5>🔥 Fire on ${COVN(INC.cob[k])}</h5>
+    <span class="sev" style="background:${SEVC[sev]}">${SEV[sev]} severity</span></div></div>
     <div class="bar"><i style="width:${pct}%;background:linear-gradient(90deg,#ffd43b,${SEVC[sev]})"></i></div>
     <table>
-      <tr><th>Fecha</th><td>${nice(d0)}${dur>1?' – '+nice(d1):''} <span style="color:#6b7280;font-weight:500">(${dur} día${dur>1?'s':''})</span></td></tr>
-      <tr><th>Municipio</th><td>${D.mpios[INC.m[k]].n}</td></tr>
-      <tr><th>Cobertura</th><td>${COVN(INC.cob[k])}</td></tr>
-      <tr><th>Detecciones</th><td>${INC.n[k]} hotspots${INC.nv[k]?` (${INC.nv[k]} VIIRS)`:' (MODIS)'}</td></tr>
-      <tr><th>Energía liberada</th><td>${fmt(INC.frp[k])} MW en total · máx. ${fmt(INC.frpmax[k])} MW</td></tr>
-      <tr><th>Área con fuego</th><td>≈ ${fmt(INC.area[k])} ha <span style="color:#6b7280;font-weight:500">(máximo estimado)</span></td></tr>
-      <tr><th>Clima</th><td>${clima}</td></tr>
+      <tr><th>Date</th><td>${nice(d0)}${dur>1?' – '+nice(d1):''} <span style="color:#6b7280;font-weight:500">(${dur} day${dur>1?'s':''})</span></td></tr>
+      <tr><th>Municipality</th><td>${D.mpios[INC.m[k]].n}</td></tr>
+      <tr><th>Land cover</th><td>${COVN(INC.cob[k])} <span style="color:#6b7280;font-weight:500">(MODIS MCD12Q1)</span></td></tr>
+      <tr><th>Detections</th><td>${INC.n[k]} hotspots${INC.nv[k]?` (${INC.nv[k]} VIIRS)`:' (MODIS)'}</td></tr>
+      <tr><th>Fire power</th><td>${fmt(INC.frp[k])} MW total · max ${fmt(INC.frpmax[k])} MW</td></tr>
+      <tr><th>Thermal footprint</th><td>≈ ${fmt(INC.area[k])} ha <span style="color:#6b7280;font-weight:500">(upper estimate)</span></td></tr>
+      <tr><th>Climate</th><td>${clima}</td></tr>
     </table>
-    <div class="note">Severidad según la energía liberada frente a todos los incendios del Tolima 2000–2025. Área estimada con los píxeles del satélite: el área quemada real suele ser menor. Cobertura: mapa MODIS de la NASA del año anterior.</div>
-    <div class="btns"><button data-fz="${k}">🔍 Ver sus hotspots</button>${canCmp?`<button class="alt" data-cmp="${k}">↔ Antes / después</button>`:''}</div></div>`;
+    <div class="note">Severity = total fire radiative power ranked against all Tolima fires 2000–2025 (P50/P80/P95). Footprint estimated from satellite pixels (VIIRS ≈ 14 ha, MODIS ≈ 100 ha): the real burned area is usually smaller. Land cover: NASA MODIS map of the previous year.</div>
+    <div class="btns"><button data-fz="${k}">🔍 Show its hotspots</button>${canCmp?`<button class="alt" data-cmp="${k}">↔ Before / after</button>`:''}</div></div>`;
 }
 function drawFires(){
   const fc=$('fireCount');
-  if(!INC){if(fc)fc.textContent='Cargando…';return;}
+  if(!INC){if(fc)fc.textContent='Loading…';return;}
   FIRE_IDX=fireIdxInPeriod();
-  if(fc)fc.textContent=`${fmt(FIRE_IDX.length)} en el periodo · toca para ${S.fires?'ocultar':'ver'}`;
+  if(fc)fc.textContent=`${fmt(FIRE_IDX.length)} in the period · tap to ${S.fires?'hide':'show'}`;
   if(!fireLayer)return;fireLayer.clearLayers();
   if(!S.fires)return;
   FIRE_IDX.slice(0,250).forEach(k=>{
     const sev=INC.sev[k],sz=[26,30,34,40][sev],g=COVG(INC.cob[k]);
     const icon=L.divIcon({className:'',iconSize:[sz,sz],iconAnchor:[sz/2,sz-2],popupAnchor:[0,-sz+4],
       html:`<div class="fev" style="width:${sz}px;height:${sz}px">${fireSVG(g,sev)}<span class="num" style="background:${SEVC[sev]}">${INC.n[k]}</span></div>`});
-    L.marker([INC.lat[k],INC.lon[k]],{icon,zIndexOffset:300+sev*100,title:`Incendio ${nice(INC.d0[k])}`}).bindPopup(()=>firePopup(k),{maxWidth:320,minWidth:260,autoPanPaddingTopLeft:L.point(20,80)}).on('popupopen',()=>sayFire(k)).addTo(fireLayer);
+    L.marker([INC.lat[k],INC.lon[k]],{icon,zIndexOffset:300+sev*100,title:`Fire ${nice(INC.d0[k])}`}).bindPopup(()=>firePopup(k),{maxWidth:320,minWidth:260,autoPanPaddingTopLeft:L.point(20,80)}).on('popupopen',()=>sayFire(k)).addTo(fireLayer);
   });
   if(S.tab==='inc')renderFireList();
 }
 function sayFire(k){
   const g=COVG(INC.cob[k]),dur=INC.d1[k]-INC.d0[k]+1;
-  say(`Este incendio en <b>${D.mpios[INC.m[k]].n}</b> ardió sobre ${COVN(INC.cob[k])} durante ${dur} día${dur>1?'s':''}. El satélite lo detectó ${INC.n[k]} veces y su severidad fue <b>${SEV[INC.sev[k]].toLowerCase()}</b>${INC.sev[k]===3?': está entre el 5 % de incendios más intensos del Tolima':''}.`,'Incendio');
+  say(`This fire in <b>${D.mpios[INC.m[k]].n}</b> burned ${COVN(INC.cob[k])} for ${dur} day${dur>1?'s':''}. Satellites detected it ${INC.n[k]} times and its severity was <b>${SEV[INC.sev[k]].toLowerCase()}</b>${INC.sev[k]===3?': it is among the 5 % most intense fires in Tolima':''}.`,'Fire');
 }
 function toggleFires(on){
   S.fires=on===undefined?!S.fires:on;
   $('fireBtn').classList.toggle('on',S.fires);
   if(S.fires){map.removeLayer(hsLayer);fireLayer.addTo(map);}else{map.removeLayer(fireLayer);hsLayer.addTo(map);}
   drawFires();
-  if(S.fires)say(`Te muestro los <b>incendios ocurridos</b>: agrupé los hotspots cercanos en el espacio y el tiempo. Cada ícono indica la cobertura que se quemó, y el número cuántas veces lo vio el satélite. Toca uno para ver su severidad, fecha y área.`,'Incendios ocurridos');
+  if(S.fires)say(`Here are the <b>fire events</b>: I grouped hotspots that are close in space and time, and removed industries and persistent heat sources. Each icon shows the land cover that burned, and the number how many times the satellite saw it. Tap one to see its severity, date and area.`,'Fire events');
 }
 function openFire(k){
   if(!S.fires)toggleFires(true);
@@ -1612,9 +1675,9 @@ function openFire(k){
 }
 function renderFireList(){
   const el=$('fireList');if(!el)return;
-  if(!INC){el.innerHTML='<p style="color:var(--ink3)">Cargando…</p>';return;}
+  if(!INC){el.innerHTML='<p style="color:var(--ink3)">Loading…</p>';return;}
   const top=FIRE_IDX.slice(0,40);
-  el.innerHTML=top.length?top.map(k=>`<button class="firerow" data-k="${k}">${fireSVG(COVG(INC.cob[k]),INC.sev[k])}<div><b>${D.mpios[INC.m[k]].n} · ${nice(INC.d0[k])}</b><small>${COVN(INC.cob[k])} · ${INC.n[k]} detecciones · ≈ ${fmt(INC.area[k])} ha</small></div><span class="sev" style="background:${SEVC[INC.sev[k]]}">${SEV[INC.sev[k]]}</span></button>`).join(''):'<p style="color:var(--ink3)">No hubo incendios (2 o más detecciones) en este periodo y zona.</p>';
+  el.innerHTML=top.length?top.map(k=>`<button class="firerow" data-k="${k}">${fireSVG(COVG(INC.cob[k]),INC.sev[k])}<div><b>${D.mpios[INC.m[k]].n} · ${nice(INC.d0[k])}</b><small>${COVN(INC.cob[k])} · ${INC.n[k]} detections · ≈ ${fmt(INC.area[k])} ha</small></div><span class="sev" style="background:${SEVC[INC.sev[k]]}">${SEV[INC.sev[k]]}</span></button>`).join(''):'<p style="color:var(--ink3)">No fires (2 or more detections) in this period and zone.</p>';
   el.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>openFire(+b.dataset.k));
 }
 /* comparador antes / después: Sentinel-2 / Landsat 30 m fechados (NASA HLS), los días despejados más cercanos al incendio */
@@ -1622,12 +1685,12 @@ let CMP=null,cmpTok=0;
 async function startCompare(k){
   stopCompare();const tk=++cmpTok;map.closePopup();
   const d0=INC.d0[k],d1=INC.d1[k],lat=INC.lat[k],lon=INC.lon[k];
-  if(d0<=HLS0+5){say('Para incendios anteriores a abril de 2013 no hay imágenes Sentinel-2 o Landsat 8 para comparar el antes y el después.','Antes / después');return;}
+  if(d0<=HLS0+5){say('For fires before April 2013 there are no Sentinel-2 or Landsat 8 images to compare before and after.','Before / after');return;}
   map.flyTo([lat,lon],13,{duration:.6});
-  say('Estoy buscando las imágenes <b>Sentinel-2</b> más despejadas de justo antes y justo después del incendio…','Antes / después',6000);
+  say('I am searching for the clearest <b>Sentinel-2</b> images just before and just after the fire…','Before / after',6000);
   const [A,B]=await Promise.all([hlsFind(lat,lon,d0-1,-1,90),hlsFind(lat,lon,d1+1,+1,60)]);
-  if(tk!==cmpTok)return; // se pidió otra comparación mientras tanto
-  if(!A||!B){say('No encontré imágenes despejadas de antes y después para este incendio (mucha nubosidad en esas fechas).','Antes / después');return;}
+  if(tk!==cmpTok)return; // another comparison was requested meanwhile
+  if(!A||!B){say('I could not find clear before and after images for this fire (too many clouds on those dates).','Before / after');return;}
   ['cmpA','cmpB'].forEach((n,i)=>{if(!map.getPane(n)){const p=map.createPane(n);p.style.zIndex=210+i;}
     map.getPane(n).style.filter='contrast(1.35) saturate(1.35) brightness(1.05)';});
   const LA=L.tileLayer(hlsUrl(A.lay,A.d),{pane:'cmpA',maxZoom:17,maxNativeZoom:12,attribution:'NASA HLS (Sentinel-2 / Landsat)'}).addTo(map);
@@ -1639,9 +1702,9 @@ async function startCompare(k){
   box.querySelectorAll('.cmp-bar,.cmp-lab,.cmp-exit,.cmp-note').forEach(e=>e.remove());
   const bar=L.DomUtil.create('div','cmp-bar',box),la=L.DomUtil.create('div','cmp-lab',box),lb=L.DomUtil.create('div','cmp-lab',box),ex=L.DomUtil.create('button','cmp-exit',box),nt=L.DomUtil.create('div','cmp-note',box);
   la.style.left='12px';lb.style.right='12px';
-  la.textContent=`◀ Antes: ${HLSN[A.lay]} · ${nice(A.d)} · ${A.cloud} % nubes`;lb.textContent=`Después: ${HLSN[B.lay]} · ${nice(B.d)} · ${B.cloud} % nubes ▶`;
-  ex.innerHTML='✕ Salir de la comparación <small>(Esc)</small>';
-  nt.textContent=`Incendio del ${nice(d0)}${d1>d0?' al '+nice(d1):''} (círculo rojo). Busca manchas oscuras, grises o marrones nuevas a la derecha: es el área quemada.`;
+  la.textContent=`◀ Before: ${HLSN[A.lay]} · ${nice(A.d)} · ${A.cloud} % clouds`;lb.textContent=`After: ${HLSN[B.lay]} · ${nice(B.d)} · ${B.cloud} % clouds ▶`;
+  ex.innerHTML='✕ Exit comparison <small>(Esc)</small>';
+  nt.textContent=`Fire of ${nice(d0)}${d1>d0?' to '+nice(d1):''} (red circle, radius ${(rad/1000).toFixed(1)} km). Look for new dark, gray or brown patches on the right: that is the burned area.`;
   [bar,ex,nt].forEach(e=>{L.DomEvent.disableClickPropagation(e);L.DomEvent.disableScrollPropagation(e);});
   let x=box.clientWidth/2;
   const clip=()=>{const nw=map.containerPointToLayerPoint([0,0]),se=map.containerPointToLayerPoint(map.getSize()),cx=map.containerPointToLayerPoint([x,0]).x;
@@ -1654,7 +1717,7 @@ async function startCompare(k){
   [baseYear,baseNasa,baseOSM,baseHls,baseGls].forEach(l=>l&&map.hasLayer(l)&&map.removeLayer(l));
   if(fireLayer&&map.hasLayer(fireLayer))map.removeLayer(fireLayer);
   CMP={LA,LB,ring,els:[bar,la,lb,ex,nt],clip};clip();setTimeout(clip,700);
-  say(`Arrastra la barra blanca. A la izquierda el <b>${nice(A.d)}</b>, antes del fuego; a la derecha el <b>${nice(B.d)}</b>, después. Dentro del círculo rojo busca manchas oscuras nuevas: es lo que se quemó. Para salir, toca el botón rojo o la tecla Escape.`,'Antes / después');
+  say(`Drag the white bar. On the left, <b>${nice(A.d)}</b>, before the fire; on the right, <b>${nice(B.d)}</b>, after. Inside the red circle look for new dark patches: that is what burned. To exit, tap the red button or press Escape.`,'Before / after');
 }
 addEventListener('keydown',e=>{if(e.key==='Escape'&&CMP)stopCompare();});
 function stopCompare(){
@@ -1692,39 +1755,39 @@ function bind(){
     document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id==='p-'+b.dataset.t));
     S.tab=b.dataset.t;tip(S.tab);renderCharts();});
   const SEGMSG={
-    harm:['Armonizado','Antes de 2012 multiplicamos MODIS por <b>k ≈ 6</b> (VIIRS ve unas seis veces más). Así los 26 años se comparan en la misma escala y el salto de 2012 desaparece.'],
-    raw:['Sin armonizar','Estos son los datos tal cual: MODIS hasta 2011 y VIIRS desde 2012. ¿Ves cómo todo se oscurece desde 2012? No hubo más fuego: <b>cambió el satélite</b>.'],
-    int:['¿Cuánto fuego?','Cada cuadro muestra cuántos hotspots hubo. <b>Más oscuro = más fuego.</b> Las columnas oscuras caen en las temporadas secas.'],
-    anom:['¿Fue normal?','Ahora comparo cada periodo con lo que es <b>normal</b> para esa época del año. <b>Rojo</b> = mucho más fuego de lo normal; <b>azul</b> = menos. Así encuentras años raros, como los de El Niño.'],
-    m:['Vista por mes','Cada fila es un año y cada columna un mes. El número dentro del cuadro es la cantidad de hotspots.'],
-    w:['Vista por semana','Las 52 semanas de cada año: sirve para ver con precisión cuándo empieza y termina cada temporada de quema.'],
-    d:['Vista por día','Cada cuadro es un día del año elegido, como un calendario de pared. Toca un día y te muestro sus hotspots en el mapa.']};
+    harm:['Harmonized','Before 2012 we multiply MODIS by <b>k ≈ 6</b> (VIIRS sees about six times more). That way all 26 years share the same scale and the 2012 jump disappears.'],
+    raw:['Not harmonized','These are the raw data: MODIS until 2011 and VIIRS since 2012. See how everything gets darker from 2012? There was not more fire: <b>the satellite changed</b>.'],
+    int:['How much fire?','Each cell shows how many hotspots there were. <b>Darker = more fire.</b> The dark columns fall in the dry seasons.'],
+    anom:['Was it normal?','Now I compare each period with what is <b>normal</b> for that time of year. <b>Red</b> = much more fire than normal; <b>blue</b> = less. That is how you find unusual years, like El Niño years.'],
+    m:['Monthly view','Each row is a year and each column a month. The number inside the cell is the number of hotspots.'],
+    w:['Weekly view','The 52 weeks of each year: useful to see exactly when each burning season starts and ends.'],
+    d:['Daily view','Each cell is a day of the selected year, like a wall calendar. Tap a day and I will show you its hotspots on the map.']};
   const seg=(id,key)=>$(id).querySelectorAll('button').forEach(b=>b.onclick=()=>{
     $(id).querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));S[key]=b.dataset.v;drawCal();
     const m=SEGMSG[b.dataset.v];if(m)say(m[1],m[0]);});
   seg('segGran','gran');seg('segView','view');seg('segSrc','src');
   // controles dentro del mapa
   document.querySelectorAll('#confChips [data-c]').forEach(c=>c.onclick=()=>{c.classList.toggle('on');S.conf[+c.dataset.c]=c.classList.contains('on');refresh();
-    if(c.dataset.c==='0'&&S.conf[0])say('Activaste la <b>confianza baja</b>: incluye detecciones dudosas, como reflejos del sol o suelos muy calientes. Úsala con cuidado.','Ojo');});
+    if(c.dataset.c==='0'&&S.conf[0])say('You turned on <b>low confidence</b>: it includes doubtful detections, such as sun glint or very hot soils. Use it with care.','Careful');});
   document.querySelectorAll('#sensChips [data-s]').forEach(c=>c.onclick=()=>{c.classList.toggle('on');S.sens[+c.dataset.s]=c.classList.contains('on');drawHotspots();});
   $('exclChip').onclick=()=>{$('exclChip').classList.toggle('on');S.excl=$('exclChip').classList.contains('on');refresh();};
   $('segBase').querySelectorAll('button').forEach(b=>b.onclick=()=>{
     $('segBase').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
     [baseYear,baseNasa,baseOSM,baseHls].forEach(l=>l&&map.hasLayer(l)&&map.removeLayer(l));
     baseMode=b.dataset.b;updateBase();
-    say(({trim:'Te muestro la <b>serie trimestral</b>: la mediana sin nubes de todas las imágenes Landsat y Sentinel-2 de cada temporada, desde el 2000. Encima, en rojo, lo que se quemó respecto a la temporada anterior (dNBR).',year:'Te muestro la <b>imagen satelital de alta resolución</b> de Esri: tiene casi 200 versiones desde 2014 y elijo la más cercana a la fecha que escojas.',
-      nasa:'Te muestro el mosaico <b>Sentinel-2 sin nubes</b> del año más cercano: imágenes de 10 m del programa europeo Copernicus.',
-      hls:'Busco la <b>imagen de 30 m más despejada</b> cerca de la fecha que elijas (Sentinel-2 o Landsat, desde 2013). Así puedes ver el paisaje de ese momento, incluso cicatrices de quema.',
-      osm:'Mapa de calles de OpenStreetMap, útil para ubicar veredas y vías.'})[baseMode],'Mapa base');});
+    say(({trim:'This is the <b>quarterly series</b>: the cloud-free median of every Landsat and Sentinel-2 image of each season since 2000. On top, in red, what burned compared with the previous season (dNBR).',year:'This is Esri <b>high-resolution imagery</b>: it has almost 200 releases since 2014 and I pick the one closest to your date.',
+      nasa:'This is the <b>cloudless Sentinel-2 mosaic</b> of the selected year: 10 m images from the European Copernicus program.',
+      hls:'I look for the <b>clearest 30 m image</b> near your date (Sentinel-2 or Landsat, since 2013). That way you can see the landscape at that moment, even burn scars.',
+      osm:'OpenStreetMap street map, useful to find villages and roads.'})[baseMode],'Base map');});
   document.querySelector('.layers .head').onclick=()=>{const l=document.querySelector('.layers');l.classList.toggle('closed');$('lyTog').textContent=l.classList.contains('closed')?'▾':'▴';};
   bindSearch();
   // calendario
   const cal=$('cal');
   cal.addEventListener('pointermove',e=>{const p=calPick(e);if(!p)return hideTT();const harm=S.src==='harm';
-    if(G.day){const n=G.cd.n0+p.k,v=G.cd.X[p.k];showTT(`<b>${nice(n)}</b><br>${v?v.toFixed(v%1?1:0)+' hotspots':'Sin hotspots'}${harm&&S.year<YV&&v?' (eq. VIIRS)':''}`,e);return;}
+    if(G.day){const n=G.cd.n0+p.k,v=G.cd.X[p.k];showTT(`<b>${nice(n)}</b><br>${v?v.toFixed(v%1?1:0)+' hotspots':'No hotspots'}${harm&&S.year<YV&&v?' (eq. VIIRS)':''}`,e);return;}
     const cd=calData(),i=p.y*cd.nc+p.c,v=cd.X[i],z=cd.z[i];
-    const lab=S.gran==='m'?`${MONTHL[p.c]} ${Y0+p.y}`:`Semana ${p.c+1} de ${Y0+p.y}<br>${nice(wkStart(p.y,p.c))} – ${nice(wkEnd(p.y,p.c))}`;
-    const zt=z>=1.5?'🔥 mucho más de lo normal':z>=.5?'algo más de lo normal':z<=-1?'menos de lo normal':'dentro de lo normal';
+    const lab=S.gran==='m'?`${MONTHL[p.c]} ${Y0+p.y}`:`Week ${p.c+1} of ${Y0+p.y}<br>${nice(wkStart(p.y,p.c))} – ${nice(wkEnd(p.y,p.c))}`;
+    const zt=z>=1.5?'🔥 much more than normal':z>=.5?'somewhat more than normal':z<=-1?'less than normal':'within normal';
     showTT(`<b>${lab}</b><br>${v.toFixed(v%1?1:0)} hotspots${harm&&Y0+p.y<YV?' (eq. VIIRS)':''}<br>${zt} (z ${z>=0?'+':''}${z.toFixed(1)})`,e);});
   cal.addEventListener('pointerleave',hideTT);
   cal.addEventListener('click',e=>{const p=calPick(e);if(!p)return;
@@ -1741,10 +1804,10 @@ fetch('data/hotspots.json').then(r=>{if(!r.ok)throw 0;return r.json();}).then(j=
   Promise.all([fetch('data/clima.json').then(r=>r.ok?r.json():null).catch(()=>null),fetch('data/wayback.json').then(r=>r.ok?r.json():null).catch(()=>null),
     fetch('data/nubes.json').then(r=>r.ok?r.json():null).catch(()=>null),fetch('data/wayback_todas.json').then(r=>r.ok?r.json():null).catch(()=>null)])
     .then(([c,w,nb,wa])=>{CLIMA=c;WB=w;WBALL=wa;NUBES=nb&&nb.pct;COB=nb&&nb.cob||null;yearSrc=null;updateBase();if(S.tab==='years')renderCharts();ready=true;lastYearSaid=S.year;});
-  countUp($('k-hot'),N);countUp($('k-k'),C.kg,1,'×');$('kStep').textContent=C.kg.toFixed(1).replace('.',',');
+  countUp($('k-hot'),N);countUp($('k-k'),C.kg,1,'×');$('kStep').textContent=C.kg.toFixed(1);
   window.__fire={D,get C(){return C;},compute,get map(){return map;},S,setRange,say,sayYear,goMpio,get hs(){return hsLayer;},get ready(){return ready;}};
 }).catch(err=>{console.error(err);
-  $('map').innerHTML='<div class="loading" style="padding:20px;text-align:center">No se pudo cargar data/hotspots.json.<br>Abre la página desde GitHub Pages o con python -m http.server.</div>';});
+  $('map').innerHTML='<div class="loading" style="padding:20px;text-align:center">Could not load data/hotspots.json.<br>Open the page from GitHub Pages or with python -m http.server.</div>';});
 })();
 </script>
 </body>

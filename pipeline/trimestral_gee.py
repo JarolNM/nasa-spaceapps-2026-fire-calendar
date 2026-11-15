@@ -18,21 +18,22 @@ Método
     Sentinel-2 → OLI con los coeficientes de HLS (Claverie et al., 2018).
 - Composición = mediana de todas las observaciones despejadas del trimestre (rellena las franjas de Landsat 7).
 - Índices: NDVI (vegetación), NBR (quemado) y dNBR = NBR del trimestre anterior − NBR actual
-  (> 0,1 posible quema; > 0,27 moderada; > 0,44 alta, umbrales de Key & Benson, 2006).
+  (en la app solo > 0,2 para quitar el cambio estacional; > 0,27 moderada; > 0,44 alta, Key & Benson 2006).
 - Salidas
-    data/trimestral/AAAA-T_rgb.jpg   color natural, ~100 m, EPSG:3857 (para la app)
-    data/trimestral/AAAA-T_dnbr.png  dNBR coloreado (transparente donde no hay cambio)
+    data/trimestral/AAAA-T_rgb.webp  color natural, ~130 m, EPSG:3857 (para la app)
+    data/trimestral/AAAA-T_dnbr.webp dNBR coloreado (transparente donde no hay cambio)
     data/trimestral/index.json       lista de trimestres, nº de imágenes y % del Tolima con dato
 """
 import argparse
 import io
 import json
+import math
 import time
 import urllib.request
 from pathlib import Path
 
 import ee
-from PIL import Image
+from PIL import Image, ImageChops, ImageDraw
 
 OUT = Path("data/trimestral")
 BBOX = [-76.24378, 2.82, -74.32622, 5.37]   # mismo encuadre que la imagen Landsat 2000 de la app
@@ -64,7 +65,7 @@ def landsat(cid, bandas, coef):
         ok = qa.bitwiseAnd(0b11111).eq(0)           # relleno, nube dilatada, cirro, nube, sombra
         sr = img.select(bandas, BANDS).multiply(0.0000275).add(-0.2)
         sr = ajustar(sr, coef) if coef else sr
-        return sr.updateMask(ok).copyProperties(img, ["system:time_start"])
+        return sr.toFloat().updateMask(ok).copyProperties(img, ["system:time_start"])
     return ee.ImageCollection(cid).map(prep)
 
 
@@ -73,7 +74,7 @@ def sentinel2():
 
     def prep(img):
         sr = img.select(["B2", "B3", "B4", "B8A", "B11", "B12"], BANDS).divide(10000)
-        return ajustar(sr, HLS).updateMask(img.select("cs").gte(0.6)).copyProperties(img, ["system:time_start"])
+        return ajustar(sr, HLS).toFloat().updateMask(img.select("cs").gte(0.6)).copyProperties(img, ["system:time_start"])
     return (ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
             .filter(ee.Filter.lt("CLOUDY_PIXEL_PERCENTAGE", 80))
             .linkCollection(cs, ["cs"]).map(prep))
@@ -105,20 +106,58 @@ def compuesto(col, y, t):
     return med.addBands([nbr, ndvi]), c.size()
 
 
-def bajar(url, path, fmt):
-    for k in range(4):
-        try:
-            data = urllib.request.urlopen(url, timeout=300).read()
-            im = Image.open(io.BytesIO(data))
-            if fmt == "jpg":
-                im.convert("RGB").save(path, quality=82, optimize=True)
+def merc_y(lat):
+    return math.log(math.tan(math.pi / 4 + math.radians(lat) / 2))
+
+
+def lat_de(y):
+    return math.degrees(2 * math.atan(math.exp(y)) - math.pi / 2)
+
+
+W0, S0, E0, N0 = BBOX
+X0, X1, Y0, Y1 = math.radians(W0), math.radians(E0), merc_y(S0), merc_y(N0)
+H = DIM if (Y1 - Y0) >= (X1 - X0) else round(DIM * (Y1 - Y0) / (X1 - X0))
+W = DIM if (X1 - X0) > (Y1 - Y0) else round(DIM * (X1 - X0) / (Y1 - Y0))
+
+
+def mascara():
+    """Máscara del Tolima en píxeles de la imagen (proyección Mercator, igual que Leaflet)."""
+    D = json.loads(Path("data/tolima.json").read_text(encoding="utf-8"))
+    m = Image.new("L", (W, H), 0)
+    dr = ImageDraw.Draw(m)
+    for mu in D["municipios"]:
+        for r in mu["rings"]:
+            dr.polygon([((math.radians(x) - X0) / (X1 - X0) * W, (Y1 - merc_y(y)) / (Y1 - Y0) * H) for x, y in r], fill=255)
+    return m
+
+
+def bajar(vis, path, mask):
+    """Descarga en 2x2 piezas (límite de memoria de Earth Engine), une, recorta al Tolima y guarda WebP con transparencia.
+    Devuelve la fracción del Tolima con dato, o None si falla."""
+    out = Image.new("RGBA", (W, H))
+    xs, ys = [0, W // 2, W], [0, H // 2, H]
+    for i in range(2):
+        for j in range(2):
+            px0, px1, py0, py1 = xs[i], xs[i + 1], ys[j], ys[j + 1]
+            lon0, lon1 = W0 + (E0 - W0) * px0 / W, W0 + (E0 - W0) * px1 / W
+            lat1, lat0 = lat_de(Y1 - (Y1 - Y0) * py0 / H), lat_de(Y1 - (Y1 - Y0) * py1 / H)
+            reg = ee.Geometry.Rectangle([lon0, lat0, lon1, lat1], None, False)
+            url = vis.getThumbURL({"region": reg, "dimensions": f"{px1 - px0}x{py1 - py0}", "crs": "EPSG:3857", "format": "png"})
+            for k in range(4):
+                try:
+                    im = Image.open(io.BytesIO(urllib.request.urlopen(url, timeout=300).read())).convert("RGBA")
+                    out.paste(im.resize((px1 - px0, py1 - py0)), (px0, py0))
+                    break
+                except Exception as e:
+                    print("   reintento", k + 1, e)
+                    time.sleep(5 * (k + 1))
             else:
-                im.save(path, optimize=True)
-            return True
-        except Exception as e:
-            print("   reintento", k + 1, e)
-            time.sleep(5 * (k + 1))
-    return False
+                return None
+    al = ImageChops.multiply(out.getchannel("A"), mask)
+    out.putalpha(al)
+    out.save(path, "WEBP", quality=80, method=6)
+    tot = sum(mask.histogram()[128:])
+    return sum(al.histogram()[128:]) / tot if tot else 0
 
 
 def main():
@@ -133,10 +172,17 @@ def main():
     region = tolima()
     caja = ee.Geometry.Rectangle(BBOX, None, False)
     col = coleccion(caja)
+    mask = mascara()
     idx_path = OUT / "index.json"
     idx = json.loads(idx_path.read_text(encoding="utf-8")) if idx_path.exists() else {"items": []}
-    hechos = {i["id"] for i in idx["items"]}
-    prev_nbr = None
+    # cada trimestre deja su ficha en _items/ (permite varios procesos en paralelo por rangos de años)
+    IT = OUT / "_items"
+    IT.mkdir(exist_ok=True)
+    for i in idx["items"]:
+        if not (IT / f"{i['id']}.json").exists():
+            (IT / f"{i['id']}.json").write_text(json.dumps(i, ensure_ascii=False), encoding="utf-8")
+    hechos = {f.stem for f in IT.glob("*.json")}
+    prev_nbr = compuesto(col, a.desde - 1, 3)[0].select("nbr") if a.desde > 2000 else None
     vis_rgb = {"bands": ["red", "green", "blue"], "min": 0.0, "max": 0.28, "gamma": 1.3}
     pal = ["ffffcc", "fd8d3c", "e31a1c", "7f0000"]
     for y in range(a.desde, a.hasta + 1):
@@ -146,29 +192,29 @@ def main():
                 continue                                # dic 1999 sin cobertura útil
             tid = f"{y}-{nom}"
             img, n = compuesto(col, y, t)
-            img = img.clip(region)
             dnbr = prev_nbr.subtract(img.select("nbr")).rename("dnbr") if prev_nbr is not None else None
             prev_nbr = img.select("nbr")
-            if tid in hechos and not a.drive:
+            if tid in hechos:
                 continue
             n = n.getInfo()
-            cov = img.select("red").mask().reduceRegion(ee.Reducer.mean(), region, 500, maxPixels=1e9).get("red").getInfo() or 0
-            print(tid, temp, n, "imágenes", round(cov * 100), "% con dato")
-            thumb = {"region": caja, "dimensions": DIM, "crs": "EPSG:3857"}
-            ok = bajar(img.visualize(**vis_rgb).getThumbURL({**thumb, "format": "jpg"}), OUT / f"{tid}_rgb.jpg", "jpg")
+            cov = bajar(img.visualize(**vis_rgb), OUT / f"{tid}_rgb.webp", mask)
+            ok = cov is not None
+            cov = cov or 0
+            print(tid, temp, n, "imágenes", round(cov * 100), "% con dato", flush=True)
             dok = False
-            if dnbr is not None:
-                vis_d = dnbr.updateMask(dnbr.gt(0.1)).visualize(min=0.1, max=0.66, palette=pal)
-                dok = bajar(vis_d.getThumbURL({**thumb, "format": "png"}), OUT / f"{tid}_dnbr.png", "png")
+            if dnbr is not None and ok:
+                vis_d = dnbr.updateMask(dnbr.gt(0.2)).visualize(min=0.2, max=0.66, palette=pal)
+                dok = bajar(vis_d, OUT / f"{tid}_dnbr.webp", mask) is not None
             if a.drive:
                 ee.batch.Export.image.toDrive(
                     image=img.select(BANDS + ["ndvi", "nbr"]).addBands(dnbr if dnbr is not None else ee.Image(0).rename("dnbr")).toFloat(),
                     description=f"tolima_{tid}", folder="tolima_trimestral", region=region, scale=30,
                     crs="EPSG:3116", maxPixels=1e10).start()
             if ok and tid not in hechos:
-                idx["items"].append({"id": tid, "y": y, "t": t, "temp": temp, "n": n, "cob": round(cov * 100), "dnbr": dok})
+                (IT / f"{tid}.json").write_text(json.dumps({"id": tid, "y": y, "t": t, "temp": temp, "n": n, "cob": round(cov * 100), "dnbr": dok},
+                                                           ensure_ascii=False), encoding="utf-8")
                 hechos.add(tid)
-                idx["items"].sort(key=lambda i: (i["y"], i["t"]))
+                idx["items"] = sorted((json.loads(f.read_text(encoding="utf-8")) for f in IT.glob("*.json")), key=lambda i: (i["y"], i["t"]))
                 idx["bounds"] = [[BBOX[1], BBOX[0]], [BBOX[3], BBOX[2]]]
                 idx["metodo"] = ("Mediana sin nubes por temporada (DEF, MAM, JJA, SON) de Landsat 5/7/8/9 y Sentinel-2, "
                                  "armonizados a Landsat 8 (Roy 2016; HLS). dNBR = NBR trimestre anterior − actual.")

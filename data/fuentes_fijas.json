@@ -3,18 +3,18 @@
   "id": "caracolito",
   "tipo": "cemento",
   "identificacion": "confirmada",
-  "nombre": "Planta de cemento Caracolito",
+  "nombre": "Caracolito cement plant",
   "lat": 4.30856,
   "lon": -75.10133,
-  "empresa": "Cemex Colombia (acuerdo de venta a Holcim, 2026). Construida por Cementos Diamante.",
-  "produce": "Cemento y clínker",
-  "desde": "1993 (primera fase, Cementos Diamante)",
+  "empresa": "Cemex Colombia (sale agreement with Holcim, 2026). Built by Cementos Diamante.",
+  "produce": "Cement and clinker",
+  "desde": "1993 (first phase, Cementos Diamante)",
   "datos": [
-   "Capacidad reportada de ~2,8 millones de toneladas/año",
-   "Caliza de la mina La Esmeralda (Payandé, San Luis)",
-   "Usa energía solar de Celsia desde 2025"
+   "Reported capacity ~2.8 million tonnes/year",
+   "Limestone from La Esmeralda mine (Payandé, San Luis)",
+   "Uses Celsia solar power since 2025"
   ],
-  "porque": "El horno de clínker trabaja a más de 1.400 °C de forma continua: el satélite lo ve como un punto caliente todos los días.",
+  "porque": "The clinker kiln runs continuously at more than 1,400 °C: the satellite sees it as a hot spot every day.",
   "fuentes": [
    [
     "ANLA – Payandé",
@@ -25,7 +25,7 @@
     "https://www.globalcement.com/news/item/10713-cemex-resumes-colombian-production"
    ],
    [
-    "Las2orillas – historia",
+    "Las2orillas – history",
     "https://www.las2orillas.co/?p=995226"
    ]
   ],
@@ -39,17 +39,17 @@
   "id": "matachin_sur",
   "tipo": "petroleo",
   "identificacion": "confirmada",
-  "nombre": "Estación de Producción Matachín Sur",
+  "nombre": "Matachín Sur production station",
   "lat": 3.83317,
   "lon": -74.87162,
-  "empresa": "Hocol (Grupo Ecopetrol)",
-  "produce": "Petróleo y gas (bloque Espinal)",
-  "desde": "Campo descubierto en 1994",
+  "empresa": "Hocol (Ecopetrol Group)",
+  "produce": "Oil and gas (Espinal block)",
+  "desde": "Field discovered in 1994",
   "datos": [
-   "Pico de producción hacia 2014",
-   "Gas reportado: ~4 millones m³/año (2019)"
+   "Production peak around 2014",
+   "Reported gas: ~4 million m³/year (2019)"
   ],
-  "porque": "Las teas queman el gas que sale con el petróleo: una llama permanente que el satélite detecta. Las detecciones se concentran en 2012–2013.",
+  "porque": "Flares burn the gas that comes out with the oil: a permanent flame the satellite detects. Detections concentrate in 2012–2013.",
   "fuentes": [
    [
     "Global Energy Monitor",
@@ -70,19 +70,19 @@
   "id": "matachin_norte",
   "tipo": "petroleo",
   "identificacion": "confirmada",
-  "nombre": "Estación de Producción Matachín Norte",
+  "nombre": "Matachín Norte production station",
   "lat": 3.85995,
   "lon": -74.86035,
-  "empresa": "Hocol (Grupo Ecopetrol)",
-  "produce": "Petróleo y gas (bloque Espinal)",
+  "empresa": "Hocol (Ecopetrol Group)",
+  "produce": "Oil and gas (Espinal block)",
   "desde": "—",
   "datos": [
-   "Campo vecino de Matachín Sur, en Purificación"
+   "Neighbouring field of Matachín Sur, in Purificación"
   ],
-  "porque": "Tea de gas de la estación de producción.",
+  "porque": "Gas flare of the production station.",
   "fuentes": [
    [
-    "WoodMac – bloque Espinal",
+    "WoodMac – block Espinal",
     "https://www.woodmac.com/reports/upstream-oil-and-gas-espinal-426625/"
    ]
   ],
@@ -96,18 +96,18 @@
   "id": "ruiz",
   "tipo": "volcan",
   "identificacion": "confirmada",
-  "nombre": "Volcán Nevado del Ruiz",
+  "nombre": "Nevado del Ruiz volcano",
   "lat": 4.892,
   "lon": -75.324,
-  "empresa": "Vigilado por el Servicio Geológico Colombiano (SGC)",
-  "produce": "Actividad volcánica (cráter Arenas)",
-  "desde": "Volcán activo; erupción de 1985",
+  "empresa": "Monitored by the Colombian Geological Survey (SGC)",
+  "produce": "Volcanic activity (Arenas crater)",
+  "desde": "Active volcano; 1985 eruption",
   "datos": [
-   "Altura: 5.321 m",
-   "El calor viene del cráter activo Arenas, ~1 km al norte de la cumbre",
-   "Límite entre Tolima y Caldas"
+   "Elevation: 5,321 m",
+   "The heat comes from the active Arenas crater, ~1 km north of the summit",
+   "Border between Tolima and Caldas"
   ],
-  "porque": "FIRMS marca estos puntos como volcán activo: es calor volcánico, no un incendio.",
+  "porque": "FIRMS flags these points as an active volcano: it is volcanic heat, not a wildfire.",
   "fuentes": [
    [
     "Servicio Geológico Colombiano",
@@ -131,14 +131,14 @@
   "nombre": "Trilladora Tolima (Chaparral)",
   "lat": 3.72193,
   "lon": -75.48388,
-  "empresa": "Trilladora de café",
-  "produce": "Café pergamino trillado",
+  "empresa": "Coffee mill",
+  "produce": "Hulled parchment coffee",
   "desde": "—",
   "datos": [
-   "A ~70 m del centro de las detecciones fijas de MODIS",
-   "Chaparral es zona cafetera del sur del Tolima"
+   "~70 m from the center of the MODIS static detections",
+   "Chaparral is a coffee region in southern Tolima"
   ],
-  "porque": "Las trilladoras y secadores queman cisco (cascarilla de café) para secar el grano. MODIS (píxel de 1 km) no permite asegurar cuál edificio es la fuente.",
+  "porque": "Coffee mills and dryers burn cisco (coffee husk) to dry the beans. MODIS (1 km pixel) cannot confirm which building is the source.",
   "fuentes": [
    [
     "Google Maps",
@@ -158,13 +158,13 @@
   "nombre": "Inversiones Molino Colombia (Venadillo)",
   "lat": 4.71548,
   "lon": -74.93255,
-  "empresa": "Molino de arroz",
-  "produce": "Arroz blanco y subproductos",
+  "empresa": "Rice mill",
+  "produce": "White rice and by-products",
   "desde": "—",
   "datos": [
-   "A ~700 m de las detecciones fijas de MODIS en Venadillo"
+   "~700 m from the MODIS static detections in Venadillo"
   ],
-  "porque": "Los molinos queman cascarilla de arroz en hornos para secar el grano.",
+  "porque": "Mills burn rice husks in furnaces to dry the grain.",
   "fuentes": [
    [
     "Google Maps",
@@ -184,13 +184,13 @@
   "nombre": "Paisa Arroz (Guamo)",
   "lat": 4.02983,
   "lon": -74.96673,
-  "empresa": "Empresa arrocera",
-  "produce": "Arroz",
+  "empresa": "Rice company",
+  "produce": "Rice",
   "desde": "—",
   "datos": [
-   "A ~400 m de las detecciones fijas de MODIS en Guamo"
+   "~400 m from the MODIS static detections in Guamo"
   ],
-  "porque": "Probable horno de cascarilla de un molino de arroz; MODIS no permite confirmarlo.",
+  "porque": "Probable husk furnace of a rice mill; MODIS cannot confirm it.",
   "fuentes": [
    [
     "Google Maps",
@@ -211,13 +211,13 @@
   "lat": 4.1471,
   "lon": -74.89743,
   "empresa": "Grupo Diana (Arroz Diana)",
-  "produce": "Arroz blanco, aceites y otros alimentos",
-  "desde": "1964 (Molino Murra, origen del grupo)",
+  "produce": "White rice, oils and other foods",
+  "desde": "1964 (Molino Murra, origin of the group)",
   "datos": [
-   "Plantas del grupo en Espinal, Saldaña, Lérida, Venadillo, Ibagué, Doima y Mariquita",
-   "Uno de los mayores comercializadores de arroz del país"
+   "Group plants in Espinal, Saldaña, Lérida, Venadillo, Ibagué, Doima and Mariquita",
+   "One of the largest rice traders in the country"
   ],
-  "porque": "Molino que quema cascarilla para secar arroz. Las detecciones fijas de MODIS en El Espinal se centran a ~1,3 km, en el casco urbano.",
+  "porque": "Mill that burns husks to dry rice. MODIS static detections in El Espinal are centered ~1.3 km away, in the urban area.",
   "fuentes": [
    [
     "Valora Analitik",
@@ -238,14 +238,14 @@
   "id": "diana_espinal_p1",
   "tipo": "arroz",
   "identificacion": "contexto",
-  "nombre": "Molino Diana Espinal – Planta I",
+  "nombre": "Molino Diana Espinal – Plant I",
   "lat": 4.15873,
   "lon": -74.90114,
   "empresa": "Grupo Diana",
-  "produce": "Arroz",
+  "produce": "Rice",
   "desde": "—",
   "datos": [],
-  "porque": "Molino de arroz cercano a las detecciones fijas de El Espinal.",
+  "porque": "Rice mill near the static detections of El Espinal.",
   "fuentes": [
    [
     "Google Maps",
@@ -265,11 +265,11 @@
   "nombre": "Molino Espinal",
   "lat": 4.14891,
   "lon": -74.89653,
-  "empresa": "Molino de arroz",
-  "produce": "Arroz",
+  "empresa": "Rice mill",
+  "produce": "Rice",
   "desde": "—",
   "datos": [],
-  "porque": "Molino de arroz cercano a las detecciones fijas de El Espinal.",
+  "porque": "Rice mill near the static detections of El Espinal.",
   "fuentes": [
    [
     "Google Maps",
@@ -290,12 +290,12 @@
   "lat": 4.15687,
   "lon": -74.90119,
   "empresa": "Unión de Arroceros S.A.S. (Arroz Supremo)",
-  "produce": "Arroz",
-  "desde": "Empresa con unas seis décadas (plantas en Venadillo, El Espinal e Ibagué)",
+  "produce": "Rice",
+  "desde": "Company about six decades old (plants in Venadillo, El Espinal and Ibagué)",
   "datos": [
-   "Fundada por agricultores arroceros tolimenses"
+   "Founded by rice farmers from Tolima"
   ],
-  "porque": "Molino de arroz cercano a las detecciones fijas de El Espinal.",
+  "porque": "Rice mill near the static detections of El Espinal.",
   "fuentes": [
    [
     "Portafolio",
@@ -312,17 +312,17 @@
   "id": "sinid_11",
   "tipo": "sin_identificar",
   "identificacion": "sin identificar",
-  "nombre": "Fuente fija en Espinal",
+  "nombre": "Static source in Espinal",
   "lat": 4.14665,
   "lon": -74.88463,
   "empresa": "—",
-  "produce": "Desconocido",
+  "produce": "Unknown",
   "desde": "—",
   "datos": [
-   "Industrias cercanas: Molino Diana Corporación (El Espinal), Molino Espinal",
-   "Detectada por MODIS (píxel de 1 km): la ubicación exacta tiene un margen de ~1 km"
+   "Nearby industries: Molino Diana Corporación (El Espinal), Molino Espinal",
+   "Detected by MODIS (1 km pixel): the exact location has a margin of ~1 km"
   ],
-  "porque": "FIRMS detecta calor repetido en el mismo lugar durante años: suele ser un horno, molino, trilladora o ladrillera dentro del casco urbano. Aún no está identificada.",
+  "porque": "FIRMS detects repeated heat at the same spot for years: usually a kiln, mill, coffee mill or brickworks inside the urban area. Not identified yet.",
   "fuentes": [],
   "n": 279,
   "desde_det": 2003,
@@ -334,16 +334,16 @@
   "id": "sinid_12",
   "tipo": "sin_identificar",
   "identificacion": "sin identificar",
-  "nombre": "Fuente fija en San Sebastián De Mariquita",
+  "nombre": "Static source in San Sebastián De Mariquita",
   "lat": 5.1961,
   "lon": -74.89321,
   "empresa": "—",
-  "produce": "Desconocido",
+  "produce": "Unknown",
   "desde": "—",
   "datos": [
-   "Detectada por MODIS (píxel de 1 km): la ubicación exacta tiene un margen de ~1 km"
+   "Detected by MODIS (1 km pixel): the exact location has a margin of ~1 km"
   ],
-  "porque": "FIRMS detecta calor repetido en el mismo lugar durante años: suele ser un horno, molino, trilladora o ladrillera dentro del casco urbano. Aún no está identificada.",
+  "porque": "FIRMS detects repeated heat at the same spot for years: usually a kiln, mill, coffee mill or brickworks inside the urban area. Not identified yet.",
   "fuentes": [],
   "n": 53,
   "desde_det": 2013,
@@ -355,16 +355,16 @@
   "id": "sinid_13",
   "tipo": "sin_identificar",
   "identificacion": "sin identificar",
-  "nombre": "Fuente fija en Ibagué",
+  "nombre": "Static source in Ibagué",
   "lat": 4.43224,
   "lon": -75.2332,
   "empresa": "—",
-  "produce": "Desconocido",
+  "produce": "Unknown",
   "desde": "—",
   "datos": [
-   "Detectada por MODIS (píxel de 1 km): la ubicación exacta tiene un margen de ~1 km"
+   "Detected by MODIS (1 km pixel): the exact location has a margin of ~1 km"
   ],
-  "porque": "FIRMS detecta calor repetido en el mismo lugar durante años: suele ser un horno, molino, trilladora o ladrillera dentro del casco urbano. Aún no está identificada.",
+  "porque": "FIRMS detects repeated heat at the same spot for years: usually a kiln, mill, coffee mill or brickworks inside the urban area. Not identified yet.",
   "fuentes": [],
   "n": 29,
   "desde_det": 2003,
@@ -376,16 +376,16 @@
   "id": "sinid_14",
   "tipo": "sin_identificar",
   "identificacion": "sin identificar",
-  "nombre": "Fuente fija en Líbano",
+  "nombre": "Static source in Líbano",
   "lat": 4.92054,
   "lon": -75.0628,
   "empresa": "—",
-  "produce": "Desconocido",
+  "produce": "Unknown",
   "desde": "—",
   "datos": [
-   "Detectada por MODIS (píxel de 1 km): la ubicación exacta tiene un margen de ~1 km"
+   "Detected by MODIS (1 km pixel): the exact location has a margin of ~1 km"
   ],
-  "porque": "FIRMS detecta calor repetido en el mismo lugar durante años: suele ser un horno, molino, trilladora o ladrillera dentro del casco urbano. Aún no está identificada.",
+  "porque": "FIRMS detects repeated heat at the same spot for years: usually a kiln, mill, coffee mill or brickworks inside the urban area. Not identified yet.",
   "fuentes": [],
   "n": 18,
   "desde_det": 2010,
@@ -397,16 +397,16 @@
   "id": "sinid_15",
   "tipo": "sin_identificar",
   "identificacion": "sin identificar",
-  "nombre": "Fuente fija en Rovira",
+  "nombre": "Static source in Rovira",
   "lat": 4.23916,
   "lon": -75.23855,
   "empresa": "—",
-  "produce": "Desconocido",
+  "produce": "Unknown",
   "desde": "—",
   "datos": [
-   "Detectada por MODIS (píxel de 1 km): la ubicación exacta tiene un margen de ~1 km"
+   "Detected by MODIS (1 km pixel): the exact location has a margin of ~1 km"
   ],
-  "porque": "FIRMS detecta calor repetido en el mismo lugar durante años: suele ser un horno, molino, trilladora o ladrillera dentro del casco urbano. Aún no está identificada.",
+  "porque": "FIRMS detects repeated heat at the same spot for years: usually a kiln, mill, coffee mill or brickworks inside the urban area. Not identified yet.",
   "fuentes": [],
   "n": 11,
   "desde_det": 2017,
@@ -418,16 +418,16 @@
   "id": "sinid_16",
   "tipo": "sin_identificar",
   "identificacion": "sin identificar",
-  "nombre": "Fuente fija en Ibagué",
+  "nombre": "Static source in Ibagué",
   "lat": 4.44761,
   "lon": -75.13644,
   "empresa": "—",
-  "produce": "Desconocido",
+  "produce": "Unknown",
   "desde": "—",
   "datos": [
-   "Detectada por MODIS (píxel de 1 km): la ubicación exacta tiene un margen de ~1 km"
+   "Detected by MODIS (1 km pixel): the exact location has a margin of ~1 km"
   ],
-  "porque": "FIRMS detecta calor repetido en el mismo lugar durante años: suele ser un horno, molino, trilladora o ladrillera dentro del casco urbano. Aún no está identificada.",
+  "porque": "FIRMS detects repeated heat at the same spot for years: usually a kiln, mill, coffee mill or brickworks inside the urban area. Not identified yet.",
   "fuentes": [],
   "n": 10,
   "desde_det": 2015,
@@ -439,16 +439,16 @@
   "id": "sinid_17",
   "tipo": "sin_identificar",
   "identificacion": "sin identificar",
-  "nombre": "Fuente fija en Ibagué",
+  "nombre": "Static source in Ibagué",
   "lat": 4.40683,
   "lon": -75.15244,
   "empresa": "—",
-  "produce": "Desconocido",
+  "produce": "Unknown",
   "desde": "—",
   "datos": [
-   "Detectada por MODIS (píxel de 1 km): la ubicación exacta tiene un margen de ~1 km"
+   "Detected by MODIS (1 km pixel): the exact location has a margin of ~1 km"
   ],
-  "porque": "FIRMS detecta calor repetido en el mismo lugar durante años: suele ser un horno, molino, trilladora o ladrillera dentro del casco urbano. Aún no está identificada.",
+  "porque": "FIRMS detects repeated heat at the same spot for years: usually a kiln, mill, coffee mill or brickworks inside the urban area. Not identified yet.",
   "fuentes": [],
   "n": 7,
   "desde_det": 2003,
@@ -460,16 +460,16 @@
   "id": "sinid_18",
   "tipo": "sin_identificar",
   "identificacion": "sin identificar",
-  "nombre": "Fuente fija en Flandes",
+  "nombre": "Static source in Flandes",
   "lat": 4.27537,
   "lon": -74.80722,
   "empresa": "—",
-  "produce": "Desconocido",
+  "produce": "Unknown",
   "desde": "—",
   "datos": [
-   "Detectada por MODIS (píxel de 1 km): la ubicación exacta tiene un margen de ~1 km"
+   "Detected by MODIS (1 km pixel): the exact location has a margin of ~1 km"
   ],
-  "porque": "FIRMS detecta calor repetido en el mismo lugar durante años: suele ser un horno, molino, trilladora o ladrillera dentro del casco urbano. Aún no está identificada.",
+  "porque": "FIRMS detects repeated heat at the same spot for years: usually a kiln, mill, coffee mill or brickworks inside the urban area. Not identified yet.",
   "fuentes": [],
   "n": 6,
   "desde_det": 2003,
@@ -481,16 +481,16 @@
   "id": "sinid_19",
   "tipo": "sin_identificar",
   "identificacion": "sin identificar",
-  "nombre": "Fuente fija en Honda",
+  "nombre": "Static source in Honda",
   "lat": 5.20145,
   "lon": -74.74158,
   "empresa": "—",
-  "produce": "Desconocido",
+  "produce": "Unknown",
   "desde": "—",
   "datos": [
-   "Detectada por MODIS (píxel de 1 km): la ubicación exacta tiene un margen de ~1 km"
+   "Detected by MODIS (1 km pixel): the exact location has a margin of ~1 km"
   ],
-  "porque": "FIRMS detecta calor repetido en el mismo lugar durante años: suele ser un horno, molino, trilladora o ladrillera dentro del casco urbano. Aún no está identificada.",
+  "porque": "FIRMS detects repeated heat at the same spot for years: usually a kiln, mill, coffee mill or brickworks inside the urban area. Not identified yet.",
   "fuentes": [],
   "n": 6,
   "desde_det": 2005,
