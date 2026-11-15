@@ -1,0 +1,5 @@
+.env
+MAP_KEY.txt
+data/raw/
+__pycache__/
+*.pyc
