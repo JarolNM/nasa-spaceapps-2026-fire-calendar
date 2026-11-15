@@ -340,6 +340,51 @@ body.intro-on{overflow:hidden}
 .fx-pop .src a{margin-right:8px}
 .fx-pop button{margin-top:6px;font:600 11.5px Inter,sans-serif;background:#0b2a5b;color:#fff;border:0;border-radius:8px;padding:6px 10px;cursor:pointer}
 @media (prefers-reduced-motion:reduce){.fxi .puff,.fxi .flame,.fxi .glow,.fxi .kiln,.fxi .bean{animation:none}.fxi .puff{opacity:.6}}
+/* ---------- incendios ocurridos ---------- */
+.firebtn{display:flex;align-items:center;gap:12px;border:2px solid transparent;background:linear-gradient(135deg,#2b0d05,#6b1d0a 55%,#a8350c);color:#fff;border-radius:16px;padding:8px 16px 8px 8px;cursor:pointer;box-shadow:0 6px 20px rgba(201,42,42,.35);transition:transform .15s,box-shadow .2s;text-align:left;font-family:var(--font),sans-serif}
+.firebtn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(201,42,42,.5)}
+.firebtn.on{border-color:#ffd43b;box-shadow:0 0 0 3px rgba(255,212,59,.35),0 10px 26px rgba(201,42,42,.5)}
+.firebtn svg{width:78px;height:54px;flex:none}
+.firebtn b{display:block;font-size:16px;letter-spacing:-.01em}
+.firebtn span{font-size:12px;opacity:.85}
+.firebtn .fl{transform-origin:50% 100%;transform-box:fill-box;animation:flame .5s ease-in-out infinite alternate}
+.firebtn .fl.b{animation-duration:.42s;animation-delay:.1s}.firebtn .fl.c{animation-duration:.6s;animation-delay:.2s}
+.firebtn .ember{animation:ember 1.8s linear infinite;opacity:0}
+.firebtn .ember.b{animation-delay:.6s}.firebtn .ember.c{animation-delay:1.2s}
+@keyframes ember{0%{opacity:0;transform:translateY(0)}20%{opacity:1}100%{opacity:0;transform:translate(4px,-22px)}}
+.fev{position:relative;cursor:pointer;transition:transform .15s}
+.fev:hover{transform:scale(1.15)}
+.fev svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 2px 3px rgba(0,0,0,.6))}
+.fev .fl{transform-origin:50% 100%;transform-box:fill-box;animation:flame .45s ease-in-out infinite alternate}
+.fev .num{position:absolute;right:-7px;top:-7px;min-width:17px;height:17px;padding:0 4px;border-radius:99px;font:800 10px/17px Inter,sans-serif;color:#fff;text-align:center;border:1.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.fire-pop{font:12px/1.4 var(--font),Inter,sans-serif;min-width:260px}
+.fire-pop .hd{display:flex;gap:10px;align-items:center;margin-bottom:6px}
+.fire-pop .hd svg{width:42px;height:42px;flex:none}
+.fire-pop h5{margin:0;font-size:14.5px;line-height:1.25;color:#0f1f3d}
+.fire-pop .sev{display:inline-block;font-size:11px;font-weight:800;padding:2px 9px;border-radius:99px;color:#fff;margin-top:3px}
+.fire-pop .bar{height:6px;border-radius:3px;background:#eee;margin:4px 0 8px;overflow:hidden}
+.fire-pop .bar i{display:block;height:100%}
+.fire-pop table{border-collapse:collapse;width:100%}
+.fire-pop th{text-align:left;color:#6b7280;font-weight:500;padding:2px 8px 2px 0;white-space:nowrap;vertical-align:top}
+.fire-pop td{padding:2px 0;font-weight:600;color:#111827}
+.fire-pop .note{color:#6b7280;font-size:10.5px;margin-top:6px}
+.fire-pop .btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.fire-pop button{font:600 11.5px Inter,sans-serif;background:#0b2a5b;color:#fff;border:0;border-radius:8px;padding:6px 10px;cursor:pointer}
+.fire-pop button.alt{background:#e8590c}
+.firelist{display:grid;gap:8px}
+.firerow{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;background:var(--bg);border-radius:12px;padding:8px 10px;cursor:pointer;border:1.5px solid transparent;text-align:left;color:inherit;font:inherit}
+.firerow:hover{border-color:var(--fire)}
+.firerow svg{width:40px;height:40px}
+.firerow b{display:block;font-size:13.5px}
+.firerow small{color:var(--ink3);font-size:11.5px}
+.firerow .sev{font-size:10.5px;font-weight:800;color:#fff;border-radius:99px;padding:2px 8px;white-space:nowrap}
+/* comparador antes / después */
+.cmp-bar{position:absolute;top:0;bottom:0;width:4px;margin-left:-2px;background:#fff;z-index:650;cursor:ew-resize;box-shadow:0 0 8px rgba(0,0,0,.6)}
+.cmp-bar::after{content:'⇆';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:50%;background:#fff;color:#0b2a5b;font:800 18px/38px Inter,sans-serif;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+.cmp-lab{position:absolute;bottom:70px;z-index:640;background:rgba(11,42,91,.88);color:#fff;font:700 12px Inter,sans-serif;padding:5px 10px;border-radius:8px;pointer-events:none}
+.cmp-exit{position:absolute;top:56px;left:50%;transform:translateX(-50%);z-index:660;background:#e8590c;color:#fff;border:0;border-radius:99px;font:700 12.5px Inter,sans-serif;padding:7px 14px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.cmp-note{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:640;background:rgba(0,0,0,.65);color:#fff;font:11.5px Inter,sans-serif;padding:5px 10px;border-radius:8px;max-width:80%;text-align:center}
+@media (prefers-reduced-motion:reduce){.firebtn .fl,.firebtn .ember,.fev .fl{animation:none}}
 </style>
 </head>
 <body class="intro-on">
@@ -414,6 +459,18 @@ body.intro-on{overflow:hidden}
     <div class="sep"></div>
     <div class="fg"><label>Zona</label>
       <div class="chips" id="presets"><span class="chip on" data-p="all">Todo el Tolima</span><span class="chip" data-p="n">Norte</span><span class="chip" data-p="c">Centro</span><span class="chip" data-p="s">Sur</span></div></div>
+    <button class="firebtn" id="fireBtn" title="Ver los incendios ocurridos en el periodo">
+      <svg viewBox="0 0 78 54" aria-hidden="true"><rect width="78" height="54" rx="10" fill="#1a0803"/><circle cx="62" cy="12" r="6" fill="#ffd8a8" opacity=".6"/>
+        <path d="M0 54V40l8-4 9 5 10-6 9 4 10-5 11 5 10-3 11 4v14Z" fill="#2b1a0e"/>
+        <path d="M12 46V36M30 46V33M50 46V35M66 46V38" stroke="#3b2a1a" stroke-width="2.5"/>
+        <path d="M12 22l-6 10h12Z M12 27l-7 11h14Z" fill="#2f5d2a"/><path d="M50 20l-6 10h12Z M50 25l-7 11h14Z" fill="#2f5d2a"/><path d="M66 27l-5 8h10Z M66 31l-6 9h12Z" fill="#3a6b30"/>
+        <g class="fl"><path d="M30 8c9 9 10 16 3 23-1-6-4-7-6-9 0 6-4 9-7 10-3-9 2-17 10-24Z" fill="#ff6b00"/><path d="M29 18c4 5 4 9 0 12-3-3-4-6 0-12Z" fill="#ffd43b"/></g>
+        <g class="fl b"><path d="M14 22c5 5 5 9 1 12-1-3-2-4-3-5 0 3-2 5-4 5-1-5 1-9 6-12Z" fill="#ff922b"/></g>
+        <g class="fl c"><path d="M52 21c5 6 6 10 1 14-1-4-3-5-4-6 0 4-2 6-4 6-2-6 1-10 7-14Z" fill="#fa5252"/></g>
+        <circle class="ember" cx="32" cy="10" r="1.6" fill="#ffd43b"/><circle class="ember b" cx="24" cy="14" r="1.2" fill="#ff922b"/><circle class="ember c" cx="40" cy="12" r="1.3" fill="#ffd43b"/>
+      </svg>
+      <div><b>Incendios ocurridos</b><span id="fireCount">Cargando…</span></div>
+    </button>
     <div id="rangeTxt"></div>
   </div>
 
@@ -426,6 +483,7 @@ body.intro-on{overflow:hidden}
         <button data-t="season">〰 Temporadas</button>
         <button data-t="years">▮ Por año</button>
         <button data-t="mun">🏘 Municipios</button>
+        <button data-t="inc">🔥 Incendios</button>
         <button data-t="crit">⚠ Periodos críticos</button>
       </div>
       <div class="tabbody">
@@ -467,6 +525,10 @@ body.intro-on{overflow:hidden}
           <div class="hint">👆 Toca un municipio para ir a él en el mapa.</div>
         </div>
 
+        <div class="pane" id="p-inc">
+          <div class="ph"><div><h3>Incendios ocurridos</h3><p>Los incendios más intensos del periodo y zona elegidos (hotspots agrupados a ≤ 1,5 km y ≤ 2 días). Toca uno para verlo en el mapa.</p></div></div>
+          <div class="firelist" id="fireList"></div>
+        </div>
         <div class="pane" id="p-crit">
           <div class="ph"><div><h3>Periodos críticos</h3><p>Semanas con mucho más fuego que lo normal para esa época (anomalía z ≥ 1,5). Varias coinciden con años de El Niño.</p></div></div>
           <div class="crit" id="crit"></div>
@@ -744,7 +806,7 @@ const DAY0=Date.UTC(2000,0,1),dayOf=(y,m,d)=>Math.round((Date.UTC(y,m,d)-DAY0)/8
 const dateOf=n=>new Date(DAY0+n*864e5);
 const iso=n=>dateOf(n).toISOString().slice(0,10);
 const nice=n=>{const d=dateOf(n);return d.getUTCDate()+' '+MONTHS[d.getUTCMonth()]+' '+d.getUTCFullYear();};
-const S={src:'harm',view:'int',gran:'m',conf:[false,true,true],excl:true,sens:[true,true],
+const S={fires:false,src:'harm',view:'int',gran:'m',conf:[false,true,true],excl:true,sens:[true,true],
   year:2024,month:-1,from:dayOf(2024,0,1),to:dayOf(2024,11,31),tab:'cal',hl:null};
 let D=null,N=0,BAND_CUTS=[4.5,3.75],DA,YY,MO,WK,BAND,SEL;
 const bandOfLat=lat=>lat>=BAND_CUTS[0]?0:lat>=BAND_CUTS[1]?1:2;
@@ -769,6 +831,7 @@ const TIPS={
   season:'La línea naranja es el año que elegiste; la gris, lo normal. Si la naranja va <b>muy por encima</b>, fue un año fuerte.',
   years:'¿Ves el salto gris en 2012? No es más fuego: es que llegó <b>VIIRS</b>, que ve más. Lo naranja ya está corregido.',
   mun:'Comparamos por cada 100 km², así un municipio grande no gana solo por tamaño.',
+  inc:'Aquí están los <b>incendios más intensos</b> del periodo. Toca uno y te llevo hasta él en el mapa.',
   crit:'Estos periodos tuvieron mucho más fuego de lo normal. 2015 y 2024 fueron años de <b>El Niño</b>.'
 };
 let sayT=0,voiceOn=true,satiVoice=null;
@@ -833,7 +896,7 @@ const FXFACT={
   sin_identificar:'Este punto se calienta una y otra vez durante años en el mismo lugar. Un incendio real no se repite así: probablemente es un horno o una industria. ¿Sabes qué hay aquí?'
 };
 let hsSaid=0;
-function tip(k){say(TIPS[k],({cal:'Calendario',season:'Temporadas',years:'Por año',mun:'Municipios',crit:'Periodos críticos'})[k]||'Sati te cuenta');}
+function tip(k){say(TIPS[k],({cal:'Calendario',season:'Temporadas',years:'Por año',mun:'Municipios',crit:'Periodos críticos',inc:'Incendios'})[k]||'Sati te cuenta');}
 setTimeout(()=>{$('guideText').style.opacity=0;},9000);
 const gm=$('guideMute');const setMuteIcon=()=>gm.textContent=voiceOn?'🔊':'🔇';setMuteIcon();
 gm.onclick=()=>{voiceOn=!voiceOn;try{localStorage.setItem('satiVoz',voiceOn?'1':'0');}catch(e){}setMuteIcon();
@@ -923,7 +986,7 @@ function setRange(from,to,opts={}){
     S.month=fullMonth?d0.getUTCMonth():-1;
   }
   $('fYear').value=S.year;$('fMonth').value=S.month;$('fFrom').value=iso(S.from);$('fTo').value=iso(S.to);
-  drawHotspots();renderCharts();updateBase();
+  drawHotspots();renderCharts();updateBase();drawFires();
   if(!opts.quiet&&ready&&S.year!==lastYearSaid){lastYearSaid=S.year;sayYear(S.year);}
 }
 let ready=false,lastYearSaid=null;
@@ -940,14 +1003,15 @@ function ensoRange(){
 function updateBase(){
   if(!map)return;
   const ysrc=setYearLayer();
-  if(baseNasa)baseNasa.setUrl(nasaUrl());
+  if(baseNasa){const y=s2Year();baseNasa.setUrl(s2Url(y));baseNasa.options.attribution=`Sentinel-2 cloudless ${y} by <a href="https://s2maps.eu" target="_blank">EOX IT Services GmbH</a> (Contains modified Copernicus Sentinel data ${y})`;}
   const el=$('mapInfo');if(!el)return;
   const e=ensoRange();
   const lab=e?{nino:`El Niño ${e.fz}`,nina:`La Niña ${e.fz}`,neutral:'Condiciones neutrales'}[e.fase]:'';
   const ex=e?{nino:'Menos lluvias en el Tolima: más riesgo de incendios.',nina:'Más lluvias en el Tolima: menos incendios.',neutral:'Ni El Niño ni La Niña en este periodo.'}[e.fase]:'';
   let img='';
   if(baseMode==='year')img='🛰 '+ysrc.lab;
-  else if(baseMode==='nasa'){nasaDate();img=`🛰 NASA MODIS del ${nice(nasaPick.d)}${nasaPick.pct!=null?` · ${nasaPick.pct} % nubes`:''}${nasaPick.why==='cerca'?' (día más cercano con menos de 30 % de nubes)':nasaPick.why==='nublado'?' (no hubo días con menos de 30 % de nubes cerca; este es el menos nublado)':''}`;}
+  else if(baseMode==='nasa'){const y=s2Year();img=`🛰 Sentinel-2 10 m · mosaico sin nubes ${y}${y!==S.year?` (el más cercano a ${S.year})`:''}`;}
+  else if(false){img=`🛰 NASA MODIS del ${nice(nasaPick.d)}${nasaPick.pct!=null?` · ${nasaPick.pct} % nubes`:''}${nasaPick.why==='cerca'?' (día más cercano con menos de 30 % de nubes)':nasaPick.why==='nublado'?' (no hubo días con menos de 30 % de nubes cerca; este es el menos nublado)':''}`;}
   else img='🗺 OpenStreetMap';
   el.innerHTML=`<div class="img" style="border:0;margin:0;padding:0">${img}</div>`;
   const bd=$('ensoBadge');
@@ -964,23 +1028,24 @@ function applyYM(){
 
 /* ---------- mapa ---------- */
 let map=null,mpLayers=[],hsLayer=null,bounds=null,canvasR=null,baseYear=null,baseNasa=null,baseOSM=null,baseMode='year',WB=null,CLIMA=null,infoCtl=null;
-// Imagen satelital por año: Landsat 2000 (NASA WELD), Esri Wayback (2014+) o Sentinel-2 sin nubes (EOX, 2016 y 2018+)
-function yearSource(y){
-  const esri=yy=>{const k=WB&&(WB[yy]||WB[Math.max(2014,Math.min(2026,yy))]);
-    return {key:'esri'+(k?k.num:'x'),url:k?'https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/'+k.num+'/{z}/{y}/{x}':'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      mz:17,att:'Imágenes © Esri World Imagery (Wayback), Maxar, Earthstar Geographics',lab:k?`Esri alta resolución · versión ${k.fecha.slice(0,7)}`:'Esri alta resolución'};};
-  if(y<=2000)return {key:'weld2000',url:'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/Landsat_WELD_CorrectedReflectance_TrueColor_Global_Annual/default/2000-12-01/GoogleMapsCompatible_Level12/{z}/{y}/{x}.jpg',
-    mz:12,att:'Landsat 7 · NASA WELD (GIBS)',lab:'Landsat 30 m · mosaico anual 2000'};
-  if(y===2016||(y>=2018&&y<=2025))return {key:'s2_'+y,url:`https://tiles.maps.eox.at/wmts/1.0.0/${y===2016?'s2cloudless_3857':'s2cloudless-'+y+'_3857'}/default/g/{z}/{y}/{x}.jpg`,
-    mz:15,att:`Sentinel-2 cloudless ${y} by <a href="https://s2maps.eu" target="_blank">EOX IT Services GmbH</a> (Contains modified Copernicus Sentinel data ${y})`,lab:`Sentinel-2 10 m · mosaico sin nubes ${y}`};
-  if(y<=2013){const p=pickClear(S.from,S.to);
-    return {key:'modis_'+p.d,url:'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/'+iso(p.d)+'/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
-      mz:9,att:'NASA GIBS · MODIS Terra',lab:`MODIS 250 m · ${nice(p.d)}${p.pct!=null?' · '+p.pct+' % nubes':''}${p.why==='cerca'?' (día más cercano con menos de 30 % de nubes)':p.why==='nublado'?' (no hubo días con menos de 30 % de nubes cerca; este es el menos nublado)':''}`};}
-  return esri(y);
+// Mapa base satelital: Esri World Imagery (Wayback, 198 versiones desde 2014) según la fecha elegida,
+// o Sentinel-2 sin nubes (EOX, mosaicos anuales 2016 y 2018–2025). Ambos nítidos y sin franjas negras.
+let WBALL=null;
+const S2Y=[2016,2018,2019,2020,2021,2022,2023,2024,2025];
+const wbAt=day=>{if(!WBALL||!WBALL.length)return null;const t=iso(day);let k=WBALL[0];for(const r of WBALL){if(r[0]<=t)k=r;else break;}return k;};
+const wbTile=num=>'https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/'+num+'/{z}/{y}/{x}';
+function yearSource(){
+  const k=wbAt(S.to);
+  if(!k)return {key:'esri',url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',mz:17,att:'Imágenes © Esri, Maxar, Earthstar Geographics',lab:'Esri alta resolución (actual)'};
+  const antes=iso(S.to)<WBALL[0][0];
+  return {key:'esri'+k[1],url:wbTile(k[1]),mz:17,att:'Imágenes © Esri World Imagery (Wayback), Maxar, Earthstar Geographics',
+    lab:`Esri alta resolución · versión del ${nice(dayOf(+k[0].slice(0,4),+k[0].slice(5,7)-1,+k[0].slice(8,10)))}${antes?' (la más antigua: Esri empieza en 2014)':''}`};
 }
+function s2Year(){let best=S2Y[0];for(const y of S2Y)if(Math.abs(y-S.year)<Math.abs(best-S.year)||(Math.abs(y-S.year)===Math.abs(best-S.year)&&y<best))best=y;return best;}
+const s2Url=y=>`https://tiles.maps.eox.at/wmts/1.0.0/${y===2016?'s2cloudless_3857':'s2cloudless-'+y+'_3857'}/default/g/{z}/{y}/{x}.jpg`;
 let yearSrc=null;
 function setYearLayer(){
-  const src=yearSource(S.year);if(yearSrc&&yearSrc.key===src.key)return src;
+  const src=yearSource();if(yearSrc&&yearSrc.key===src.key)return src;
   const was=baseYear&&map.hasLayer(baseYear);if(baseYear)map.removeLayer(baseYear);
   baseYear=L.tileLayer(src.url,{attribution:src.att,maxZoom:18,maxNativeZoom:src.mz,minZoom:6});
   if(was||baseMode==='year'){baseYear.addTo(map).bringToBack();}
@@ -1015,7 +1080,7 @@ function layersControl(){
     const d=stop(L.DomUtil.create('div','mctl layers'+(innerWidth<700?' closed':'')));
     d.innerHTML=`<div class="head"><span>⚙ Capas y filtros</span><span id="lyTog">${innerWidth<700?'▾':'▴'}</span></div>
     <div class="body">
-      <div class="blk"><h4>Mapa base</h4><div class="seg" id="segBase"><button data-b="year" class="on" title="Imagen satelital del año elegido: Landsat (2000), Esri o Sentinel-2 sin nubes">Satélite del año</button><button data-b="nasa" title="Imagen diaria de NASA (250 m) de la fecha elegida">NASA del día</button><button data-b="osm">Mapa</button></div></div>
+      <div class="blk"><h4>Mapa base</h4><div class="seg" id="segBase"><button data-b="year" class="on" title="Esri alta resolución, versión más cercana a la fecha elegida (desde 2014)">Satélite</button><button data-b="nasa" title="Mosaico anual Sentinel-2 sin nubes (2016, 2018–2025)">Sentinel-2</button><button data-b="osm">Mapa</button></div></div>
       <div class="blk"><h4>Confianza</h4><div class="chips" id="confChips">
         <span class="chip" data-c="0"><span class="dot" style="background:var(--c0)"></span>Baja</span>
         <span class="chip on" data-c="1"><span class="dot" style="background:var(--c1)"></span>Nominal</span>
@@ -1050,7 +1115,7 @@ function initMap(){
   map=L.map('map',{preferCanvas:true,zoomControl:false});
   canvasR=L.canvas({padding:.3});
   setYearLayer();
-  baseNasa=L.tileLayer(nasaUrl(),{attribution:'Imagen diaria NASA GIBS (MODIS Terra)',maxZoom:18,maxNativeZoom:9,minZoom:6});
+  baseNasa=L.tileLayer(s2Url(s2Year()),{attribution:'Sentinel-2 cloudless © EOX',maxZoom:18,maxNativeZoom:15,minZoom:6});
   baseOSM=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:16,minZoom:6});
   map.attributionControl.setPrefix(false).addAttribution('<a href="https://firms.modaps.eosdis.nasa.gov" target="_blank">NASA FIRMS</a> · DANE');
   searchControl();
@@ -1298,10 +1363,10 @@ function renderCrit(){
 
 function renderCharts(){
   if(!C)return;
-  ({cal:drawCal,season:drawSeason,years:drawBars,mun:drawTop,crit:renderCrit})[S.tab]();
+  ({cal:drawCal,season:drawSeason,years:drawBars,mun:drawTop,crit:renderCrit,inc:()=>{drawFires();renderFireList();}})[S.tab]();
 }
 let rto=0;
-function refresh(){clearTimeout(rto);rto=setTimeout(()=>{C=compute();drawHotspots();renderCharts();},0);}
+function refresh(){clearTimeout(rto);rto=setTimeout(()=>{C=compute();drawHotspots();renderCharts();drawFires();},0);}
 
 /* ---------- municipios: búsqueda y selección ---------- */
 function markPreset(p){$('presets').querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',c.dataset.p===p));
@@ -1379,6 +1444,130 @@ function initFx(){
   }).catch(()=>{});
 }
 
+/* ---------- incendios ocurridos ---------- */
+let INC=null,fireLayer=null,FIRE_IDX=[];
+const SEV=['Baja','Moderada','Alta','Muy alta'],SEVC=['#e0a800','#f76707','#e03131','#7b1d1d'];
+const COVG=c=>INC&&INC.meta.grupo[c]||'otro';
+const COVN=c=>{if(!INC||c<0)return 'vegetación';const n=INC.meta.igbp[c];return c===9?'sabana (pasto con arbustos)':c===8?'sabana arbolada':n;};
+function fireSVG(g,sev){
+  const fl=`<g class="fl"><path d="M22 4c6 7 7 12 2 17-1-4-3-5-4-6 0 4-3 6-5 7-2-6 1-12 7-18Z" fill="${['#ffd43b','#ff922b','#f03e3e','#c92a2a'][sev]}"/><path d="M21 12c3 4 3 7 0 9-2-2-3-4 0-9Z" fill="#fff3bf"/></g>`;
+  const base={
+    bosque:`<path d="M10 40V30M30 40V28" stroke="#5c3d1e" stroke-width="3"/><path d="M10 14l-7 12h14Z M10 20l-8 12h16Z" fill="#2b8a3e"/><path d="M30 12l-8 13h16Z M30 18l-9 13h18Z" fill="#237032"/>`,
+    arbustal:`<ellipse cx="11" cy="33" rx="9" ry="7" fill="#5c940d"/><ellipse cx="28" cy="32" rx="11" ry="8" fill="#74b816"/><ellipse cx="20" cy="29" rx="7" ry="6" fill="#82c91e"/>`,
+    sabana:`<path d="M6 40V31" stroke="#5c3d1e" stroke-width="2.5"/><ellipse cx="6" cy="28" rx="6" ry="4" fill="#5c940d"/><path d="M2 40q4-9 6 0M10 40q3-8 5 0M16 40q4-10 6 0M24 40q3-8 5 0M31 40q4-9 6 0" stroke="#d9a520" stroke-width="2.2" fill="none"/><ellipse cx="33" cy="33" rx="6" ry="5" fill="#74b816"/>`,
+    pastizal:`<path d="M2 40q4-11 6 0M8 40q3-9 5 0M14 40q4-12 6 0M21 40q3-9 5 0M27 40q4-11 6 0M33 40q3-9 5 0" stroke="#c0a020" stroke-width="2.4" fill="none"/>`,
+    cultivo:`<path d="M2 40l8-14M9 40l8-14M16 40l8-14M23 40l8-14M30 40l8-14" stroke="#a9861e" stroke-width="2.6"/><path d="M1 40h38" stroke="#7a5a12" stroke-width="2"/>`,
+    otro:`<ellipse cx="20" cy="34" rx="16" ry="6" fill="#8d6e4a"/>`
+  };
+  return `<svg viewBox="0 0 40 42">${base[g]||base.otro}${fl}</svg>`;
+}
+function fireIdxInPeriod(){
+  if(!INC)return [];const out=[],L0=INC.lat.length;
+  for(let k=0;k<L0;k++){if(INC.n[k]<2)continue;if(INC.d1[k]<S.from||INC.d0[k]>S.to)continue;if(!SEL[INC.m[k]])continue;out.push(k);}
+  return out; // ya vienen ordenados por energía (mayor primero)
+}
+function firePopup(k){
+  const g=COVG(INC.cob[k]),sev=INC.sev[k],d0=INC.d0[k],d1=INC.d1[k],dur=d1-d0+1;
+  const e=(()=>{const a=S.from,b=S.to;S.from=d0;S.to=d1;const r=ensoRange();S.from=a;S.to=b;return r;})();
+  const clima=e?{nino:'🔴 El Niño',nina:'🔵 La Niña',neutral:'Neutral'}[e.fase]+(e.fz?' '+e.fz:''):'—';
+  const pct=Math.min(100,Math.round(100*Math.log10(1+INC.frp[k])/Math.log10(1+2000)));
+  const canCmp=WBALL&&iso(d0)>WBALL[0][0];
+  return `<div class="fire-pop"><div class="hd">${fireSVG(g,sev)}<div><h5>🔥 Incendio ocurrido sobre ${COVN(INC.cob[k])}</h5>
+    <span class="sev" style="background:${SEVC[sev]}">Severidad ${SEV[sev].toLowerCase()}</span></div></div>
+    <div class="bar"><i style="width:${pct}%;background:linear-gradient(90deg,#ffd43b,${SEVC[sev]})"></i></div>
+    <table>
+      <tr><th>Fecha</th><td>${nice(d0)}${dur>1?' – '+nice(d1):''} <span style="color:#6b7280;font-weight:500">(${dur} día${dur>1?'s':''})</span></td></tr>
+      <tr><th>Municipio</th><td>${D.mpios[INC.m[k]].n}</td></tr>
+      <tr><th>Cobertura</th><td>${COVN(INC.cob[k])}</td></tr>
+      <tr><th>Detecciones</th><td>${INC.n[k]} hotspots${INC.nv[k]?` (${INC.nv[k]} VIIRS)`:' (MODIS)'}</td></tr>
+      <tr><th>Energía liberada</th><td>${fmt(INC.frp[k])} MW en total · máx. ${fmt(INC.frpmax[k])} MW</td></tr>
+      <tr><th>Área con fuego</th><td>≈ ${fmt(INC.area[k])} ha <span style="color:#6b7280;font-weight:500">(máximo estimado)</span></td></tr>
+      <tr><th>Clima</th><td>${clima}</td></tr>
+    </table>
+    <div class="note">Severidad según la energía liberada frente a todos los incendios del Tolima 2000–2025. Área estimada con los píxeles del satélite: el área quemada real suele ser menor. Cobertura: mapa MODIS de la NASA del año anterior.</div>
+    <div class="btns"><button data-fz="${k}">🔍 Ver sus hotspots</button>${canCmp?`<button class="alt" data-cmp="${k}">↔ Antes / después</button>`:''}</div></div>`;
+}
+function drawFires(){
+  const fc=$('fireCount');
+  if(!INC){if(fc)fc.textContent='Cargando…';return;}
+  FIRE_IDX=fireIdxInPeriod();
+  if(fc)fc.textContent=`${fmt(FIRE_IDX.length)} en el periodo · toca para ${S.fires?'ocultar':'ver'}`;
+  if(!fireLayer)return;fireLayer.clearLayers();
+  if(!S.fires)return;
+  FIRE_IDX.slice(0,250).forEach(k=>{
+    const sev=INC.sev[k],sz=[26,30,34,40][sev],g=COVG(INC.cob[k]);
+    const icon=L.divIcon({className:'',iconSize:[sz,sz],iconAnchor:[sz/2,sz-2],popupAnchor:[0,-sz+4],
+      html:`<div class="fev" style="width:${sz}px;height:${sz}px">${fireSVG(g,sev)}<span class="num" style="background:${SEVC[sev]}">${INC.n[k]}</span></div>`});
+    L.marker([INC.lat[k],INC.lon[k]],{icon,zIndexOffset:300+sev*100,title:`Incendio ${nice(INC.d0[k])}`}).bindPopup(()=>firePopup(k),{maxWidth:320,minWidth:260,autoPanPaddingTopLeft:L.point(20,80)}).on('popupopen',()=>sayFire(k)).addTo(fireLayer);
+  });
+  if(S.tab==='inc')renderFireList();
+}
+function sayFire(k){
+  const g=COVG(INC.cob[k]),dur=INC.d1[k]-INC.d0[k]+1;
+  say(`Este incendio en <b>${D.mpios[INC.m[k]].n}</b> ardió sobre ${COVN(INC.cob[k])} durante ${dur} día${dur>1?'s':''}. El satélite lo detectó ${INC.n[k]} veces y su severidad fue <b>${SEV[INC.sev[k]].toLowerCase()}</b>${INC.sev[k]===3?': está entre el 5 % de incendios más intensos del Tolima':''}.`,'Incendio');
+}
+function toggleFires(on){
+  S.fires=on===undefined?!S.fires:on;
+  $('fireBtn').classList.toggle('on',S.fires);
+  if(S.fires){map.removeLayer(hsLayer);fireLayer.addTo(map);}else{map.removeLayer(fireLayer);hsLayer.addTo(map);}
+  drawFires();
+  if(S.fires)say(`Te muestro los <b>incendios ocurridos</b>: agrupé los hotspots cercanos en el espacio y el tiempo. Cada ícono indica la cobertura que se quemó, y el número cuántas veces lo vio el satélite. Toca uno para ver su severidad, fecha y área.`,'Incendios ocurridos');
+}
+function openFire(k){
+  if(!S.fires)toggleFires(true);
+  map.flyTo([INC.lat[k],INC.lon[k]],13,{duration:.8});
+  setTimeout(()=>{fireLayer.eachLayer(m=>{const ll=m.getLatLng();if(Math.abs(ll.lat-INC.lat[k])<1e-6&&Math.abs(ll.lng-INC.lon[k])<1e-6)m.openPopup();});},900);
+}
+function renderFireList(){
+  const el=$('fireList');if(!el)return;
+  if(!INC){el.innerHTML='<p style="color:var(--ink3)">Cargando…</p>';return;}
+  const top=FIRE_IDX.slice(0,40);
+  el.innerHTML=top.length?top.map(k=>`<button class="firerow" data-k="${k}">${fireSVG(COVG(INC.cob[k]),INC.sev[k])}<div><b>${D.mpios[INC.m[k]].n} · ${nice(INC.d0[k])}</b><small>${COVN(INC.cob[k])} · ${INC.n[k]} detecciones · ≈ ${fmt(INC.area[k])} ha</small></div><span class="sev" style="background:${SEVC[INC.sev[k]]}">${SEV[INC.sev[k]]}</span></button>`).join(''):'<p style="color:var(--ink3)">No hubo incendios (2 o más detecciones) en este periodo y zona.</p>';
+  el.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>openFire(+b.dataset.k));
+}
+/* comparador antes / después (Esri Wayback) */
+let CMP=null;
+function startCompare(k){
+  stopCompare();
+  const d0=INC.d0[k],d1=INC.d1[k],A=[...WBALL].reverse().find(r=>r[0]<iso(d0)),B=WBALL.find(r=>r[0]>=iso(d1+20))||WBALL[WBALL.length-1];
+  if(!A){say('Para incendios anteriores a 2014 no hay imágenes de alta resolución de antes del fuego.','Antes / después');return;}
+  map.closePopup();
+  ['cmpA','cmpB'].forEach((n,i)=>{if(!map.getPane(n)){const p=map.createPane(n);p.style.zIndex=210+i;}});
+  const LA=L.tileLayer(wbTile(A[1]),{pane:'cmpA',maxZoom:18,maxNativeZoom:17}).addTo(map),LB=L.tileLayer(wbTile(B[1]),{pane:'cmpB',maxZoom:18,maxNativeZoom:17}).addTo(map);
+  const box=map.getContainer();
+  const bar=L.DomUtil.create('div','cmp-bar',box),la=L.DomUtil.create('div','cmp-lab',box),lb=L.DomUtil.create('div','cmp-lab',box),ex=L.DomUtil.create('button','cmp-exit',box),nt=L.DomUtil.create('div','cmp-note',box);
+  la.style.left='12px';lb.style.right='12px';
+  la.textContent='◀ Antes: Esri '+A[0];lb.textContent='Después: Esri '+B[0]+' ▶';ex.textContent='✕ Salir de antes/después';
+  nt.textContent=`Incendio del ${nice(d0)}. Si la zona no tuvo imagen nueva entre versiones, ambos lados pueden verse iguales.`;
+  [bar,ex].forEach(e=>{L.DomEvent.disableClickPropagation(e);L.DomEvent.disableScrollPropagation(e);});
+  let x=box.clientWidth/2;
+  const clip=()=>{const nw=map.containerPointToLayerPoint([0,0]),se=map.containerPointToLayerPoint(map.getSize()),cx=map.containerPointToLayerPoint([x,0]).x;
+    map.getPane('cmpB').style.clip=`rect(${nw.y}px,${se.x}px,${se.y}px,${cx}px)`;map.getPane('cmpA').style.clip=`rect(${nw.y}px,${cx}px,${se.y}px,${nw.x}px)`;bar.style.left=x+'px';};
+  let drag=false;
+  bar.addEventListener('pointerdown',e=>{drag=true;bar.setPointerCapture(e.pointerId);map.dragging.disable();});
+  bar.addEventListener('pointermove',e=>{if(!drag)return;const r=box.getBoundingClientRect();x=Math.max(10,Math.min(r.width-10,e.clientX-r.left));clip();});
+  bar.addEventListener('pointerup',()=>{drag=false;map.dragging.enable();});
+  map.on('move zoom resize',clip);
+  ex.onclick=stopCompare;
+  [baseYear,baseNasa,baseOSM].forEach(l=>l&&map.hasLayer(l)&&map.removeLayer(l));
+  CMP={LA,LB,els:[bar,la,lb,ex,nt],clip};
+  map.flyTo([INC.lat[k],INC.lon[k]],14,{duration:.6});setTimeout(clip,700);clip();
+  say(`Arrastra la barra blanca para comparar el paisaje <b>antes</b> (${A[0]}) y <b>después</b> (${B[0]}) del incendio. Busca manchas oscuras de tierra quemada.`,'Antes / después');
+}
+function stopCompare(){
+  if(!CMP)return;map.removeLayer(CMP.LA);map.removeLayer(CMP.LB);CMP.els.forEach(e=>e.remove());map.off('move zoom resize',CMP.clip);
+  ['cmpA','cmpB'].forEach(n=>{const p=map.getPane(n);if(p)p.style.clip='';});
+  ({year:baseYear,nasa:baseNasa,osm:baseOSM})[baseMode].addTo(map).bringToBack();CMP=null;
+}
+function initFires(){
+  fireLayer=L.layerGroup();
+  fetch('data/incendios.json').then(r=>r.ok?r.json():null).then(j=>{INC=j;drawFires();}).catch(()=>{});
+  $('fireBtn').onclick=()=>toggleFires();
+  map.on('popupopen',e=>{const el=e.popup.getElement();if(!el)return;
+    const b=el.querySelector('[data-fz]');if(b)b.onclick=()=>{const k=+b.dataset.fz;toggleFires(false);setRange(INC.d0[k],INC.d1[k]);map.flyTo([INC.lat[k],INC.lon[k]],13,{duration:.8});};
+    const c=el.querySelector('[data-cmp]');if(c)c.onclick=()=>startCompare(+c.dataset.cmp);});
+}
+
 /* ---------- eventos ---------- */
 function bind(){
   for(let y=Y1;y>=Y0;y--)$('fYear').add(new Option(y,y));
@@ -1417,8 +1606,8 @@ function bind(){
     $('segBase').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
     [baseYear,baseNasa,baseOSM].forEach(l=>map.hasLayer(l)&&map.removeLayer(l));
     baseMode=b.dataset.b;({year:baseYear,nasa:baseNasa,osm:baseOSM})[baseMode].addTo(map).bringToBack();updateBase();
-    say(({year:'Te muestro la <b>imagen satelital del año</b> que elijas: Landsat (30 m) para los primeros años, el archivo de Esri y, desde 2016, mosaicos <b>Sentinel-2 sin nubes</b> de 10 m. Cambia de año y compara el paisaje.',
-      nasa:'Te muestro la <b>imagen de la NASA</b> (MODIS Terra, 250 m) de la fecha elegida. Si ese día estaba muy nublado, busco el día más cercano con <b>menos de 30 % de nubes</b>. En días de quema a veces se ve hasta el <b>humo</b>.',
+    say(({year:'Te muestro la <b>imagen satelital de alta resolución</b> de Esri: tiene casi 200 versiones desde 2014 y elijo la más cercana a la fecha que escojas.',
+      nasa:'Te muestro el mosaico <b>Sentinel-2 sin nubes</b> del año más cercano: imágenes de 10 m del programa europeo Copernicus.',
       osm:'Mapa de calles de OpenStreetMap, útil para ubicar veredas y vías.'})[baseMode],'Mapa base');});
   document.querySelector('.layers .head').onclick=()=>{const l=document.querySelector('.layers');l.classList.toggle('closed');$('lyTog').textContent=l.classList.contains('closed')?'▾':'▴';};
   bindSearch();
@@ -1439,11 +1628,11 @@ function bind(){
 }
 
 fetch('data/hotspots.json').then(r=>{if(!r.ok)throw 0;return r.json();}).then(j=>{
-  D=j;prep();initMap();bind();initFx();styleMpios();C=compute();
+  D=j;prep();initMap();bind();initFx();initFires();styleMpios();C=compute();
   setRange(S.from,S.to,{quiet:true});
   Promise.all([fetch('data/clima.json').then(r=>r.ok?r.json():null).catch(()=>null),fetch('data/wayback.json').then(r=>r.ok?r.json():null).catch(()=>null),
-    fetch('data/nubes.json').then(r=>r.ok?r.json():null).catch(()=>null)])
-    .then(([c,w,nb])=>{CLIMA=c;WB=w;NUBES=nb&&nb.pct;COB=nb&&nb.cob||null;yearSrc=null;updateBase();if(S.tab==='years')renderCharts();ready=true;lastYearSaid=S.year;});
+    fetch('data/nubes.json').then(r=>r.ok?r.json():null).catch(()=>null),fetch('data/wayback_todas.json').then(r=>r.ok?r.json():null).catch(()=>null)])
+    .then(([c,w,nb,wa])=>{CLIMA=c;WB=w;WBALL=wa;NUBES=nb&&nb.pct;COB=nb&&nb.cob||null;yearSrc=null;updateBase();if(S.tab==='years')renderCharts();ready=true;lastYearSaid=S.year;});
   countUp($('k-hot'),N);countUp($('k-k'),C.kg,1,'×');$('kStep').textContent=C.kg.toFixed(1).replace('.',',');
   window.__fire={D,get C(){return C;},compute,get map(){return map;},S,setRange,say,sayYear,goMpio,get hs(){return hsLayer;},get ready(){return ready;}};
 }).catch(err=>{console.error(err);

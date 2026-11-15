@@ -119,5 +119,9 @@
 "Si una semana supera mucho ese valor, sobre todo en temporada seca, el sistema podría enviar una alerta temprana a bomberos, corporaciones ambientales y gestión del riesgo, antes de que el incendio se salga de control.",
 "Ahora te toca a ti.",
 "Explora el mapa y el calendario, y descubre cómo se ha quemado el Tolima en los últimos veintiséis años.",
-"Te muestro la imagen de la NASA (MODIS Terra, 250 m) de la fecha elegida. Si ese día estaba muy nublado, busco el día más cercano con menos de 30 % de nubes. En días de quema a veces se ve hasta el humo."
+"Te muestro la imagen de la NASA (MODIS Terra, 250 m) de la fecha elegida. Si ese día estaba muy nublado, busco el día más cercano con menos de 30 % de nubes. En días de quema a veces se ve hasta el humo.",
+"Te muestro los incendios ocurridos: agrupé los hotspots cercanos en el espacio y el tiempo. Cada ícono indica la cobertura que se quemó, y el número cuántas veces lo vio el satélite. Toca uno para ver su severidad, fecha y área.",
+"Aquí están los incendios más intensos del periodo. Toca uno y te llevo hasta él en el mapa.",
+"Te muestro la imagen satelital de alta resolución de Esri: tiene casi 200 versiones desde 2014 y elijo la más cercana a la fecha que escojas.",
+"Te muestro el mosaico Sentinel-2 sin nubes del año más cercano: imágenes de 10 m del programa europeo Copernicus."
 ]
