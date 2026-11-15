@@ -947,7 +947,7 @@ function updateBase(){
   const ex=e?{nino:'Menos lluvias en el Tolima: más riesgo de incendios.',nina:'Más lluvias en el Tolima: menos incendios.',neutral:'Ni El Niño ni La Niña en este periodo.'}[e.fase]:'';
   let img='';
   if(baseMode==='year')img='🛰 '+ysrc.lab;
-  else if(baseMode==='nasa'){nasaDate();img=`🛰 NASA MODIS del ${nice(nasaPick.d)}${nasaPick.pct!=null?` · ${nasaPick.pct} % nubes`:''}${nasaPick.exact?'':' (el día más cercano con menos de 30 % de nubes)'}`;}
+  else if(baseMode==='nasa'){nasaDate();img=`🛰 NASA MODIS del ${nice(nasaPick.d)}${nasaPick.pct!=null?` · ${nasaPick.pct} % nubes`:''}${nasaPick.why==='cerca'?' (día más cercano con menos de 30 % de nubes)':nasaPick.why==='nublado'?' (no hubo días con menos de 30 % de nubes cerca; este es el menos nublado)':''}`;}
   else img='🗺 OpenStreetMap';
   el.innerHTML=`<div class="img" style="border:0;margin:0;padding:0">${img}</div>`;
   const bd=$('ensoBadge');
@@ -973,9 +973,9 @@ function yearSource(y){
     mz:12,att:'Landsat 7 · NASA WELD (GIBS)',lab:'Landsat 30 m · mosaico anual 2000'};
   if(y===2016||(y>=2018&&y<=2025))return {key:'s2_'+y,url:`https://tiles.maps.eox.at/wmts/1.0.0/${y===2016?'s2cloudless_3857':'s2cloudless-'+y+'_3857'}/default/g/{z}/{y}/{x}.jpg`,
     mz:15,att:`Sentinel-2 cloudless ${y} by <a href="https://s2maps.eu" target="_blank">EOX IT Services GmbH</a> (Contains modified Copernicus Sentinel data ${y})`,lab:`Sentinel-2 10 m · mosaico sin nubes ${y}`};
-  if(y<=2013){const p=pickClear(dayOf(y,0,1),dayOf(y,11,31));
+  if(y<=2013){const p=pickClear(S.from,S.to);
     return {key:'modis_'+p.d,url:'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/'+iso(p.d)+'/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
-      mz:9,att:'NASA GIBS · MODIS Terra',lab:`MODIS 250 m · día más despejado de ${y} (${nice(p.d)}${p.pct!=null?', '+p.pct+' % nubes':''})`};}
+      mz:9,att:'NASA GIBS · MODIS Terra',lab:`MODIS 250 m · ${nice(p.d)}${p.pct!=null?' · '+p.pct+' % nubes':''}${p.why==='cerca'?' (día más cercano con menos de 30 % de nubes)':p.why==='nublado'?' (no hubo días con menos de 30 % de nubes cerca; este es el menos nublado)':''}`};}
   return esri(y);
 }
 let yearSrc=null;
@@ -994,9 +994,11 @@ function pickClear(from,to,lim=30){
   if(!NUBES)return {d:from,pct:null,exact:true};
   let best=-1,bp=101;for(let d=from;d<=to;d++){const v=nub(d);if(v>=0&&v<bp){bp=v;best=d;}}
   if(best>=0&&bp<lim)return {d:best,pct:bp,exact:true};
-  const c=from===to?from:(best>=0?best:Math.round((from+to)/2));
-  for(let k=1;k<=400;k++){for(const d of [c-k,c+k]){const v=nub(d);if(v>=0&&v<lim)return {d,pct:v,exact:false};}}
-  return best>=0?{d:best,pct:bp,exact:true}:{d:from,pct:null,exact:true};
+  // 1) el día más cercano con < 30 % de nubes, como máximo a 30 días del periodo (primero el anterior)
+  for(let k=1;k<=30;k++){for(const d of [from-k,to+k]){const v=nub(d);if(v>=0&&v<lim)return {d,pct:v,exact:false,why:'cerca'};}}
+  // 2) si no existe, el día menos nublado alrededor de la fecha (±15 días)
+  let b2=-1,p2=101;for(let d=from-15;d<=to+15;d++){const v=nub(d);if(v>=0&&v<p2){p2=v;b2=d;}}
+  return b2>=0?{d:b2,pct:p2,exact:false,why:'nublado'}:{d:from,pct:null,exact:true};
 }
 let nasaPick={d:0,pct:null,exact:true};
 const nasaDate=()=>{nasaPick=pickClear(S.from,S.to);return iso(nasaPick.d);};
