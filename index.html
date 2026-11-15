@@ -384,8 +384,11 @@ body.intro-on{overflow:hidden}
 .cmp-bar{position:absolute;top:0;bottom:0;width:4px;margin-left:-2px;background:#fff;z-index:650;cursor:ew-resize;box-shadow:0 0 8px rgba(0,0,0,.6)}
 .cmp-bar::after{content:'⇆';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:50%;background:#fff;color:#0b2a5b;font:800 18px/38px Inter,sans-serif;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.4)}
 .cmp-lab{position:absolute;bottom:70px;z-index:640;background:rgba(11,42,91,.88);color:#fff;font:700 12px Inter,sans-serif;padding:5px 10px;border-radius:8px;pointer-events:none}
-.cmp-exit{position:absolute;top:56px;left:50%;transform:translateX(-50%);z-index:660;background:#e8590c;color:#fff;border:0;border-radius:99px;font:700 12.5px Inter,sans-serif;padding:7px 14px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.3)}
-.cmp-note{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:640;background:rgba(0,0,0,.65);color:#fff;font:11.5px Inter,sans-serif;padding:5px 10px;border-radius:8px;max-width:80%;text-align:center}
+.cmp-exit{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:700;background:#e03131;color:#fff;border:2px solid #fff;border-radius:99px;font:800 14px Inter,sans-serif;padding:10px 20px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+.cmp-exit:hover{background:#c92a2a}
+.cmp-exit small{font-weight:500;opacity:.8}
+.cmp-alt{margin-left:6px;font:700 11px Inter,sans-serif;background:#fff;color:#0b2a5b;border:0;border-radius:6px;padding:3px 8px;cursor:pointer}
+.cmp-note{pointer-events:auto;position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:640;background:rgba(0,0,0,.65);color:#fff;font:11.5px Inter,sans-serif;padding:5px 10px;border-radius:8px;max-width:80%;text-align:center}
 @media (prefers-reduced-motion:reduce){.firebtn .fl,.firebtn .ember,.fev .fl{animation:none}}
 </style>
 </head>
@@ -1533,7 +1536,7 @@ function firePopup(k){
   const e=(()=>{const a=S.from,b=S.to;S.from=d0;S.to=d1;const r=ensoRange();S.from=a;S.to=b;return r;})();
   const clima=e?{nino:'🔴 El Niño',nina:'🔵 La Niña',neutral:'Neutral'}[e.fase]+(e.fz?' '+e.fz:''):'—';
   const pct=Math.min(100,Math.round(100*Math.log10(1+INC.frp[k])/Math.log10(1+2000)));
-  const canCmp=d0>HLS0+5||(WBALL&&iso(d0)>WBALL[0][0]);
+  const canCmp=!!WBALL;
   return `<div class="fire-pop"><div class="hd">${fireSVG(g,sev)}<div><h5>🔥 Incendio ocurrido sobre ${COVN(INC.cob[k])}</h5>
     <span class="sev" style="background:${SEVC[sev]}">Severidad ${SEV[sev].toLowerCase()}</span></div></div>
     <div class="bar"><i style="width:${pct}%;background:linear-gradient(90deg,#ffd43b,${SEVC[sev]})"></i></div>
@@ -1587,29 +1590,67 @@ function renderFireList(){
   el.innerHTML=top.length?top.map(k=>`<button class="firerow" data-k="${k}">${fireSVG(COVG(INC.cob[k]),INC.sev[k])}<div><b>${D.mpios[INC.m[k]].n} · ${nice(INC.d0[k])}</b><small>${COVN(INC.cob[k])} · ${INC.n[k]} detecciones · ≈ ${fmt(INC.area[k])} ha</small></div><span class="sev" style="background:${SEVC[INC.sev[k]]}">${SEV[INC.sev[k]]}</span></button>`).join(''):'<p style="color:var(--ink3)">No hubo incendios (2 o más detecciones) en este periodo y zona.</p>';
   el.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>openFire(+b.dataset.k));
 }
-/* comparador antes / después (Esri Wayback) */
-let CMP=null;
-async function startCompare(k){
+/* comparador antes / después con fotos Esri de alta resolución (fecha real de captura) */
+let CMP=null;const capCache=new Map();
+async function esriCap(i,lat,lon){
+  const r=WBALL[i],key=r[1]+'_'+lat.toFixed(4)+'_'+lon.toFixed(4);
+  if(capCache.has(key))return capCache.get(key);
+  const u=`https://metadata.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Metadata_${r[2]}/MapServer/identify?geometry=${lon},${lat}&geometryType=esriGeometryPoint&sr=4326&layers=all&tolerance=0&mapExtent=${lon-0.01},${lat-0.01},${lon+0.01},${lat+0.01}&imageDisplay=400,400,96&returnGeometry=false&f=json`;
+  const pr=fetch(u).then(x=>x.json()).then(j=>{
+    let best=null;for(const it of (j.results||[])){const a=it.attributes||{},s=a.SRC_DATE2;if(!s||s==='Null')continue;const m=String(s).match(/(\d+)\/(\d+)\/(\d{4})/);if(!m)continue;
+      const res=parseFloat(a.SRC_RES)||99;if(!best||res<best.res)best={date:`${m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}`,res,desc:a.NICE_DESC||'',num:r[1]};}
+    return best;}).catch(()=>null);
+  capCache.set(key,pr);return pr;
+}
+// fotos distintas a lo largo de las versiones (bisección: solo se consultan los cambios)
+async function esriCaptures(lat,lon){
+  const n=WBALL.length,segs=[];
+  async function rec(lo,hi,a,b){
+    if(a&&b&&a.date===b.date){segs.push({...b,lo,hi});return;}
+    if(hi-lo<=1){if(a)segs.push({...a,lo,hi:lo});if(b)segs.push({...b,lo:hi,hi});return;}
+    const mid=(lo+hi)>>1,m=await esriCap(mid,lat,lon);
+    await Promise.all([rec(lo,mid,a,m),rec(mid,hi,m,b)]);
+  }
+  const [a,b]=await Promise.all([esriCap(0,lat,lon),esriCap(n-1,lat,lon)]);
+  await rec(0,n-1,a,b);
+  const byDate=new Map();for(const s of segs){const p=byDate.get(s.date);if(!p||s.hi>p.hi)byDate.set(s.date,s);} // versión más reciente que muestra cada foto
+  return [...byDate.values()].sort((x,y)=>x.date<y.date?-1:1);
+}
+const fmtCap=c=>`foto del ${nice(dayOf(+c.date.slice(0,4),+c.date.slice(5,7)-1,+c.date.slice(8,10)))}${c.desc?' · '+c.desc:''}${c.res<5?' · '+Math.round(c.res*100)+' cm':''}`;
+async function startCompare(k,force){
   stopCompare();map.closePopup();
   const d0=INC.d0[k],d1=INC.d1[k],lat=INC.lat[k],lon=INC.lon[k];
-  map.flyTo([lat,lon],13,{duration:.6});
-  let A=null,B=null,src='hls';
-  if(d0>HLS0+5){say('Estoy buscando las imágenes de satélite más despejadas de <b>antes</b> y <b>después</b> del incendio…','Antes / después',6000);
-    [A,B]=await Promise.all([hlsFind(lat,lon,d0-1,-1),hlsFind(lat,lon,d1+1,+1)]);}
-  let LA,LB,labA,labB;
-  if(A&&B){LA=L.tileLayer(hlsUrl(A.lay,A.d),{pane:'cmpA',maxZoom:18,maxNativeZoom:12,attribution:'NASA HLS (Landsat / Sentinel-2)'});LB=L.tileLayer(hlsUrl(B.lay,B.d),{pane:'cmpB',maxZoom:18,maxNativeZoom:12});
-    labA=`◀ Antes: ${HLSN[A.lay]} · ${nice(A.d)} · ${A.cloud} % nubes`;labB=`Después: ${HLSN[B.lay]} · ${nice(B.d)} · ${B.cloud} % nubes ▶`;}
-  else{src='esri';const RA=[...WBALL].reverse().find(r=>r[0]<iso(d0)),RB=WBALL.find(r=>r[0]>=iso(d1+20))||WBALL[WBALL.length-1];
-    if(!RA){say('Para incendios anteriores a 2013 no hay imágenes de alta resolución de antes del fuego para comparar.','Antes / después');return;}
-    LA=L.tileLayer(wbTile(RA[1]),{pane:'cmpA',maxZoom:18,maxNativeZoom:17});LB=L.tileLayer(wbTile(RB[1]),{pane:'cmpB',maxZoom:18,maxNativeZoom:17});
-    labA='◀ Antes: Esri '+RA[0];labB='Después: Esri '+RB[0]+' ▶';}
+  map.flyTo([lat,lon],15,{duration:.6});
+  let A,B,LA,LB,labA,labB,note,alt=false;
+  if(force!=='hls'){
+    say('Estoy buscando en el archivo de Esri las <b>fotos de alta resolución</b> tomadas antes y después del incendio…','Antes / después',6000);
+    const caps=await esriCaptures(lat,lon);
+    const before=[...caps].reverse().find(c=>c.date<iso(d0)),after=caps.find(c=>c.date>iso(d1));
+    A=before||caps[0];B=after||caps[caps.length-1];
+    if(A&&B){
+      LA=L.tileLayer(wbTile(A.num),{pane:'cmpA',maxZoom:19,maxNativeZoom:19,attribution:'Imágenes © Esri World Imagery (Wayback), Maxar, Vantor'});
+      LB=L.tileLayer(wbTile(B.num),{pane:'cmpB',maxZoom:19,maxNativeZoom:19});
+      labA='◀ Antes: '+fmtCap(A);labB='Después: '+fmtCap(B)+' ▶';
+      note=!before?`Esri no tiene una foto anterior al incendio del ${nice(d0)} en esta zona (la más antigua es la ${fmtCap(A)}).`
+          :!after?`Esri aún no tiene una foto posterior al incendio del ${nice(d0)} en esta zona (la más reciente es la ${fmtCap(B)}).`
+          :`Incendio del ${nice(d0)}. Fotos reales de Esri: acerca el mapa y busca zonas oscuras o grises (área quemada) que no estaban antes.`;
+      alt=!after||!before;
+    }
+  }
+  if(!LA){ // respaldo: Sentinel-2 / Landsat 30 m fechados
+    const [HA,HB]=await Promise.all([hlsFind(lat,lon,d0-1,-1),hlsFind(lat,lon,d1+1,+1)]);
+    if(!HA||!HB){say('No encontré imágenes despejadas de antes y después para este incendio.','Antes / después');return;}
+    LA=L.tileLayer(hlsUrl(HA.lay,HA.d),{pane:'cmpA',maxZoom:19,maxNativeZoom:12,attribution:'NASA HLS'});LB=L.tileLayer(hlsUrl(HB.lay,HB.d),{pane:'cmpB',maxZoom:19,maxNativeZoom:12});
+    labA=`◀ Antes: ${HLSN[HA.lay]} · ${nice(HA.d)}`;labB=`Después: ${HLSN[HB.lay]} · ${nice(HB.d)} ▶`;note='Imágenes de 30 m del día despejado más cercano (menos detalle que Esri al acercar).';
+  }
   ['cmpA','cmpB'].forEach((n,i)=>{if(!map.getPane(n)){const p=map.createPane(n);p.style.zIndex=210+i;}});
   LA.addTo(map);LB.addTo(map);
   const box=map.getContainer();
   const bar=L.DomUtil.create('div','cmp-bar',box),la=L.DomUtil.create('div','cmp-lab',box),lb=L.DomUtil.create('div','cmp-lab',box),ex=L.DomUtil.create('button','cmp-exit',box),nt=L.DomUtil.create('div','cmp-note',box);
-  la.style.left='12px';lb.style.right='12px';la.textContent=labA;lb.textContent=labB;ex.textContent='✕ Salir de antes/después';
-  nt.textContent=src==='hls'?`Incendio del ${nice(d0)}${d1>d0?' al '+nice(d1):''}. Imágenes de 30 m: busca manchas oscuras o grises (área quemada) que no estaban antes.`:`No hallé imágenes despejadas cerca de las fechas; uso Esri, que puede no haberse actualizado en esta zona.`;
-  [bar,ex].forEach(e=>{L.DomEvent.disableClickPropagation(e);L.DomEvent.disableScrollPropagation(e);});
+  la.style.left='12px';lb.style.right='12px';la.textContent=labA;lb.textContent=labB;ex.innerHTML='✕ Salir de la comparación <small>(Esc)</small>';
+  nt.innerHTML=note+(alt&&force!=='hls'?' <button class="cmp-alt">Probar con Sentinel-2 (30 m)</button>':'');
+  const altB=nt.querySelector('.cmp-alt');if(altB)altB.onclick=()=>startCompare(k,'hls');
+  [bar,ex,nt].forEach(e=>{L.DomEvent.disableClickPropagation(e);L.DomEvent.disableScrollPropagation(e);});
   let x=box.clientWidth/2;
   const clip=()=>{const nw=map.containerPointToLayerPoint([0,0]),se=map.containerPointToLayerPoint(map.getSize()),cx=map.containerPointToLayerPoint([x,0]).x;
     map.getPane('cmpB').style.clip=`rect(${nw.y}px,${se.x}px,${se.y}px,${cx}px)`;map.getPane('cmpA').style.clip=`rect(${nw.y}px,${cx}px,${se.y}px,${nw.x}px)`;bar.style.left=x+'px';};
@@ -1620,8 +1661,9 @@ async function startCompare(k){
   map.on('move zoom resize',clip);ex.onclick=stopCompare;
   [baseYear,baseNasa,baseOSM,baseHls,baseGls].forEach(l=>l&&map.hasLayer(l)&&map.removeLayer(l));
   CMP={LA,LB,els:[bar,la,lb,ex,nt],clip};clip();setTimeout(clip,700);
-  if(src==='hls')say(`Arrastra la barra blanca: a la izquierda el ${nice(A.d)} y a la derecha el ${nice(B.d)}. Las <b>manchas oscuras</b> nuevas son el área quemada.`,'Antes / después');
+  say(`Arrastra la barra blanca para comparar. A la izquierda, la foto de <b>antes</b>; a la derecha, la de <b>después</b>. Acerca el mapa para ver el detalle. Para salir, toca el botón rojo o la tecla Escape.`,'Antes / después');
 }
+addEventListener('keydown',e=>{if(e.key==='Escape'&&CMP)stopCompare();});
 function stopCompare(){
   if(!CMP)return;map.removeLayer(CMP.LA);map.removeLayer(CMP.LB);CMP.els.forEach(e=>e.remove());map.off('move zoom resize',CMP.clip);
   ['cmpA','cmpB'].forEach(n=>{const p=map.getPane(n);if(p)p.style.clip='';});
