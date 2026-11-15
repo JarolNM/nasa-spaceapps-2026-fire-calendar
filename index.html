@@ -1004,17 +1004,27 @@ function ensoRange(){
 }
 let hlsLabel='🛰 Buscando la imagen más despejada…',hlsTok=0;
 async function updateHls(){
-  if(!map||!baseHls)return;const tk=++hlsTok,c=map.getCenter(),t=Math.min(S.to,dayOf(2026,1,28));
+  if(!map||!baseHls)return;if(useGls()){hlsTok++;return;}const tk=++hlsTok,c=map.getCenter(),t=Math.min(S.to,dayOf(2026,1,28));
   if(t<HLS0+5){hlsLabel='🛰 Imagen del día: disponible desde abril de 2013';baseHls.setUrl('');const el=$('mapInfo');if(el&&baseMode==='hls')el.innerHTML=`<div class="img" style="border:0;margin:0;padding:0">${hlsLabel}</div>`;return;}
   let r=await hlsFind(c.lat,c.lng,t,-1,60);if(!r)r=await hlsFind(c.lat,c.lng,t+1,+1,30);
-  if(tk!==hlsTok)return;
+  if(tk!==hlsTok||useGls())return;
   if(r){baseHls.setUrl(hlsUrl(r.lay,r.d));hlsLabel=`🛰 ${HLSN[r.lay]} 30 m · ${nice(r.d)} · ${r.cloud} % nubes (la más despejada cerca de la fecha, en el centro del mapa)`;}
   else hlsLabel='🛰 No hallé una imagen despejada cerca de esa fecha';
   const el=$('mapInfo');if(el&&baseMode==='hls')el.innerHTML=`<div class="img" style="border:0;margin:0;padding:0">${hlsLabel}</div>`;
 }
+// Landsat 7 (GLS 2000, NASA/USGS vía Esri) para 2000–2009: una sola imagen del Tolima con contraste uniforme
+let baseGls=null;
+const useGls=()=>S.year<=2009&&(baseMode==='nasa'||baseMode==='hls');
+function syncBase(){
+  if(!map||CMP)return;
+  if(!baseGls)baseGls=L.imageOverlay('assets/landsat7_2000_tolima.jpg',[[2.82,-76.24378],[5.37,-74.32622]],{attribution:'Landsat 7 · Global Land Survey 2000 (NASA/USGS), servicio Esri',opacity:1,zIndex:1});
+  const want=useGls()?baseGls:({year:baseYear,nasa:baseNasa,osm:baseOSM,hls:baseHls})[baseMode];
+  [baseYear,baseNasa,baseOSM,baseHls,baseGls].forEach(l=>{if(l&&l!==want&&map.hasLayer(l))map.removeLayer(l);});
+  if(want&&!map.hasLayer(want)){want.addTo(map);if(want.bringToBack)want.bringToBack();}
+}
 function updateBase(){
   if(!map)return;
-  const ysrc=setYearLayer();
+  const ysrc=setYearLayer();syncBase();
   if(baseNasa){const y=s2Year();baseNasa.setUrl(s2Url(y));baseNasa.options.attribution=`Sentinel-2 cloudless ${y} by <a href="https://s2maps.eu" target="_blank">EOX IT Services GmbH</a> (Contains modified Copernicus Sentinel data ${y})`;}
   const el=$('mapInfo');if(!el)return;
   const e=ensoRange();
@@ -1022,6 +1032,7 @@ function updateBase(){
   const ex=e?{nino:'Menos lluvias en el Tolima: más riesgo de incendios.',nina:'Más lluvias en el Tolima: menos incendios.',neutral:'Ni El Niño ni La Niña en este periodo.'}[e.fase]:'';
   let img='';
   if(baseMode==='year')img='🛰 '+ysrc.lab;
+  else if(useGls())img='🛰 Landsat 7 · 30 m · 16 jul 2001 (mosaico GLS 2000 de NASA/USGS). Para 2002–2012 no hay imágenes nítidas: Landsat 7 quedó con franjas desde 2003.';
   else if(baseMode==='hls'){img=hlsLabel;updateHls();}
   else if(baseMode==='nasa'){const y=s2Year();img=`🛰 Sentinel-2 10 m · mosaico sin nubes ${y}${y!==S.year?` (el más cercano a ${S.year})`:''}`;}
   else if(false){img=`🛰 NASA MODIS del ${nice(nasaPick.d)}${nasaPick.pct!=null?` · ${nasaPick.pct} % nubes`:''}${nasaPick.why==='cerca'?' (día más cercano con menos de 30 % de nubes)':nasaPick.why==='nublado'?' (no hubo días con menos de 30 % de nubes cerca; este es el menos nublado)':''}`;}
@@ -1607,14 +1618,14 @@ async function startCompare(k){
   bar.addEventListener('pointermove',e=>{if(!drag)return;const r=box.getBoundingClientRect();x=Math.max(10,Math.min(r.width-10,e.clientX-r.left));clip();});
   bar.addEventListener('pointerup',()=>{drag=false;map.dragging.enable();});
   map.on('move zoom resize',clip);ex.onclick=stopCompare;
-  [baseYear,baseNasa,baseOSM,baseHls].forEach(l=>l&&map.hasLayer(l)&&map.removeLayer(l));
+  [baseYear,baseNasa,baseOSM,baseHls,baseGls].forEach(l=>l&&map.hasLayer(l)&&map.removeLayer(l));
   CMP={LA,LB,els:[bar,la,lb,ex,nt],clip};clip();setTimeout(clip,700);
   if(src==='hls')say(`Arrastra la barra blanca: a la izquierda el ${nice(A.d)} y a la derecha el ${nice(B.d)}. Las <b>manchas oscuras</b> nuevas son el área quemada.`,'Antes / después');
 }
 function stopCompare(){
   if(!CMP)return;map.removeLayer(CMP.LA);map.removeLayer(CMP.LB);CMP.els.forEach(e=>e.remove());map.off('move zoom resize',CMP.clip);
   ['cmpA','cmpB'].forEach(n=>{const p=map.getPane(n);if(p)p.style.clip='';});
-  ({year:baseYear,nasa:baseNasa,osm:baseOSM,hls:baseHls})[baseMode].addTo(map).bringToBack();CMP=null;
+  CMP=null;syncBase();
 }
 function initFires(){
   fireLayer=L.layerGroup();
@@ -1662,7 +1673,7 @@ function bind(){
   $('segBase').querySelectorAll('button').forEach(b=>b.onclick=()=>{
     $('segBase').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
     [baseYear,baseNasa,baseOSM,baseHls].forEach(l=>l&&map.hasLayer(l)&&map.removeLayer(l));
-    baseMode=b.dataset.b;({year:baseYear,nasa:baseNasa,osm:baseOSM,hls:baseHls})[baseMode].addTo(map).bringToBack();updateBase();
+    baseMode=b.dataset.b;updateBase();
     say(({year:'Te muestro la <b>imagen satelital de alta resolución</b> de Esri: tiene casi 200 versiones desde 2014 y elijo la más cercana a la fecha que escojas.',
       nasa:'Te muestro el mosaico <b>Sentinel-2 sin nubes</b> del año más cercano: imágenes de 10 m del programa europeo Copernicus.',
       hls:'Busco la <b>imagen de 30 m más despejada</b> cerca de la fecha que elijas (Sentinel-2 o Landsat, desde 2013). Así puedes ver el paisaje de ese momento, incluso cicatrices de quema.',
