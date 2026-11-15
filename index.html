@@ -510,8 +510,8 @@ body.intro-on{overflow:hidden}
         <div class="pane" id="p-season">
           <div class="ph"><div><h3>Temporadas de quema</h3><p>Hotspots por semana: el año elegido frente al promedio de 2001–2025 (equivalente VIIRS).</p></div></div>
           <svg class="chart" id="season"></svg>
-          <div class="legend"><span><i class="ln" style="background:var(--gray)"></i>Promedio 2001–2025</span><span><i class="ln" style="background:var(--fire)"></i><b id="seasonYr"></b></span></div>
-          <div class="hint">💡 Hay dos temporadas: <b>enero–marzo</b> y <b>agosto–septiembre</b>, las épocas secas del Tolima. Cambia el año arriba para comparar.</div>
+          <div class="legend"><span><i class="ln" style="background:var(--ink)"></i>Promedio 2001–2025 (línea punteada)</span><span><i class="ln" style="background:var(--fire)"></i><b id="seasonYr"></b></span></div>
+          <div class="hint">💡 <span>Hay dos temporadas: <b>enero–marzo</b> y <b>agosto–septiembre</b>, las épocas secas del Tolima. Cambia el año arriba para comparar.</span></div>
         </div>
 
         <div class="pane" id="p-years">
@@ -1294,17 +1294,17 @@ function drawSeason(){
   const mx=Math.max(...mean,...cur)*1.1||1,x=w=>ml+w*(W-ml-mr)/(NW-1),y=v=>mt+(H-mt-mb)*(1-v/mx);
   for(let t=0;t<=4;t++){const v=mx*t/4;el('line',{x1:ml,x2:W-mr,y1:y(v),y2:y(v),stroke:'var(--line)'},svg);txt(svg,ml-6,y(v)+4,fmt(v),{'text-anchor':'end'});}
   for(let m=0;m<12;m++){const wk=Math.floor((Date.UTC(2001,m,1)-Date.UTC(2001,0,1))/864e5/7);txt(svg,x(wk),H-8,MONTHS[m]);}
-  const path=a=>a.map((v,w)=>(w?'L':'M')+x(w)+','+y(v)).join('');
+  const path=a=>Array.from(a,(v,w)=>(w?'L':'M')+x(w)+','+y(v)).join('');
   const defs=el('defs',{},svg),lg=el('linearGradient',{id:'sg',x1:0,x2:0,y1:0,y2:1},defs);
   el('stop',{offset:0,'stop-color':css('--fire'),'stop-opacity':.25},lg);el('stop',{offset:1,'stop-color':css('--fire'),'stop-opacity':0},lg);
   el('path',{d:path(cur)+`L${x(NW-1)},${y(0)}L${x(0)},${y(0)}Z`,fill:'url(#sg)'},svg);
-  el('path',{d:path(mean),fill:'none',stroke:'var(--gray)','stroke-width':2,'stroke-dasharray':'5 4'},svg);
+  el('path',{d:path(mean),fill:'none',stroke:'var(--ink)','stroke-width':2.2,'stroke-dasharray':'6 4',opacity:.9},svg);
   const ln=el('path',{d:path(cur),fill:'none',stroke:'var(--fire)','stroke-width':2.4,'stroke-linejoin':'round'},svg);
   const L0=ln.getTotalLength();ln.style.strokeDasharray=L0;ln.style.strokeDashoffset=L0;ln.style.transition='stroke-dashoffset 1.2s ease';
   requestAnimationFrame(()=>requestAnimationFrame(()=>ln.style.strokeDashoffset=0));
   const vl=el('line',{y1:mt,y2:H-mb,stroke:'var(--ink3)','stroke-dasharray':'3 3',opacity:0},svg);
   const d1=el('circle',{r:4.5,fill:'var(--fire)',stroke:'var(--surface)','stroke-width':2,opacity:0},svg);
-  const d2=el('circle',{r:4,fill:'var(--gray)',stroke:'var(--surface)','stroke-width':2,opacity:0},svg);
+  const d2=el('circle',{r:4,fill:'var(--ink)',stroke:'var(--surface)','stroke-width':2,opacity:0},svg);
   const hit=el('rect',{x:ml,y:0,width:W-ml-mr,height:H,fill:'transparent',style:'cursor:pointer'},svg);
   const wAt=e=>{const r=svg.getBoundingClientRect();return Math.max(0,Math.min(NW-1,Math.round((e.clientX-r.left-ml)/(W-ml-mr)*(NW-1))));};
   hit.addEventListener('pointermove',e=>{const w=wAt(e);
