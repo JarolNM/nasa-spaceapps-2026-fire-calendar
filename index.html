@@ -140,6 +140,9 @@ svg.chart text{font:11px var(--font),sans-serif;fill:var(--ink3)}
 .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-2px}
 .legend i.ln{height:3px;border-radius:2px;vertical-align:3px}
 .calleg{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:11.5px;color:var(--ink3)}
+.climleg{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:8px;font-size:11.5px;color:var(--ink2)}
+.climleg i{display:inline-block;width:14px;height:8px;border-radius:3px;margin-right:5px;vertical-align:1px}
+.climleg .src{color:var(--ink3);font-style:italic}
 .calleg .ramp{flex:1;height:8px;border-radius:4px;max-width:260px}
 .hint{display:flex;gap:8px;align-items:flex-start;background:var(--soft);border-radius:10px;padding:8px 10px;font-size:12.5px;color:var(--ink2);margin-top:10px}
 #tt{position:fixed;z-index:2000;pointer-events:none;background:var(--ink);color:var(--surface);font-size:12px;line-height:1.45;padding:7px 10px;border-radius:8px;opacity:0;transition:opacity .12s;max-width:260px;box-shadow:0 6px 20px rgba(0,0,0,.2)}
@@ -182,9 +185,79 @@ footer .lg{width:110px;height:72px;border-radius:12px;background:#fff center/con
 #fontPick b{font-size:14px;color:var(--ink)}
 #fontPick select{border:0;background:var(--soft);color:var(--ink);border-radius:99px;padding:5px 8px;font-size:12px}
 @media (prefers-reduced-motion:reduce){.mascot,#guide .mini{animation:none}.pane{animation:none}}
+
+/* ---------- intro ---------- */
+#intro{position:fixed;inset:0;z-index:5000;overflow:hidden;color:#fff;font-family:var(--font),sans-serif;
+  background:radial-gradient(ellipse at 50% 120%,#123a7a 0%,#0b2a5b 35%,#050b1a 75%);transition:opacity .9s ease,transform .9s ease}
+#intro.out{opacity:0;transform:scale(1.06);pointer-events:none}
+body.intro-on{overflow:hidden}
+.stars{position:absolute;inset:0}
+.stars i{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;animation:tw 3s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.2}50%{opacity:1}}
+.earth{position:absolute;left:50%;bottom:-141vmax;width:150vmax;height:150vmax;transform:translateX(-50%);border-radius:50%;
+  background:radial-gradient(circle at 50% 4%,#2b6a52 0%,#16433f 10%,#0b2638 24%,#06142a 50%);
+  box-shadow:0 -10px 60px rgba(84,160,255,.35),inset 0 20px 60px rgba(120,190,255,.25);animation:rise 2.2s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{transform:translate(-50%,12vmax)}to{transform:translate(-50%,0)}}
+.fires{position:absolute;left:0;right:0;bottom:4vh;height:12vh}
+.fires i{position:absolute;width:8px;height:8px;border-radius:50%;background:#ffb347;box-shadow:0 0 12px 4px rgba(255,120,30,.75);opacity:0;animation:flick 2.6s ease-in-out infinite}
+@keyframes flick{0%,100%{opacity:0;transform:scale(.6)}40%{opacity:1;transform:scale(1.1)}70%{opacity:.6}}
+.orbitpath{position:absolute;left:50%;top:50%;width:min(760px,130vw);height:min(260px,46vw);transform:translate(-50%,-85%) rotate(-6deg);pointer-events:none}
+.sat{position:absolute;width:74px;height:74px;offset-path:path('M 0 130 A 380 130 0 1 1 760 130 A 380 130 0 1 1 0 130');offset-rotate:0deg;animation:orb 14s linear infinite}
+@keyframes orb{to{offset-distance:100%}}
+@supports not (offset-path:path('M0 0')){.sat{display:none}}
+.intro-c{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
+.intro-logo{width:150px;height:96px;border-radius:18px;background:#fff center/86% no-repeat url(assets/logo.webp);box-shadow:0 10px 40px rgba(0,0,0,.4);animation:pop .9s cubic-bezier(.2,1.4,.4,1) .2s both}
+@keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+.scenes{position:relative;height:150px;width:min(720px,92vw);margin-top:34px}
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none}
+.scene.on{animation:sceneIn .8s cubic-bezier(.2,.8,.2,1) forwards}
+.scene.off{animation:sceneOut .5s ease forwards}
+@keyframes sceneIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes sceneOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-14px)}}
+.scene .k{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#ffb347;margin-bottom:10px}
+.scene p{margin:0;text-shadow:0 2px 20px rgba(0,0,0,.5);font-size:clamp(20px,3.2vw,32px);line-height:1.25;font-weight:700;letter-spacing:-.02em}
+.scene p em{font-style:normal;background:linear-gradient(90deg,#ff6b6b,#ff922b,#ffd43b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.dots{display:flex;gap:8px;margin-top:18px}
+.dots i{width:22px;height:4px;border-radius:2px;background:rgba(255,255,255,.2);overflow:hidden;position:relative}
+.dots i.done::after,.dots i.on::after{content:'';position:absolute;inset:0;background:#ff922b;transform-origin:left}
+.dots i.on::after{animation:bar var(--d,3.4s) linear forwards}
+@keyframes bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.startbtn{margin-top:30px;display:inline-flex;align-items:center;gap:10px;font:700 16px var(--font),sans-serif;color:#0b2a5b;background:#fff;border:0;border-radius:99px;padding:15px 30px;cursor:pointer;
+  box-shadow:0 10px 30px rgba(255,146,43,.35);opacity:0;transition:box-shadow .2s,transform .2s}
+.startbtn.on{animation:sceneIn .7s cubic-bezier(.2,.8,.2,1) forwards}
+.startbtn:hover{box-shadow:0 14px 40px rgba(255,146,43,.55);transform:translateY(-2px)}
+.startbtn .ar{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#ff922b,#e8590c);color:#fff;transition:transform .2s}
+.startbtn:hover .ar{transform:translateX(3px)}
+.skip{position:absolute;top:18px;right:20px;z-index:3;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:99px;padding:7px 14px;font:600 12.5px var(--font),sans-serif;cursor:pointer}
+.skip:hover{background:rgba(255,255,255,.2)}
+.credit{position:absolute;bottom:16px;left:0;right:0;text-align:center;font-size:11.5px;color:rgba(255,255,255,.55);z-index:2}
+@media (prefers-reduced-motion:reduce){.earth,.sat,.stars i,.fires i{animation:none}.fires i{opacity:.8}}
 </style>
 </head>
-<body>
+<body class="intro-on">
+<div id="intro" role="dialog" aria-label="Introducción">
+  <div class="stars" id="stars"></div>
+  <div class="earth"></div>
+  <div class="fires" id="fires"></div>
+  <div class="orbitpath"><svg class="sat" viewBox="0 0 200 200" aria-hidden="true">
+    <rect x="8" y="78" width="52" height="30" rx="5" fill="#ff922b"/><rect x="140" y="78" width="52" height="30" rx="5" fill="#ff922b"/>
+    <rect x="58" y="90" width="84" height="6" fill="#dbe4ff"/><rect x="68" y="52" width="64" height="78" rx="20" fill="#dbe4ff"/>
+    <rect x="76" y="62" width="48" height="36" rx="12" fill="#fff"/><ellipse class="eye" cx="90" cy="80" rx="5" ry="6.5" fill="#0b2a5b"/><ellipse class="eye" cx="110" cy="80" rx="5" ry="6.5" fill="#0b2a5b"/>
+    <path d="M93 89Q100 95 107 89" stroke="#e8590c" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="100" cy="30" r="7" fill="#ff922b"/><path d="M100 52V36" stroke="#dbe4ff" stroke-width="3"/></svg></div>
+  <button class="skip" id="skipIntro">Saltar intro →</button>
+  <div class="intro-c">
+    <div class="intro-logo" role="img" aria-label="GeoElectronic"></div>
+    <div class="scenes">
+      <div class="scene"><span class="k">Cada día</span><p>Satélites de la NASA miran la Tierra<br>buscando <em>puntos de fuego</em>.</p></div>
+      <div class="scene"><span class="k">Desde el año 2000</span><p>Primero <em>MODIS</em>; desde 2012, <em>VIIRS</em>,<br>con una mirada mucho más fina.</p></div>
+      <div class="scene"><span class="k">El problema</span><p>Sus registros no se comparan directo:<br>el cambio de sensor <em>parece más fuego</em>.</p></div>
+      <div class="scene"><span class="k">Nuestra solución</span><p>Armonizamos 26 años de quemas<br>en el Tolima en <em>un solo calendario</em>.</p></div>
+    </div>
+    <div class="dots" id="dots"><i></i><i></i><i></i><i></i></div>
+    <button class="startbtn" id="startBtn">Iniciar exploración <span class="ar">→</span></button>
+  </div>
+  <div class="credit">GeoElectronic · NASA Space Apps Challenge 2026 · Datos NASA FIRMS</div>
+</div>
 
 <nav><div class="wrap">
   <a class="brand" href="#top"><span class="lg" role="img" aria-label="Logo GeoElectronic"></span>Calendario de Quema</a>
@@ -261,6 +334,7 @@ footer .lg{width:110px;height:72px;border-radius:12px;background:#fff center/con
           </div>
           <canvas id="cal"></canvas>
           <div class="calleg"><span id="rl0"></span><div class="ramp" id="ramp"></div><span id="rl1"></span></div>
+          <div class="climleg"><span><i style="background:#f4b860"></i>Temporada seca</span><span><i style="background:#cfd6de"></i>Transición</span><span><i style="background:#6fa8dc"></i>Temporada de lluvias</span><span class="src">Régimen bimodal andino (referencia general)</span></div>
           <div class="hint">👆 <span id="calHint"></span></div>
         </div>
 
@@ -347,6 +421,26 @@ footer .lg{width:110px;height:72px;border-radius:12px;background:#fff center/con
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+/* ---------- intro animada ---------- */
+(function(){
+  const intro=document.getElementById('intro');if(!intro)return;
+  const st=document.getElementById('stars'),fi=document.getElementById('fires');
+  for(let i=0;i<120;i++){const e=document.createElement('i');e.style.left=Math.random()*100+'%';e.style.top=Math.random()*75+'%';
+    e.style.animationDelay=(Math.random()*3)+'s';const z=Math.random()<.15?3:Math.random()<.5?2:1;e.style.width=e.style.height=z+'px';st.appendChild(e);}
+  for(let i=0;i<26;i++){const e=document.createElement('i');e.style.left=(38+Math.random()*24)+'%';e.style.bottom=(Math.random()*90)+'%';
+    e.style.animationDelay=(1.5+Math.random()*4)+'s';e.style.animationDuration=(1.8+Math.random()*2)+'s';fi.appendChild(e);}
+  const sc=[...intro.querySelectorAll('.scene')],dots=[...document.querySelectorAll('#dots i')],D=3400;
+  let k=-1,timer=0;
+  const next=()=>{if(k>=0){sc[k].classList.remove('on');sc[k].classList.add('off');dots[k].classList.remove('on');dots[k].classList.add('done');}
+    k++;if(k<sc.length){sc[k].classList.add('on');dots[k].style.setProperty('--d',D+'ms');dots[k].classList.add('on');
+      if(k===sc.length-1){setTimeout(()=>document.getElementById('startBtn').classList.add('on'),900);}else timer=setTimeout(next,D);}};
+  setTimeout(next,900);
+  const close=()=>{clearTimeout(timer);intro.classList.add('out');document.body.classList.remove('intro-on');
+    setTimeout(()=>{intro.remove();window.dispatchEvent(new Event('resize'));},950);};
+  document.getElementById('startBtn').onclick=close;document.getElementById('skipIntro').onclick=close;
+  addEventListener('keydown',e=>{if(document.getElementById('intro')&&(e.key==='Escape'||e.key==='Enter'))close();});
+})();
+
 (()=>{
 const Y0=2000,Y1=2025,NY=Y1-Y0+1,NW=53,YV=2012;
 const MONTHS=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
@@ -581,6 +675,22 @@ function drawHotspots(){
   const mc=$('mapCount');if(mc)mc.textContent=`VIIRS ${fmt(nv)} · MODIS ${fmt(nm)}`;
 }
 
+/* ---------- temporadas climáticas (régimen bimodal andino, referencia general) ---------- */
+// 0 = seca, 1 = transición, 2 = lluviosa
+const CLIM=[0,0,1,2,2,1,0,0,0,2,2,1];
+const CLIMC=['#f4b860','#cfd6de','#6fa8dc'],CLIMT=['☀ Seca','Transición','🌧 Lluvias'];
+function seasonStrip(g,y,h,xs,xe,font){
+  let m=0;
+  while(m<12){let m1=m;while(m1+1<12&&CLIM[m1+1]===CLIM[m])m1++;
+    const x0=xs(m),x1=xe(m1),c=CLIM[m];
+    g.fillStyle=CLIMC[c];g.globalAlpha=.9;g.beginPath();g.roundRect(x0,y,Math.max(1,x1-x0-1.5),h,4);g.fill();g.globalAlpha=1;
+    const lab=CLIMT[c],w=x1-x0;
+    if(w>(c===1?64:44)){g.fillStyle='#0f1f3d';g.font=`700 ${Math.min(10,h-3)}px ${font}`;g.textAlign='center';g.textBaseline='middle';g.fillText(lab,(x0+x1)/2,y+h/2+.5);g.textAlign='left';}
+    else if(w>14&&c!==1){g.font=`${Math.min(10,h-3)}px ${font}`;g.textAlign='center';g.textBaseline='middle';g.fillText(c===0?'☀':'🌧',(x0+x1)/2,y+h/2+.5);g.textAlign='left';}
+    m=m1+1;}
+}
+const SH=14; // alto de la franja
+
 /* ---------- calendario ---------- */
 let C=null,G=null;
 function calData(){
@@ -598,12 +708,12 @@ function drawCal(){
   const cd=calData();
   const sub={m:'Cada fila es un año y cada columna un mes.',w:'Cada fila es un año y cada columna una de las 52 semanas.',d:`Cada cuadro es un día de ${S.year}. Columnas = semanas; filas = lunes a domingo.`}[S.gran];
   $('calSub').textContent=sub+(anom?' Azul = menos fuego de lo normal; rojo = más.':' Más oscuro = más hotspots.');
-  $('calHint').textContent={m:'Toca un mes para verlo en el mapa. La línea punteada marca 2012, cuando llega VIIRS.',w:'Toca una semana para verla en el mapa. La línea punteada marca 2012, cuando llega VIIRS.',d:'Toca un día para ver sus hotspots en el mapa. Cambia el año en la barra de filtros.'}[S.gran];
+  $('calHint').textContent={m:'Toca un mes para verlo en el mapa. Fíjate: las columnas más oscuras caen en las temporadas secas. La línea punteada marca 2012, cuando llega VIIRS.',w:'Toca una semana para verla en el mapa. La línea punteada marca 2012, cuando llega VIIRS.',d:'Toca un día para ver sus hotspots en el mapa. Cambia el año en la barra de filtros.'}[S.gran];
   if(S.gran==='d'){$('segView').style.opacity=.4;}else $('segView').style.opacity=1;
   if(C.empty){const [g]=fitCanvas(cv,80);g.fillStyle=css('--ink3');g.font='14px sans-serif';g.fillText('Selecciona al menos un municipio',10,40);return;}
   const font=getComputedStyle(document.body).fontFamily;
   if(cd.day){
-    const left=26,top=18,cols=Math.ceil((cd.nd+cd.off)/7),cs=Math.min(18,(W0-left)/cols),H=top+7*cs+4;
+    const left=26,top=18+SH+6,cols=Math.ceil((cd.nd+cd.off)/7),cs=Math.min(18,(W0-left)/cols),H=top+7*cs+4;
     const [g]=fitCanvas(cv,H);G={day:true,left,top,cs,cd};
     const mx=Math.max(1,...cd.X);
     for(let k=0;k<cd.nd;k++){const p=k+cd.off,c=Math.floor(p/7),r=p%7;
@@ -614,13 +724,15 @@ function drawCal(){
     g.fillStyle=css('--ink3');g.font=`500 10px ${font}`;g.textBaseline='middle';
     ['L','','X','','V','','D'].forEach((s,r)=>g.fillText(s,4,top+r*cs+cs/2));
     for(let m=0;m<12;m++){const p=dayOf(S.year,m,1)-cd.n0+cd.off;g.fillText(MONTHS[m],left+Math.floor(p/7)*cs,8);}
+    const dx=m=>left+Math.floor((dayOf(S.year,m,1)-cd.n0+cd.off)/7)*cs;
+    seasonStrip(g,16,SH,dx,m=>m===11?left+cols*cs:dx(m+1),font);
     $('calTitle').textContent=`Calendario diario · ${S.year}`;
     $('ramp').style.background='linear-gradient(90deg,'+[0,.25,.5,.75,1].map(t=>ramp(HEAT,t)).join(',')+')';
     $('rl0').textContent='0';$('rl1').textContent=`${mx.toFixed(mx%1?1:0)} hotspots/día`;
     return;
   }
   $('calTitle').textContent=S.gran==='m'?'Calendario mensual · 2000–2025':'Calendario semanal · 2000–2025';
-  const nc=cd.nc,nr=cd.nr,left=36,top=18,cw=(W0-left)/nc,ch=S.gran==='m'?Math.max(14,Math.min(20,cw*.55)):Math.max(9,Math.min(14,cw*1.4));
+  const nc=cd.nc,nr=cd.nr,left=36,top=18+SH+6,cw=(W0-left)/nc,ch=S.gran==='m'?Math.max(14,Math.min(20,cw*.55)):Math.max(9,Math.min(14,cw*1.4));
   const [g,W]=fitCanvas(cv,top+nr*ch+4);G={left,top,cw,ch,nc,nr};
   let vmax=1;if(!anom){const s=Array.from(cd.X).sort((a,b)=>a-b);vmax=s[Math.floor(s.length*.985)]||1;}
   const gap=cw>6?1.5:0.5;
@@ -641,8 +753,11 @@ function drawCal(){
       g.strokeRect(left+w0*cw-1,top+y0*ch-1,(w1-w0+1)*cw+1,ch+1);}}
   g.textAlign='left';g.fillStyle=css('--ink3');g.font=`500 10px ${font}`;
   for(let y=0;y<nr;y+=(ch<12?5:S.gran==='m'?1:2))g.fillText(cd.rows[y],0,top+y*ch+ch/2);
-  if(S.gran==='m'){g.textAlign='center';MONTHS.forEach((m,c)=>g.fillText(cw>30?m:cd.colsS[c],left+c*cw+cw/2,8));g.textAlign='left';}
-  else for(let m=0;m<12;m++){const wk=Math.floor((Date.UTC(2001,m,1)-Date.UTC(2001,0,1))/864e5/7);g.fillText(MONTHS[m],left+wk*cw,8);}
+  if(S.gran==='m'){g.textAlign='center';MONTHS.forEach((m,c)=>g.fillText(cw>30?m:cd.colsS[c],left+c*cw+cw/2,8));g.textAlign='left';
+    seasonStrip(g,16,SH,m=>left+m*cw,m=>left+(m+1)*cw,font);}
+  else{const wx=m=>left+Math.floor((Date.UTC(2001,m,1)-Date.UTC(2001,0,1))/864e5/7)*cw;
+    for(let m=0;m<12;m++)g.fillText(MONTHS[m],wx(m),8);
+    seasonStrip(g,16,SH,wx,m=>m===11?left+NW*cw:wx(m+1),font);}
   g.strokeStyle=css('--ink');g.setLineDash([4,3]);g.lineWidth=1.2;const yl=top+(YV-Y0)*ch-.75;
   g.beginPath();g.moveTo(left-6,yl);g.lineTo(W,yl);g.stroke();g.setLineDash([]);
 
