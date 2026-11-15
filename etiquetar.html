@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Etiquetador de Hotspots · GeoElectronic</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/logo.webp">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{--bg:#f6f5f2;--surface:#fff;--ink:#0f1f3d;--ink2:#4a5568;--ink3:#8a94a6;--line:#e7e5e0;--soft:#f1efea;
+  --fire:#e8590c;--ok:#2b8a3e;--bad:#c92a2a;--doubt:#e0a100;--navy:#0b2a5b}
+@media (prefers-color-scheme:dark){:root{--bg:#0c1220;--surface:#131b2e;--ink:#eef2f8;--ink2:#b4bfd0;--ink3:#7d8aa3;--line:#232e45;--soft:#1a2439}}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,system-ui,sans-serif;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:14px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--surface);flex-wrap:wrap}
+header .lg{width:40px;height:26px;border-radius:6px;background:#fff center/contain no-repeat url(assets/logo.webp);box-shadow:0 0 0 1px var(--line)}
+header h1{font-size:15px;margin:0}
+.prog{flex:1;min-width:180px;display:flex;align-items:center;gap:10px}
+.bar{flex:1;height:8px;border-radius:4px;background:var(--soft);overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.counts{font-size:12px;color:var(--ink2);white-space:nowrap}
+.counts b{font-weight:700}
+.hbtn{font:600 12.5px Inter,sans-serif;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;padding:7px 11px;cursor:pointer}
+.hbtn:hover{border-color:var(--ink3)}
+.hbtn.primary{background:var(--navy);color:#fff;border-color:var(--navy)}
+main{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 360px;min-height:0}
+@media (max-width:900px){main{grid-template-columns:1fr;grid-template-rows:55vh auto}}
+#map{position:relative;min-height:300px}
+.side{border-left:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;min-height:0}
+.sbody{flex:1;overflow:auto;padding:14px 16px}
+.nav{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.nav .pos{font-weight:700}
+.nav .st{margin-left:auto;font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--soft);color:var(--ink2)}
+.st.fuego{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.st.falso{background:color-mix(in srgb,var(--bad) 15%,transparent);color:var(--bad)}
+.st.duda{background:color-mix(in srgb,var(--doubt) 18%,transparent);color:#b08000}
+table.attr{width:100%;border-collapse:collapse;font-size:13px}
+table.attr th{text-align:left;color:var(--ink3);font-weight:500;padding:4px 8px 4px 0;white-space:nowrap;width:42%}
+table.attr td{padding:4px 0;font-weight:600}
+.hintv{font-size:11.5px;color:var(--ink3);font-weight:400}
+.links{display:flex;flex-direction:column;gap:6px;margin:12px 0}
+.links a{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink);text-decoration:none;padding:8px 10px;border-radius:9px;background:var(--soft)}
+.links a:hover{outline:1px solid var(--ink3)}
+.links a span{font-weight:400;color:var(--ink3);font-size:11.5px;margin-left:auto}
+.lab{border-top:1px solid var(--line);padding:12px 16px;background:var(--surface)}
+.lbtns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.lb{font:700 14px Inter,sans-serif;border:2px solid transparent;border-radius:12px;padding:12px 6px;cursor:pointer;color:#fff;transition:transform .1s}
+.lb:active{transform:scale(.97)}
+.lb small{display:block;font-weight:500;font-size:11px;opacity:.85}
+.lb.fuego{background:var(--ok)}.lb.falso{background:var(--bad)}.lb.duda{background:var(--doubt)}
+.lb.sel{border-color:var(--ink);box-shadow:0 0 0 2px var(--surface) inset}
+.why{margin-top:10px}
+.why h4{margin:0 0 6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-size:12px;padding:5px 10px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);cursor:pointer;user-select:none}
+.chip.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+textarea{width:100%;margin-top:8px;font:13px Inter,sans-serif;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:var(--bg);color:var(--ink);resize:vertical;min-height:44px}
+.keys{font-size:11px;color:var(--ink3);margin-top:8px}
+kbd{font:600 10.5px Inter,sans-serif;background:var(--soft);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:10px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:3000}
+.toast.on{opacity:1}
+.legend{position:absolute;left:10px;bottom:24px;z-index:500;background:var(--surface);color:var(--ink);border-radius:10px;padding:8px 10px;font-size:11.5px;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.legend div{display:flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:2px;display:inline-block}
+.help{position:fixed;inset:0;background:rgba(5,10,25,.6);z-index:4000;display:none;align-items:center;justify-content:center;padding:16px}
+.help.on{display:flex}
+.help .card{background:var(--surface);color:var(--ink);border-radius:16px;max-width:620px;padding:22px 24px;max-height:90vh;overflow:auto}
+.help h2{margin:0 0 8px;font-size:20px}
+.help li{margin:4px 0}
+</style>
+</head>
+<body>
+<header>
+  <span class="lg" role="img" aria-label="GeoElectronic"></span>
+  <h1>Etiquetador de hotspots</h1>
+  <div class="prog"><div class="bar" id="bar"></div><span class="counts" id="counts"></span></div>
+  <button class="hbtn" id="helpBtn">❔ Criterios</button>
+  <button class="hbtn" id="pendBtn" title="Ir al siguiente sin etiquetar">⏭ Siguiente pendiente</button>
+  <label class="hbtn" style="display:inline-flex;align-items:center;gap:6px">⤒ Importar<input type="file" id="imp" accept=".csv" hidden></label>
+  <button class="hbtn primary" id="expBtn">⤓ Exportar CSV</button>
+</header>
+<main>
+  <div id="map"><div class="legend">
+    <div><i style="border:2.5px solid #ff2d2d"></i>Hotspot a revisar (huella del píxel)</div>
+    <div><i style="background:#ffb347"></i>Otros hotspots ese día (±1)</div>
+    <div><i style="background:#9fb0cc"></i>Mismo lugar, otras fechas</div>
+  </div></div>
+  <aside class="side">
+    <div class="sbody">
+      <div class="nav">
+        <button class="hbtn" id="prev" title="Anterior (←)">◀</button>
+        <span class="pos" id="pos">–</span>
+        <button class="hbtn" id="next" title="Siguiente (→)">▶</button>
+        <span class="st" id="st">Sin etiqueta</span>
+      </div>
+      <table class="attr" id="attr"></table>
+      <div class="links" id="links"></div>
+    </div>
+    <div class="lab">
+      <div class="lbtns">
+        <button class="lb fuego" data-l="fuego">✓ Fuego real<small>tecla 1</small></button>
+        <button class="lb falso" data-l="falso">✗ Falso positivo<small>tecla 2</small></button>
+        <button class="lb duda" data-l="duda">? Duda<small>tecla 3</small></button>
+      </div>
+      <div class="why">
+        <h4>¿Por qué? (opcional)</h4>
+        <div class="chips" id="why"></div>
+        <textarea id="note" placeholder="Nota opcional: p. ej. «se ve cicatriz en imagen del 20 feb», «ladrillera conocida»…"></textarea>
+      </div>
+      <label class="keys" style="display:flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" id="auto" checked> Pasar al siguiente al etiquetar</label>
+      <div class="keys"><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> etiquetar · <kbd>←</kbd> <kbd>→</kbd> moverse · el avance se guarda solo en este navegador</div>
+    </div>
+  </aside>
+</main>
+
+<div class="help" id="help"><div class="card">
+  <h2>Criterios de etiquetado</h2>
+  <p><b>✓ Fuego real</b>: quema agrícola, de pastos o forestal. Indicios: cicatriz o cambio de color en imágenes de antes y después, humo en la imagen del mismo día, zona rural o de vegetación, varios hotspots juntos ese día.</p>
+  <p><b>✗ Falso positivo</b>: fuente que no es quema de vegetación. Indicios: chimenea, industria o ladrillera; techos o zona urbana; cráter del volcán; reflejo en agua (embalses, ríos); suelo desnudo muy caliente; el mismo píxel se repite muchas veces a lo largo de los años.</p>
+  <p><b>? Duda</b>: no se puede decidir con la evidencia disponible. Es mejor marcar duda que adivinar.</p>
+  <p><b>Evidencia sugerida</b></p>
+  <ul>
+    <li><b>NASA Worldview</b>: imagen satelital del mismo día (desde 2000) con humo y anomalías térmicas.</li>
+    <li><b>EO Browser</b>: Sentinel-2 alrededor de la fecha (desde 2015); usa la vista de falso color SWIR para ver cicatrices.</li>
+    <li><b>Google Earth</b>: imagen de alta resolución para reconocer techos, industria o cultivos. En Google Earth Pro (escritorio) puedes ver imágenes históricas.</li>
+  </ul>
+  <p class="hintv">La muestra tiene 500 puntos fijos repartidos entre años y sensores, con más peso en casos dudosos (confianza baja, fuentes fijas, puntos aislados o muy repetidos). El avance se guarda en este navegador: exporta el CSV de vez en cuando como respaldo.</p>
+  <button class="hbtn primary" id="helpClose">Entendido</button>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const SAMPLE_N=500,SEED=2026,KEY='etiquetas_v1';
+const CONF=['Baja','Nominal','Alta'],SAT=['Terra','Aqua','Suomi-NPP'],TYPE=['Vegetación (presunto)','Volcán activo','Fuente fija','Costa afuera'];
+const REASONS={
+  fuego:['Cicatriz de quema','Humo en imagen','Cultivo / pastos','Bosque','Grupo de hotspots','Temporada seca'],
+  falso:['Industria / ladrillera','Zona urbana / techos','Volcán','Agua / reflejo','Suelo desnudo','Se repite mucho'],
+  duda:['Nubes en imágenes','Sin imagen en la fecha','Borde de cultivo','Resolución insuficiente']
+};
+const toast=m=>{const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),1800);};
+let D,N,S=[],cur=0,labels={},map,layer;
+
+/* ---------- guardado ---------- */
+function load(){try{labels=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){labels={};}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(labels));}catch(e){toast('No se pudo guardar en el navegador: exporta el CSV');}}
+
+/* ---------- utilidades ---------- */
+function mulberry32(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const dayN=i=>Math.round((Date.UTC(2000+D.y[i],0,D.j[i])-Date.UTC(2000,0,1))/864e5);
+const dateStr=i=>{const d=new Date(Date.UTC(2000+D.y[i],0,D.j[i]));return d.toISOString().slice(0,10);};
+const lat=i=>D.la[i]/1e5,lon=i=>D.lo[i]/1e5;
+
+/* ---------- variables de contexto ---------- */
+let REP,NEI,byDay;
+function features(){
+  const cell=i=>{const g=D.s[i]?0.0034:0.009;return D.s[i]+'_'+Math.round(lat(i)/g)+'_'+Math.round(lon(i)/g);};
+  const cnt=new Map();for(let i=0;i<N;i++){const k=cell(i);cnt.set(k,(cnt.get(k)||0)+1);}
+  REP=new Int32Array(N);for(let i=0;i<N;i++)REP[i]=cnt.get(cell(i));
+  byDay=new Map();for(let i=0;i<N;i++){const d=dayN(i);if(!byDay.has(d))byDay.set(d,[]);byDay.get(d).push(i);}
+  NEI=new Int32Array(N);
+  for(const [,arr] of byDay)for(const i of arr){let n=0;for(const j of arr){if(j===i)continue;
+    const dy=(lat(i)-lat(j))*111,dx=(lon(i)-lon(j))*111*Math.cos(lat(i)*Math.PI/180);if(dx*dx+dy*dy<=25)n++;}NEI[i]=n;}
+}
+/* ---------- muestra fija y estratificada (siempre la misma) ---------- */
+function sample(){
+  const rnd=mulberry32(SEED),keys=[];
+  for(let i=0;i<N;i++){
+    let w=1;
+    if(D.c[i]===0)w*=4;if(D.t[i]!==0)w*=4;if(REP[i]>=5)w*=2;if(NEI[i]===0)w*=2;if(D.y[i]===0)w*=.3;
+    keys.push({i,k:Math.pow(rnd(),1/w),s:D.s[i],y:D.y[i]});
+  }
+  keys.sort((a,b)=>b.k-a.k);
+  // cupos: 40 % MODIS, 60 % VIIRS; como máximo 8 % de la muestra en un mismo año
+  const quota={0:Math.round(SAMPLE_N*.4),1:SAMPLE_N-Math.round(SAMPLE_N*.4)},per={},maxY=Math.ceil(SAMPLE_N*.08),out=[];
+  for(const o of keys){if(out.length>=SAMPLE_N)break;if(quota[o.s]<=0)continue;per[o.y]=per[o.y]||0;if(per[o.y]>=maxY)continue;
+    out.push(o.i);quota[o.s]--;per[o.y]++;}
+  // orden aleatorio estable para alternar años y sensores
+  for(let a=out.length-1;a>0;a--){const b=Math.floor(rnd()*(a+1));[out[a],out[b]]=[out[b],out[a]];}
+  return out;
+}
+
+/* ---------- mapa ---------- */
+function initMap(){
+  map=L.map('map',{zoomControl:true});
+  const esri=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    {attribution:'Imágenes © Esri, Maxar, Earthstar Geographics',maxZoom:19}).addTo(map);
+  const s2=L.tileLayer('https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg',
+    {attribution:'Sentinel-2 cloudless 2020 © EOX',maxZoom:17,maxNativeZoom:15});
+  const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19});
+  L.control.layers({'Satélite alta resolución (Esri)':esri,'Sentinel-2 2020':s2,'Mapa (OSM)':osm},null,{collapsed:false,position:'topright'}).addTo(map);
+  L.control.scale({imperial:false}).addTo(map);
+  layer=L.layerGroup().addTo(map);
+}
+function box(la,lo,h,opt){const hx=h/Math.cos(la*Math.PI/180);return L.rectangle([[la-h,lo-hx],[la+h,lo+hx]],opt);}
+function drawPoint(i){
+  layer.clearLayers();
+  const d=dayN(i),la=lat(i),lo=lon(i);
+  // mismo lugar, otras fechas
+  const g=D.s[i]?0.0034:0.009;
+  for(let j=0;j<N;j++){if(j===i||D.s[j]!==D.s[i])continue;if(Math.abs(lat(j)-la)<g&&Math.abs(lon(j)-lo)<g)
+    box(lat(j),lon(j),D.s[j]?0.0017:0.0045,{color:'#9fb0cc',weight:1,fillOpacity:.15,interactive:false}).addTo(layer);}
+  // otros hotspots del mismo día (±1)
+  for(const dd of [d-1,d,d+1])for(const j of (byDay.get(dd)||[])){if(j===i)continue;
+    box(lat(j),lon(j),D.s[j]?0.0017:0.0045,{color:'#ffb347',weight:1.5,fillColor:'#ffb347',fillOpacity:.35})
+      .bindTooltip(`${dateStr(j)} · ${D.s[j]?'VIIRS':'MODIS'} · conf. ${CONF[D.c[j]]}`).addTo(layer);}
+  box(la,lo,D.s[i]?0.0017:0.0045,{color:'#ff2d2d',weight:3,fill:false}).addTo(layer);
+  L.circleMarker([la,lo],{radius:3,color:'#ff2d2d',fillOpacity:1}).addTo(layer);
+  map.setView([la,lo],D.s[i]?15:14,{animate:false});
+}
+
+/* ---------- panel ---------- */
+function render(){
+  const i=S[cur],L0=labels[i]||{};
+  $('pos').textContent=`Punto ${cur+1} de ${S.length}`;
+  const st=$('st');st.className='st '+(L0.l||'');st.textContent=L0.l?{fuego:'✓ Fuego real',falso:'✗ Falso positivo',duda:'? Duda'}[L0.l]:'Sin etiqueta';
+  const hm=String(D.hm[i]).padStart(4,'0'),hl=(+hm.slice(0,2)+19)%24;
+  const rows=[['ID',i],['Fecha',dateStr(i)],['Hora',`${hm.slice(0,2)}:${hm.slice(2)} UTC <span class="hintv">(~${String(hl).padStart(2,'0')}:${hm.slice(2)} hora Colombia, ${D.dn[i]?'noche':'día'})</span>`],
+    ['Coordenadas',`${lat(i).toFixed(5)}, ${lon(i).toFixed(5)}`],['Sensor',`${D.s[i]?'VIIRS · 375 m':'MODIS · 1 km'} (${SAT[D.sat[i]]})`],
+    ['Confianza',CONF[D.c[i]]],['FRP',`${(D.f[i]/10).toFixed(1)} MW`],['Tipo FIRMS',TYPE[D.t[i]]||D.t[i]],['Municipio',D.mpios[D.m[i]].n],
+    ['Se repite aquí',`${REP[i]} ${REP[i]>1?'veces':'vez'} <span class="hintv">(mismo píxel, 2000–2025)</span>`],
+    ['Vecinos ese día',`${NEI[i]} <span class="hintv">(hotspots a ≤ 5 km)</span>`]];
+  $('attr').innerHTML=rows.map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join('');
+  const la=lat(i).toFixed(5),lo=lon(i).toFixed(5),ds=dateStr(i),dd=new Date(ds+'T00:00:00Z');
+  const sh=n=>new Date(dd.getTime()+n*864e5).toISOString().slice(0,10);
+  const wv=`https://worldview.earthdata.nasa.gov/?v=${(+lo-0.25).toFixed(3)},${(+la-0.18).toFixed(3)},${(+lo+0.25).toFixed(3)},${(+la+0.18).toFixed(3)}&t=${ds}-T18:00:00Z&l=Reference_Labels_15m,Reference_Features_15m,VIIRS_SNPP_Thermal_Anomalies_375m_All,MODIS_Aqua_Thermal_Anomalies_All,MODIS_Terra_Thermal_Anomalies_All,${D.y[i]>=12?'VIIRS_SNPP_CorrectedReflectance_TrueColor':'MODIS_Aqua_CorrectedReflectance_TrueColor'}`;
+  const eo=`https://apps.sentinel-hub.com/eo-browser/?zoom=14&lat=${la}&lng=${lo}&datasetId=S2L2A&fromTime=${sh(-20)}T00:00:00.000Z&toTime=${sh(20)}T23:59:59.999Z`;
+  const ge=`https://earth.google.com/web/@${la},${lo},400a,2500d,35y,0h,0t,0r`;
+  $('links').innerHTML=
+    `<a href="${wv}" target="_blank" rel="noopener">🛰 NASA Worldview<span>imagen del mismo día</span></a>`+
+    `<a href="${eo}" target="_blank" rel="noopener">🌍 EO Browser (Sentinel-2)<span>${D.y[i]>=15?'±20 días':'solo desde 2015'}</span></a>`+
+    `<a href="${ge}" target="_blank" rel="noopener">🌐 Google Earth<span>alta resolución</span></a>`;
+  document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('sel',b.dataset.l===L0.l));
+  renderWhy(L0.l||'fuego',L0.r||[]);
+  $('note').value=L0.n||'';
+  drawPoint(i);stats();
+}
+function renderWhy(l,sel){
+  const opts=[...new Set([...(REASONS[l]||[]),...sel])];
+  $('why').innerHTML=opts.map(r=>`<span class="chip${sel.includes(r)?' on':''}">${r}</span>`).join('');
+  $('why').querySelectorAll('.chip').forEach(c=>c.onclick=()=>{
+    const i=S[cur];labels[i]=labels[i]||{l:null,r:[],n:''};
+    const set=new Set(labels[i].r||[]);set.has(c.textContent)?set.delete(c.textContent):set.add(c.textContent);
+    labels[i].r=[...set];labels[i].t=new Date().toISOString();save();c.classList.toggle('on');});
+}
+function stats(){
+  const v=S.map(i=>labels[i]&&labels[i].l).filter(Boolean),c={fuego:0,falso:0,duda:0};v.forEach(l=>c[l]++);
+  const n=S.length;
+  $('bar').innerHTML=`<i style="width:${100*c.fuego/n}%;background:var(--ok)"></i><i style="width:${100*c.falso/n}%;background:var(--bad)"></i><i style="width:${100*c.duda/n}%;background:var(--doubt)"></i>`;
+  $('counts').innerHTML=`<b>${v.length}</b>/${n} · <span style="color:var(--ok)">✓ ${c.fuego}</span> · <span style="color:var(--bad)">✗ ${c.falso}</span> · <span style="color:#b08000">? ${c.duda}</span>`;
+}
+function setLabel(l){
+  const i=S[cur],prev=labels[i]||{};
+  labels[i]={l,r:prev.l===l?(prev.r||[]):(prev.r||[]).filter(r=>(REASONS[l]||[]).includes(r)),n:$('note').value.trim(),t:new Date().toISOString()};
+  save();
+  if($('auto').checked&&cur<S.length-1){go(cur+1);toast({fuego:'✓ Fuego real',falso:'✗ Falso positivo',duda:'? Duda'}[l]+' guardado');}
+  else render();
+}
+function go(k){cur=Math.max(0,Math.min(S.length-1,k));try{localStorage.setItem(KEY+'_pos',cur);}catch(e){}render();}
+
+/* ---------- exportar / importar ---------- */
+function exportCSV(){
+  const cols=['id','etiqueta','motivos','nota','fecha_etiqueta','sensor','satelite','fecha','hora_utc','latitud','longitud','confianza','frp_mw','tipo_firms','municipio','repeticiones_pixel','vecinos_5km_mismo_dia'];
+  const q=v=>{v=String(v??'');return /[;"\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
+  const lines=[cols.join(';')];
+  for(const i of S){const L0=labels[i];if(!L0||!L0.l)continue;const hm=String(D.hm[i]).padStart(4,'0');
+    lines.push([i,L0.l,(L0.r||[]).join(' | '),L0.n||'',L0.t||'',D.s[i]?'VIIRS':'MODIS',SAT[D.sat[i]],dateStr(i),hm.slice(0,2)+':'+hm.slice(2),
+      lat(i).toFixed(5).replace('.',','),lon(i).toFixed(5).replace('.',','),CONF[D.c[i]],(D.f[i]/10).toFixed(1).replace('.',','),TYPE[D.t[i]],D.mpios[D.m[i]].n,REP[i],NEI[i]].map(q).join(';'));}
+  if(lines.length===1){toast('Aún no hay etiquetas para exportar');return;}
+  const blob=new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`etiquetas_hotspots_${new Date().toISOString().slice(0,10)}.csv`;a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast(`Exportadas ${lines.length-1} etiquetas`);
+}
+function parseCSVLine(s){const out=[];let cur='',q=false;for(let k=0;k<s.length;k++){const ch=s[k];
+  if(q){if(ch==='"'&&s[k+1]==='"'){cur+='"';k++;}else if(ch==='"')q=false;else cur+=ch;}
+  else if(ch==='"')q=true;else if(ch===';'){out.push(cur);cur='';}else cur+=ch;}out.push(cur);return out;}
+$('imp').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{
+  const rows=r.result.replace(/^﻿/,'').split(/\r?\n/).filter(Boolean),h=parseCSVLine(rows[0]);
+  const ci=h.indexOf('id'),cl=h.indexOf('etiqueta'),cm=h.indexOf('motivos'),cn=h.indexOf('nota'),ct=h.indexOf('fecha_etiqueta');
+  if(ci<0||cl<0){toast('El CSV no tiene columnas id y etiqueta');return;}
+  let n=0;rows.slice(1).forEach(line=>{const c=parseCSVLine(line),id=+c[ci],l=c[cl];
+    if(!['fuego','falso','duda'].includes(l)||!(id>=0&&id<N))return;
+    labels[id]={l,r:cm>=0&&c[cm]?c[cm].split(' | '):[],n:cn>=0?c[cn]:'',t:ct>=0?c[ct]:''};n++;});
+  save();render();toast(`Importadas ${n} etiquetas`);e.target.value='';};r.readAsText(f,'utf-8');};
+
+/* ---------- eventos ---------- */
+function bind(){
+  document.querySelectorAll('.lb').forEach(b=>b.onclick=()=>setLabel(b.dataset.l));
+  $('prev').onclick=()=>go(cur-1);$('next').onclick=()=>go(cur+1);
+  $('pendBtn').onclick=()=>{for(let k=1;k<=S.length;k++){const j=(cur+k)%S.length;if(!(labels[S[j]]&&labels[S[j]].l))return go(j);}toast('¡Todo etiquetado! Exporta el CSV');};
+  $('expBtn').onclick=exportCSV;
+  $('note').addEventListener('input',()=>{const i=S[cur];labels[i]=labels[i]||{l:null,r:[],n:''};labels[i].n=$('note').value;save();});
+  $('helpBtn').onclick=()=>$('help').classList.add('on');$('helpClose').onclick=()=>$('help').classList.remove('on');
+  addEventListener('keydown',e=>{if(e.target.tagName==='TEXTAREA'||e.target.tagName==='INPUT')return;
+    if(e.key==='1')setLabel('fuego');else if(e.key==='2')setLabel('falso');else if(e.key==='3')setLabel('duda');
+    else if(e.key==='ArrowRight')go(cur+1);else if(e.key==='ArrowLeft')go(cur-1);else if(e.key==='Escape')$('help').classList.remove('on');});
+}
+
+fetch('data/hotspots.json').then(r=>{if(!r.ok)throw 0;return r.json();}).then(j=>{
+  D=j;N=D.meta.n;load();features();S=sample();initMap();bind();
+  let p=0;try{p=+localStorage.getItem(KEY+'_pos')||0;}catch(e){}
+  go(p);
+  try{if(!localStorage.getItem(KEY+'_help')){$('help').classList.add('on');localStorage.setItem(KEY+'_help','1');}}catch(e){$('help').classList.add('on');}
+  window.__lab={S,labels,REP,NEI};
+}).catch(()=>{$('map').innerHTML='<p style="padding:20px">No se pudo cargar data/hotspots.json. Abre esta página desde GitHub Pages o con python -m http.server.</p>';});
+})();
+</script>
+</body>
+</html>
