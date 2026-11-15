@@ -1,3 +1,4 @@
+# AI-assisted code: written with Anthropic Claude under the direction of the GeoElectronic team, reviewed and tested by the team.
 """Area de interes (AOI) compartida por download_firms.py y harmonize.py.
 
 Piloto: departamento del Tolima (Colombia). Es un rectangulo que lo contiene con un

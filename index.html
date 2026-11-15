@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tolima Burn Calendar · GeoElectronic</title>
 <meta name="description" content="26 years of harmonized MODIS + VIIRS active fires in one burning calendar for Tolima, Colombia. NASA Space Apps Challenge 2026.">
+<meta name="ai-assistance" content="Code, text, SVG illustrations (Sati mascot, intro and explainer animation) and data-processing scripts were written with the assistance of an AI tool (Anthropic Claude). Sati's voice is AI-generated speech (Microsoft neural TTS, en-US-JennyNeural, via edge-tts). All fire, imagery and climate data are real observations from NASA, USGS, ESA/Copernicus, NOAA and DANE.">
+<meta name="generator" content="Hand-directed by the GeoElectronic team; AI-assisted (Anthropic Claude)">
 <link rel="icon" href="assets/logo.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -206,6 +208,9 @@ footer .lg{width:110px;height:72px;border-radius:12px;background:#fff center/con
 #fontPick select{border:0;background:var(--soft);color:var(--ink);border-radius:99px;padding:5px 8px;font-size:12px}
 @media (prefers-reduced-motion:reduce){.mascot,#guide .mini{animation:none}.pane{animation:none}}
 
+/* ---------- marcas de IA (requisito Space Apps) ---------- */
+.aiwm{position:absolute;z-index:4;pointer-events:none;font:700 10.5px/1 var(--font),sans-serif;letter-spacing:.04em;color:rgba(255,255,255,.85);background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.35);border-radius:99px;padding:4px 8px}
+.aiwm.dark{color:var(--ink2);background:color-mix(in srgb,var(--surface) 80%,transparent);border-color:var(--line)}
 /* ---------- intro ---------- */
 #intro{position:fixed;inset:0;z-index:5000;overflow:hidden;color:#fff;font-family:var(--font),sans-serif;
   background:radial-gradient(ellipse at 50% 120%,#123a7a 0%,#0b2a5b 35%,#050b1a 75%);transition:opacity .9s ease,transform .9s ease}
@@ -404,6 +409,7 @@ body.intro-on{overflow:hidden}
     <rect x="76" y="62" width="48" height="36" rx="12" fill="#fff"/><ellipse class="eye" cx="90" cy="80" rx="5" ry="6.5" fill="#0b2a5b"/><ellipse class="eye" cx="110" cy="80" rx="5" ry="6.5" fill="#0b2a5b"/>
     <path d="M93 89Q100 95 107 89" stroke="#e8590c" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="100" cy="30" r="7" fill="#ff922b"/><path d="M100 52V36" stroke="#dbe4ff" stroke-width="3"/></svg></div>
   <button class="skip" id="skipIntro">Skip intro →</button>
+  <span class="aiwm" style="left:16px;top:20px">✦ AI-generated illustration &amp; animation</span>
   <div class="intro-c">
     <div class="intro-logo" role="img" aria-label="GeoElectronic"></div>
     <div class="scenes">
@@ -421,12 +427,13 @@ body.intro-on{overflow:hidden}
 <nav><div class="wrap">
   <a class="brand" href="#top"><span class="lg" role="img" aria-label="GeoElectronic logo"></span>Burn Calendar</a>
   <div id="fontPick" title="Typeface"><b>Aa</b><select id="fontSel"><option>Inter</option><option>Manrope</option><option>Space Grotesk</option><option>DM Sans</option><option>IBM Plex Sans</option><option>Outfit</option></select></div>
-  <div class="links"><a href="#" id="navHow">▶ How it works</a><a href="#tablero">Dashboard</a><a href="#metodo">Method</a><a href="#validacion">Validation</a><a href="#refs">References</a></div>
+  <div class="links"><a href="#" id="navHow">▶ How it works</a><a href="#tablero">Dashboard</a><a href="#metodo">Method</a><a href="#validacion">Validation</a><a href="#refs">References</a><a href="#ai">AI use</a></div>
 </div></nav>
 
 <header class="hero" id="top"><div class="wrap">
   <div class="hero-grid">
-    <svg class="mascot" viewBox="0 0 200 200" aria-label="Sati, the guide satellite">
+    <div style="position:relative"><span class="aiwm dark" style="left:0;bottom:-6px;font-size:9px">✦ AI-generated</span>
+    <svg class="mascot" viewBox="0 0 200 200" aria-label="Sati, the guide satellite (AI-generated illustration)">
       <defs><linearGradient id="pnl" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ff922b"/><stop offset="1" stop-color="#e8590c"/></linearGradient>
       <radialGradient id="bm" cx=".5" cy="0" r="1"><stop offset="0" stop-color="#f59f00"/><stop offset="1" stop-color="#f59f00" stop-opacity="0"/></radialGradient></defs>
       <polygon class="beam" points="88,128 112,128 150,200 50,200" fill="url(#bm)"/>
@@ -438,7 +445,7 @@ body.intro-on{overflow:hidden}
       <circle cx="92" cy="77.5" r="1.6" fill="#fff"/><circle cx="112" cy="77.5" r="1.6" fill="#fff"/>
       <path d="M93 89Q100 95 107 89" stroke="#e8590c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
       <circle cx="100" cy="116" r="8" fill="#0b2a5b" stroke="#ff922b" stroke-width="3"/>
-    </svg>
+    </svg></div>
     <div>
       <span class="eyebrow"><span class="pulse"></span>NASA Space Apps 2026 · Tolima, Colombia</span>
       <h1>26 years of fire, <span class="grad">one single calendar.</span></h1>
@@ -533,6 +540,7 @@ body.intro-on{overflow:hidden}
 
         <div class="pane" id="p-inc">
           <div class="ph"><div><h3>Fire events</h3><p>The most intense fires in the selected period and zone (hotspots grouped within ≤ 1.5 km and ≤ 2 days; industrial and persistent heat sources removed). Tap one to see it on the map.</p></div></div>
+          <div class="hint" id="fpBar" style="display:none;margin:0 0 10px"></div>
           <div class="firelist" id="fireList"></div>
         </div>
         <div class="pane" id="p-crit">
@@ -607,13 +615,46 @@ body.intro-on{overflow:hidden}
    <li>Servicio Geológico Colombiano — Nevado del Ruiz volcano activity bulletins. <a href="https://www.sgc.gov.co/volcanes" target="_blank" rel="noopener">sgc.gov.co/volcanes</a></li>
    <li>Base map © OpenStreetMap contributors (ODbL). Sati's voice: Microsoft neural voice (en-US, Jenny) generated with edge-tts. Map library: Leaflet 1.9.4.</li>
   </ol>
+  <h4>Burn severity and spectral indices (quarterly series, dNBR)</h4>
+  <ol start="19">
+   <li>Rouse, J.W., Haas, R.H., Schell, J.A., Deering, D.W. (1973). Monitoring vegetation systems in the Great Plains with ERTS. <i>Third ERTS Symposium</i>, NASA SP-351 I, 309–317 — NDVI.</li>
+   <li>López-García, M.J., Caselles, V. (1991). Mapping burns and natural reforestation using Thematic Mapper data. <i>Geocarto International</i> 6(1), 31–37 — NBR. <a href="https://doi.org/10.1080/10106049109354290" target="_blank" rel="noopener">doi:10.1080/10106049109354290</a></li>
+   <li>Parks, S.A., Dillon, G.K., Miller, C. (2014). A new metric for quantifying burn severity: the Relativized Burn Ratio. <i>Remote Sensing</i> 6(3), 1827–1844. <a href="https://doi.org/10.3390/rs6031827" target="_blank" rel="noopener">doi:10.3390/rs6031827</a></li>
+   <li>Parks, S.A., Holsinger, L.M., Voss, M.A., Loehman, R.A., Robinson, N.P. (2018). Mean composite fire severity metrics computed with Google Earth Engine offer improved accuracy and expanded mapping potential. <i>Remote Sensing</i> 10(6), 879. <a href="https://doi.org/10.3390/rs10060879" target="_blank" rel="noopener">doi:10.3390/rs10060879</a></li>
+   <li>Saulino, L., Rita, A., Migliozzi, A., Maffei, C., Allevato, E., Garonna, A.P., Saracino, A. (2020). Detecting burn severity across Mediterranean forest types by coupling medium-spatial resolution satellite imagery and field data. <i>Remote Sensing</i> 12(4), 741. <a href="https://doi.org/10.3390/rs12040741" target="_blank" rel="noopener">doi:10.3390/rs12040741</a></li>
+   <li>van Gerrevink, M.J., Veraverbeke, S. (2021). Evaluating the hyperspectral sensitivity of the differenced Normalized Burn Ratio for assessing fire severity. <i>Remote Sensing</i> 13(22), 4611. <a href="https://doi.org/10.3390/rs13224611" target="_blank" rel="noopener">doi:10.3390/rs13224611</a></li>
+   <li>Smichowski, H., Contreras, F.I. (2024). Application of Google Earth Engine in the preliminary analysis of fire severity in the Iberá National Park and Reserve, Argentina. <i>Rev. U.D.C.A Act. &amp; Div. Cient.</i> 27(1), e2464. <a href="https://doi.org/10.31910/rudca.v27.n1.2024.2464" target="_blank" rel="noopener">doi:10.31910/rudca.v27.n1.2024.2464</a></li>
+   <li>He, K., Shen, X., Anagnostou, E.N. (2024). A global forest burn severity dataset from Landsat imagery (2003–2016). <i>Earth System Science Data</i> 16(6), 3061–3081. <a href="https://doi.org/10.5194/essd-16-3061-2024" target="_blank" rel="noopener">doi:10.5194/essd-16-3061-2024</a></li>
+   <li>Ghazali, N.N., Saraf, N.M., Rasam, A.R.A., Othman, A.N., Salleh, S.A., Saad, N.M. (2025). Forest fire severity level using dNBR spectral index. <i>Revue Internationale de Géomatique</i> 34(1), 89–101. <a href="https://doi.org/10.32604/rig.2025.057562" target="_blank" rel="noopener">doi:10.32604/rig.2025.057562</a></li>
+   <li>Han, L., Liu, Y., Wang, Q., Long, T., Lu, N., Wang, L., Xu, W. (2026). An improved framework for forest fire severity assessment in mountainous areas based on the dNBR index: a case study from central Yunnan, China. <i>Remote Sensing</i> 18(8), 1118. <a href="https://doi.org/10.3390/rs18081118" target="_blank" rel="noopener">doi:10.3390/rs18081118</a></li>
+   <li>UN-SPIDER. Normalized Burn Ratio (NBR) — recommended practice for burn severity. Accessed 6 Oct 2026. <a href="https://un-spider.org/advisory-support/recommended-practices/recommended-practice-burn-severity/in-detail/normalized-burn-ratio" target="_blank" rel="noopener">un-spider.org</a></li>
+   <li>Geodesta. Google Earth Engine. Accessed 6 Oct 2026. <a href="https://geodesta.com/google-earth-engine/" target="_blank" rel="noopener">geodesta.com</a></li>
+   <li>GIS&amp;Beers. Análisis de severidad de incendios NBR en Google Earth Engine. Accessed 6 Oct 2026. <a href="https://www.gisandbeers.com/analisis-severidad-de-incendios-nbr-google-earth-engine/" target="_blank" rel="noopener">gisandbeers.com</a></li>
+   <li>GIS&amp;Beers. Análisis de la severidad de incendios a través del índice NBR. Accessed 6 Oct 2026. <a href="https://www.gisandbeers.com/analisis-severidad-incendios-indice-nbr/" target="_blank" rel="noopener">gisandbeers.com</a></li>
+  </ol>
+  </div>
+</div></section>
+
+<section class="block" id="ai" style="padding-top:0"><div class="wrap">
+  <p class="kicker">Transparency</p>
+  <h2>Use of AI (SI) tools in this project</h2>
+  <div class="card" style="padding:16px 20px;font-size:13px;color:var(--ink2);max-width:900px">
+   <p style="margin-top:0">We used an AI assistant (<b>Anthropic Claude</b>) under the direction of the GeoElectronic team. Everything AI-assisted is marked with <span class="aiwm dark" style="position:static;display:inline-block">✦ AI</span> labels on the page and in file metadata.</p>
+   <ul style="margin:0;padding-left:18px;line-height:1.6">
+    <li><b>Images and animation:</b> the Sati mascot, the intro scene and the 7-step explainer animation are SVG drawn with AI assistance; each carries a visible “AI-generated” watermark. Satellite images are <i>not</i> AI-generated: they are real NASA/USGS Landsat, Copernicus Sentinel-2, NASA HLS and Esri observations.</li>
+    <li><b>Audio:</b> Sati’s voice is AI-generated speech (Microsoft neural text-to-speech, voice en-US-JennyNeural, via the open-source edge-tts library). Each MP3 carries this statement in its ID3 metadata (title/comment), and <code>audio/sati/ABOUT.md</code> describes it.</li>
+    <li><b>Code:</b> the web app (<code>index.html</code>) and the Python pipeline (<code>pipeline/*.py</code>) were written with AI assistance and reviewed and tested by the team; each file states it in a header comment and in a <code>meta name="ai-assistance"</code> tag.</li>
+    <li><b>Data:</b> the hotspots, imagery and climate values are real, unmodified observations (NASA FIRMS, Landsat, Sentinel-2, NOAA, DANE). The derived products (harmonized series, fire events, quarterly composites, industry catalog) were computed by AI-assisted scripts; their JSON metadata include an <code>ai_assisted</code> flag. Industry descriptions were researched with AI assistance and cite their sources.</li>
+    <li><b>Text:</b> interface texts, Sati’s messages and the explainer narration were drafted with AI assistance and checked against the cited references.</li>
+    <li>No NASA logos, insignia, flags or mission identifiers were generated or modified.</li>
+   </ul>
   </div>
 </div></section>
 
 <footer><div class="wrap">
   <span class="lg" role="img" aria-label="GeoElectronic logo"></span>
   <div><b style="color:var(--ink)">GeoElectronic</b> · NASA Space Apps Challenge 2026<br>
-  Data: NASA FIRMS (LANCE/EOSDIS) · NASA GIBS (HLS, MODIS) · USGS/NASA Landsat · Copernicus Sentinel-2 · NOAA CPC · DANE. Full list in <a href="#refs">References</a>.</div>
+  Data: NASA FIRMS (LANCE/EOSDIS) · NASA GIBS (HLS, MODIS) · USGS/NASA Landsat · Copernicus Sentinel-2 · NOAA CPC · DANE. Full list in <a href="#refs">References</a>. ✦ Built with AI assistance (Anthropic Claude) — see <a href="#ai">AI use</a>.</div>
 </div></footer>
 
 <div id="howto" role="dialog" aria-label="How it works">
@@ -749,7 +790,7 @@ body.intro-on{overflow:hidden}
  <g class="fx d1"><text x="400" y="300" text-anchor="middle" style="font-size:30px;font-weight:800">Now it's your turn!</text></g>
  <g class="fx d2"><text x="400" y="330" text-anchor="middle" class="sub" style="font-size:14px">26 years of fire in Tolima, in one single calendar.</text></g>
 </g>
-</svg><div class="caption" id="hwCap"></div></div>
+</svg><span class="aiwm" style="right:10px;top:10px">✦ AI-generated animation · AI voice</span><div class="caption" id="hwCap"></div></div>
   <div class="hw-ctl">
    <button id="hwPrev" aria-label="Previous">◀</button><button id="hwPlay" aria-label="Pause">⏸</button><button id="hwNext" aria-label="Next">▶</button>
    <div class="hdots" id="hwDots"></div>
@@ -761,7 +802,7 @@ body.intro-on{overflow:hidden}
 <div id="tt"></div>
 
 <div id="guide">
-  <button id="guideMute" title="Turn Sati's voice on or off" style="pointer-events:auto;align-self:flex-start;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;width:34px;height:34px;cursor:pointer;font-size:15px;box-shadow:0 4px 12px rgba(0,0,0,.15)">🔊</button>
+  <button id="guideMute" title="Turn Sati's voice on or off (AI-generated voice)" style="pointer-events:auto;align-self:flex-start;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;width:34px;height:34px;cursor:pointer;font-size:15px;box-shadow:0 4px 12px rgba(0,0,0,.15)">🔊</button>
   <div class="bubble" id="guideText">Hi! I'm <b>Sati</b>. Pick a year above and explore the map and the charts.</div>
   <svg class="mini" viewBox="60 20 80 120" id="guideBot" aria-hidden="true">
     <path d="M100 52V36" stroke="#0b2a5b" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="32" r="6" fill="#e8590c"/>
@@ -774,6 +815,7 @@ body.intro-on{overflow:hidden}
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+/* AI-assisted code: written with Anthropic Claude under the direction of the GeoElectronic team (see #ai section). */
 /* ---------- explicación animada con voz ---------- */
 (function(){
   const SC=[
@@ -1640,7 +1682,7 @@ function firePopup(k){
       <tr><th>Climate</th><td>${clima}</td></tr>
     </table>
     <div class="note">Severity = total fire radiative power ranked against all Tolima fires 2000–2025 (P50/P80/P95). Footprint estimated from satellite pixels (VIIRS ≈ 14 ha, MODIS ≈ 100 ha): the real burned area is usually smaller. Land cover: NASA MODIS map of the previous year.</div>
-    <div class="btns"><button data-fz="${k}">🔍 Show its hotspots</button>${canCmp?`<button class="alt" data-cmp="${k}">↔ Before / after</button>`:''}</div></div>`;
+    <div class="btns"><button data-fz="${k}">🔍 Show its hotspots</button><button data-fp="${k}" style="background:#6b7280">⚑ False positive</button>${canCmp?`<button class="alt" data-cmp="${k}">↔ Before / after</button>`:''}</div></div>`;
 }
 function drawFires(){
   const fc=$('fireCount');
@@ -1728,13 +1770,24 @@ function stopCompare(){
   ['cmpA','cmpB'].forEach(n=>{const p=map.getPane(n);if(p){p.style.clip='';p.style.filter='';}});
   CMP=null;syncBase();if(S.fires&&fireLayer)fireLayer.addTo(map);
 }
+// lista de falsos positivos marcados a mano (se guarda en el navegador y se descarga como data/falsos_positivos.json)
+function fpGet(){try{return JSON.parse(localStorage.getItem('fpList')||'[]');}catch(e){return [];}}
+function fpSet(l){try{localStorage.setItem('fpList',JSON.stringify(l));}catch(e){}fpBar();}
+function fpBar(){const b=$('fpBar');if(!b)return;const l=fpGet();b.style.display=l.length?'flex':'none';
+  b.innerHTML=`⚑ <span>${l.length} fire${l.length>1?'s':''} marked as false positive. <a href="#" id="fpDl">Download falsos_positivos.json</a> · <a href="#" id="fpClr">Clear</a></span>`;
+  const dl=$('fpDl');if(dl)dl.onclick=e=>{e.preventDefault();const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(fpGet(),null,1)],{type:'application/json'}));a.download='falsos_positivos.json';a.click();};
+  const cl=$('fpClr');if(cl)cl.onclick=e=>{e.preventDefault();fpSet([]);};}
 function initFires(){
   fireLayer=L.layerGroup();
   fetch('data/incendios.json').then(r=>r.ok?r.json():null).then(j=>{INC=j;drawFires();}).catch(()=>{});
   $('fireBtn').onclick=()=>toggleFires();
   map.on('popupopen',e=>{const el=e.popup.getElement();if(!el)return;
     const b=el.querySelector('[data-fz]');if(b)b.onclick=()=>{const k=+b.dataset.fz;toggleFires(false);setRange(INC.d0[k],INC.d1[k]);map.flyTo([INC.lat[k],INC.lon[k]],13,{duration:.8});};
-    const c=el.querySelector('[data-cmp]');if(c)c.onclick=()=>startCompare(+c.dataset.cmp);});
+    const c=el.querySelector('[data-cmp]');if(c)c.onclick=()=>startCompare(+c.dataset.cmp);
+    const fp=el.querySelector('[data-fp]');if(fp)fp.onclick=()=>{const k=+fp.dataset.fp,L0=fpGet();
+      if(!L0.some(x=>Math.abs(x.lat-INC.lat[k])<1e-5&&Math.abs(x.lon-INC.lon[k])<1e-5))L0.push({lat:INC.lat[k],lon:INC.lon[k],radio_km:1,date:iso(INC.d0[k]),municipality:D.mpios[INC.m[k]].n,reason:''});
+      fpSet(L0);fp.textContent='✓ Marked';say(`Marked as a <b>false positive</b>. You have ${L0.length} marked; download the list from the <b>Fires</b> tab.`,'False positive',6000);};});
+  fpBar();
 }
 
 /* ---------- eventos ---------- */

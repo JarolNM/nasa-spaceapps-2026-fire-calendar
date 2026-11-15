@@ -938,5 +938,7 @@
 -74.32622
 ]
 ],
-"metodo": "Mediana sin nubes por temporada (DEF, MAM, JJA, SON) de Landsat 5/7/8/9 y Sentinel-2, armonizados a Landsat 8 (Roy 2016; HLS). dNBR = NBR trimestre anterior − actual."
+"metodo": "Mediana sin nubes por temporada (DEF, MAM, JJA, SON) de Landsat 5/7/8/9 y Sentinel-2, armonizados a Landsat 8 (Roy 2016; HLS). dNBR = NBR trimestre anterior − actual.",
+"ai_assisted": true,
+"ai_note": "Derived product computed by scripts written with AI assistance (Anthropic Claude) and reviewed by the GeoElectronic team. Source observations are real, unmodified data."
 }

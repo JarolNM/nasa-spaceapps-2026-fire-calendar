@@ -1,3 +1,4 @@
+# AI-assisted code: written with Anthropic Claude under the direction of the GeoElectronic team, reviewed and tested by the team.
 """Recorta la grilla al Tolima usando el GeoPackage de municipios del DANE (MGN).
 
 Uso:   python pipeline/tolima_mask.py RUTA/AL/ARCHIVO.gpkg

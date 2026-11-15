@@ -1,3 +1,4 @@
+# AI-assisted code: written with Anthropic Claude under the direction of the GeoElectronic team, reviewed and tested by the team.
 """Genera la voz natural de Sati (MP3) a partir de audio/sati/textos.json.
 
 Uso:  pip install edge-tts

@@ -1,3 +1,4 @@
+# AI-assisted code: written with Anthropic Claude under the direction of the GeoElectronic team, reviewed and tested by the team.
 """Agrupa hotspots en incendios (eventos) y les asigna cobertura, severidad y área aproximada.
 
 Uso:  python pipeline/incendios.py
@@ -165,9 +166,19 @@ def main():
         e["cob"] = c if c is not None else -1
         if k % 2000 == 0:
             print(k, "…")
+    # fuera eventos sobre zona urbana (IGBP 13): en el Tolima son hornos, ladrilleras y molinos, no incendios
+    n_urb = sum(e["cob"] == 13 for e in ev)
+    ev = [e for e in ev if e["cob"] != 13]
+    # fuera eventos en la lista revisada a mano (data/falsos_positivos.json: [{"lat","lon","radio_km","motivo"}])
+    fp_path = Path("data/falsos_positivos.json")
+    FP = json.loads(fp_path.read_text(encoding="utf-8")) if fp_path.exists() else []
+    n_fp = len(ev)
+    ev = [e for e in ev if not any(km(e["lat"], e["lon"], f["lat"], f["lon"]) <= f.get("radio_km", 1.0) for f in FP)]
+    n_fp -= len(ev)
+    print(f"quitados: {n_urb} sobre zona urbana, {n_fp} de la lista revisada a mano")
     cols = ["lat", "lon", "d0", "d1", "n", "nv", "frp", "frpmax", "area", "m", "sev", "cob"]
     out = {"meta": {"metodo": "≤1.5 km and ≤2 days; nominal/high confidence; excluding fixed industrial sources (catalog radius) and persistent thermal anomalies (≥4 years, ≥8 days)",
-                    "excl_fuente": len(sacF), "excl_persistente": len(sacP), "p50": p50, "p80": p80, "p95": p95,
+                    "excl_fuente": len(sacF), "excl_persistente": len(sacP), "excl_urbano": n_urb, "excl_revisados": n_fp, "ai_assisted": True, "p50": p50, "p80": p80, "p95": p95,
                     "igbp": IGBP, "grupo": GRUPO, "cols": cols},
            **{c: [e[c] for e in ev] for c in cols}}
     Path("data/incendios.json").write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")

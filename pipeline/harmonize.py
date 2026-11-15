@@ -1,3 +1,4 @@
+# AI-assisted code: written with Anthropic Claude under the direction of the GeoElectronic team, reviewed and tested by the team.
 """Armoniza MODIS y VIIRS: calibra MODIS contra VIIRS en el solapamiento y
 exporta data/harmonized.json para la web.
 

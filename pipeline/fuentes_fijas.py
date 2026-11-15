@@ -1,3 +1,4 @@
+# AI-assisted code: written with Anthropic Claude under the direction of the GeoElectronic team, reviewed and tested by the team.
 """Catálogo de industrias y fuentes fijas del Tolima para el mapa (data/fuentes_fijas.json).
 
 Uso:  python pipeline/fuentes_fijas.py

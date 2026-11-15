@@ -1,3 +1,4 @@
+# AI-assisted code: written with Anthropic Claude under the direction of the GeoElectronic team, reviewed and tested by the team.
 """Serie histórica trimestral (por temporada) de imágenes del Tolima, 2000–2025, con Google Earth Engine.
 
 Uso (una sola vez):  earthengine authenticate      (cuenta Google con Earth Engine habilitado)
@@ -216,6 +217,7 @@ def main():
                 hechos.add(tid)
                 idx["items"] = sorted((json.loads(f.read_text(encoding="utf-8")) for f in IT.glob("*.json")), key=lambda i: (i["y"], i["t"]))
                 idx["bounds"] = [[BBOX[1], BBOX[0]], [BBOX[3], BBOX[2]]]
+                idx["ai_assisted"] = True
                 idx["metodo"] = ("Mediana sin nubes por temporada (DEF, MAM, JJA, SON) de Landsat 5/7/8/9 y Sentinel-2, "
                                  "armonizados a Landsat 8 (Roy 2016; HLS). dNBR = NBR trimestre anterior − actual.")
                 idx_path.write_text(json.dumps(idx, ensure_ascii=False, indent=0), encoding="utf-8")

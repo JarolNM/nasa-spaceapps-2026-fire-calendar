@@ -1,3 +1,4 @@
+# AI-assisted code: written with Anthropic Claude under the direction of the GeoElectronic team, reviewed and tested by the team.
 """Exporta cada hotspot del Tolima (resolucion nativa) para la web.
 
 Uso:    python pipeline/points.py RUTA/AL/TOLIMA.gpkg

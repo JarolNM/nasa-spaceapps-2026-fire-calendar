@@ -1,3 +1,4 @@
+# AI-assisted code: written with Anthropic Claude under the direction of the GeoElectronic team, reviewed and tested by the team.
 """Nubosidad diurna diaria sobre el Tolima (MODIS Terra Cloud Fraction Day, NASA GIBS) -> data/nubes.json.
 Uso: python pipeline/nubes.py CARPETA_CON_cf_cmap.xml data/nubes.json
 (cf_cmap.xml = https://gibs.earthdata.nasa.gov/colormaps/v1.3/MODIS_Cloud_Fraction.xml)"""

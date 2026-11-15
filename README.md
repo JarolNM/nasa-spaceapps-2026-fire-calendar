@@ -76,3 +76,27 @@ Compared with Perea-Ardila & Murillo-Sandoval, *Forest fire trends in Tolima* (C
 12. DANE — Marco Geoestadístico Nacional; IDEAM — Colombian climate atlas; Servicio Geológico Colombiano.
 13. Perea-Ardila, M.A., Murillo-Sandoval, P.J. CERE Regional Note 21, University of Tolima.
 14. Sentinel-2 cloudless © EOX IT Services GmbH (CC BY-NC-SA 4.0); Esri World Imagery Wayback; © OpenStreetMap contributors.
+
+### Burn severity and spectral indices
+19. Rouse, J.W., Haas, R.H., Schell, J.A., Deering, D.W. (1973). Monitoring vegetation systems in the Great Plains with ERTS. Third ERTS Symposium, NASA SP-351 I, 309–317 — NDVI.
+20. López-García, M.J., Caselles, V. (1991). Mapping burns and natural reforestation using Thematic Mapper data. Geocarto International 6(1), 31–37 — NBR. doi:10.1080/10106049109354290
+21. Parks, S.A., Dillon, G.K., Miller, C. (2014). A new metric for quantifying burn severity: the Relativized Burn Ratio. Remote Sensing 6(3), 1827–1844. doi:10.3390/rs6031827
+22. Parks, S.A., Holsinger, L.M., Voss, M.A., Loehman, R.A., Robinson, N.P. (2018). Mean composite fire severity metrics computed with Google Earth Engine offer improved accuracy and expanded mapping potential. Remote Sensing 10(6), 879. doi:10.3390/rs10060879
+23. Saulino, L., Rita, A., Migliozzi, A., Maffei, C., Allevato, E., Garonna, A.P., Saracino, A. (2020). Detecting burn severity across Mediterranean forest types by coupling medium-spatial resolution satellite imagery and field data. Remote Sensing 12(4), 741. doi:10.3390/rs12040741
+24. van Gerrevink, M.J., Veraverbeke, S. (2021). Evaluating the hyperspectral sensitivity of the differenced Normalized Burn Ratio for assessing fire severity. Remote Sensing 13(22), 4611. doi:10.3390/rs13224611
+25. Smichowski, H., Contreras, F.I. (2024). Application of Google Earth Engine in the preliminary analysis of fire severity in the Iberá National Park and Reserve, Argentina. Rev. U.D.C.A Act. & Div. Cient. 27(1), e2464. doi:10.31910/rudca.v27.n1.2024.2464
+26. He, K., Shen, X., Anagnostou, E.N. (2024). A global forest burn severity dataset from Landsat imagery (2003–2016). Earth System Science Data 16(6), 3061–3081. doi:10.5194/essd-16-3061-2024
+27. Ghazali, N.N., Saraf, N.M., Rasam, A.R.A., Othman, A.N., Salleh, S.A., Saad, N.M. (2025). Forest fire severity level using dNBR spectral index. Revue Internationale de Géomatique 34(1), 89–101. doi:10.32604/rig.2025.057562
+28. Han, L., Liu, Y., Wang, Q., Long, T., Lu, N., Wang, L., Xu, W. (2026). An improved framework for forest fire severity assessment in mountainous areas based on the dNBR index: a case study from central Yunnan, China. Remote Sensing 18(8), 1118. doi:10.3390/rs18081118
+29. UN-SPIDER. Normalized Burn Ratio (NBR) — recommended practice for burn severity. Accessed 6 Oct 2026. un-spider.org
+30. Geodesta. Google Earth Engine. Accessed 6 Oct 2026. geodesta.com
+31. GIS&Beers. Análisis de severidad de incendios NBR en Google Earth Engine. Accessed 6 Oct 2026. gisandbeers.com
+32. GIS&Beers. Análisis de la severidad de incendios a través del índice NBR. Accessed 6 Oct 2026. gisandbeers.com
+
+## Use of AI (SI) tools
+- **Assistant:** Anthropic Claude, used under the direction of the GeoElectronic team; all results were reviewed and tested by the team.
+- **Images / animation:** the Sati mascot, intro and 7-step explainer are AI-assisted SVG and carry a visible "✦ AI-generated" watermark. Satellite imagery is real (Landsat, Sentinel-2, NASA HLS, Esri), not AI-generated.
+- **Audio:** Sati's voice is AI-generated speech (Microsoft neural TTS en-US-JennyNeural via edge-tts); every MP3 has an ID3 disclosure (see `audio/sati/ABOUT.md`).
+- **Code:** `index.html`, `etiquetar.html` and `pipeline/*.py` are AI-assisted; each has a header comment or `meta name="ai-assistance"` tag.
+- **Data:** observations are real and unmodified (NASA FIRMS, USGS/NASA, Copernicus, NOAA, DANE); derived JSON files carry `"ai_assisted": true` in their metadata.
+- No NASA logos, insignia, flags or mission identifiers were generated or modified.

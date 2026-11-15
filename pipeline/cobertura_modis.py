@@ -1,3 +1,4 @@
+# AI-assisted code: written with Anthropic Claude under the direction of the GeoElectronic team, reviewed and tested by the team.
 """Mide en la imagen real MODIS Terra (NASA GIBS) de cada dia: % del Tolima con datos (sin franjas negras) y % de nubes.
 Uso: python pipeline/cobertura_modis.py data/nubes.json"""
 import json,math,io,sys,datetime as dt,urllib.request
