@@ -113,7 +113,7 @@ label.chk{font-size:13px;display:inline-flex;gap:5px;align-items:center;margin-r
   <p><b>Datos.</b> Hotspots de NASA FIRMS, productos estándar MODIS Collection 6.1 (Terra y Aqua, 1 km, desde 2000) y VIIRS S-NPP 375 m (desde 2012). Se eliminan duplicados exactos (sensor, posición, fecha y hora) y se recortan al Tolima con los límites municipales del DANE (MGN).</p>
   <p><b>Confianza.</b> VIIRS trae baja/nominal/alta. MODIS trae 0–100 y se agrupa como FIRMS: &lt;30 baja, 30–79 nominal, ≥80 alta. Por defecto se usan nominal y alta.</p>
   <p><b>Falsos positivos.</b> Se excluyen por defecto los hotspots que FIRMS marca como volcán activo (type 1, Nevado del Ruiz y Cerro Bravo), otra fuente fija terrestre (type 2, p. ej. industria en Ibagué y Espinal) o costa afuera (type 3).</p>
-  <p><b>Armonización.</b> En el solapamiento 2012–2025 se calcula k = Σ VIIRS / Σ MODIS por franja de latitud (norte/centro/sur) y mes, con los filtros activos y sobre todo el Tolima. La serie armonizada es MODIS×k antes de 2012 y VIIRS desde 2012. Anomalía z contra la climatología de cada semana (±1 semana).</p>
+  <p><b>Armonización.</b> En el solapamiento 2012–2025 se calcula k = Σ VIIRS / Σ MODIS por franja de latitud (norte/centro/sur) y mes, con los filtros activos y sobre todo el Tolima. La serie armonizada es MODIS×k antes de 2012 y VIIRS desde 2012. Anomalía z contra la climatología de cada semana (±1 semana), calculada por separado para la era MODIS (2001–2011) y la era VIIRS (2012–2025): escalar MODIS por k también amplifica su ruido, y mezclar ambas eras inflaría los extremos antes de 2012.</p>
   <p><b>Limitaciones.</b> Un hotspot es una detección térmica en el paso del satélite, no área quemada. Nubosidad y hora de paso influyen. k se supone constante en el tiempo. La huella dibujada es la nominal en el nadir; hacia los bordes de la pasada el píxel es mayor. El año 2000 está casi vacío porque el producto estándar MODIS apenas lo cubre.</p>
   <p><b>Créditos.</b> NASA FIRMS (LANCE/EOSDIS) · DANE, Marco Geoestadístico Nacional · Sentinel-2 cloudless 2020 © EOX IT Services GmbH (uso no comercial) · © OpenStreetMap.</p>
 </details>
@@ -179,16 +179,20 @@ function compute(){
   return {R,H,kg,K,ksel:sm>0?sv/sm:kg,nm,nsel,empty:nm===0};
 }
 
+// Anomalías por era de sensor: MODIS (2001–2011) y VIIRS (2012–2025) tienen cada una su
+// climatología. Así el ruido amplificado de MODIS×k no produce falsos extremos antes de 2012.
+// 2000 se omite (cobertura MODIS incompleta) y queda con z = 0.
+const ERAS=[[1,YV-Y0],[YV-Y0,NY]];
 function zscores(X){
   const z=new Float64Array(NY*NW);
-  for(let w=0;w<NW;w++){
+  for(const [ya,yb] of ERAS)for(let w=0;w<NW;w++){
     const w0=Math.max(0,w-1),w1=Math.min(NW-1,w+1);
     let s=0,n=0;
-    for(let y=0;y<NY;y++)for(let k=w0;k<=w1;k++){s+=X[y*NW+k];n++;}
+    for(let y=ya;y<yb;y++)for(let k=w0;k<=w1;k++){s+=X[y*NW+k];n++;}
     const m=s/n;let q=0;
-    for(let y=0;y<NY;y++)for(let k=w0;k<=w1;k++){const d=X[y*NW+k]-m;q+=d*d;}
+    for(let y=ya;y<yb;y++)for(let k=w0;k<=w1;k++){const d=X[y*NW+k]-m;q+=d*d;}
     const sd=Math.max(Math.sqrt(q/n),m*0.05+1e-9);
-    for(let y=0;y<NY;y++)z[y*NW+w]=(X[y*NW+w]-m)/sd;
+    for(let y=ya;y<yb;y++)z[y*NW+w]=(X[y*NW+w]-m)/sd;
   }
   return z;
 }
