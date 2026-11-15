@@ -37,7 +37,10 @@ details{margin-top:12px;font-size:13px;color:var(--mut)}
 label.chk{font-size:13px;display:inline-flex;gap:5px;align-items:center;margin-right:8px;cursor:pointer}
 .dot{width:11px;height:11px;border-radius:2px;display:inline-block;border:1px solid rgba(0,0,0,.35)}
 #period{font-size:13px;font-weight:600}
-.leaflet-popup-content{font-size:13px;line-height:1.4}
+.leaflet-popup-content{font-size:13px;line-height:1.4;margin:10px 12px}
+table.attr{border-collapse:collapse;min-width:220px}
+table.attr th{text-align:left;font-weight:600;color:#555;padding:3px 10px 3px 0;border-bottom:1px solid #eee;white-space:nowrap}
+table.attr td{padding:3px 0;border-bottom:1px solid #eee}
 </style>
 </head>
 <body>
@@ -249,7 +252,7 @@ function styleMpios(){
   for(let i=0;i<N;i++)if(D.s[i]===1&&passes(i))cnt[D.m[i]]++;
   const dens=D.mpios.map((m,k)=>cnt[k]/m.area),mx=Math.max(...dens)||1;
   mpLayers.forEach((l,k)=>{l.setStyle(mpioStyle(k,dens[k],mx));
-    l.setTooltipContent(`${D.mpios[k].n} · ${fmt(cnt[k])} hotspots VIIRS 2012–2025`);});
+    l.setTooltipContent(`Municipio de ${D.mpios[k].n}<br><span style="font-size:11px">Total municipal: ${fmt(cnt[k])} hotspots VIIRS 2012–2025<br>(clic en un hotspot para ver sus datos)</span>`);});
 }
 function initMap(){
   if(typeof L==='undefined'){$('map').innerHTML='<p class="small" style="padding:12px">No se pudo cargar el mapa (sin conexión).</p>';return;}
@@ -263,10 +266,11 @@ function initMap(){
   L.control.layers({'Sentinel-2':s2,'OpenStreetMap':osm},null,{collapsed:true}).addTo(map);
   map.attributionControl.addAttribution('Hotspots: <a href="https://firms.modaps.eosdis.nasa.gov" target="_blank">NASA FIRMS</a> · Límites: DANE');
   let s2err=0;s2.on('tileerror',()=>{if(++s2err===4){map.removeLayer(s2);osm.addTo(map);}});
-  const pane=map.createPane('mpios');pane.style.zIndex=410;
+  // Municipios y hotspots comparten un solo canvas: los hotspots se dibujan después (encima)
+  // y reciben el clic; si el clic no cae en un hotspot, lo recibe el municipio.
   D.mpios.forEach((m,k)=>{
     const rings=m.rings.map(r=>r.map(p=>[p[1],p[0]]));
-    const l=L.polygon(rings,{pane:'mpios'}).addTo(map);
+    const l=L.polygon(rings,{renderer:canvasR}).addTo(map);
     l.bindTooltip(m.n,{sticky:true});
     l.on('click',()=>{SEL[k]=SEL[k]?0:1;styleMpios();refresh();});
     mpLayers.push(l);
@@ -279,11 +283,20 @@ function initMap(){
 function popup(i){
   const y=Y0+D.y[i],d=new Date(Date.UTC(y,0,D.j[i]));
   const hm=String(D.hm[i]).padStart(4,'0');
-  return `<b>${D.s[i]?'VIIRS':'MODIS'} · ${SAT[D.sat[i]]}</b><br>`+
-    `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${y}, ${hm.slice(0,2)}:${hm.slice(2)} UTC (${D.dn[i]?'noche':'día'})<br>`+
-    `Confianza: <b>${CONF[D.c[i]]}</b><br>FRP: ${(D.f[i]/10).toFixed(1)} MW<br>`+
-    `Municipio: ${D.mpios[D.m[i]].n}<br>Tipo FIRMS: ${TYPE[D.t[i]]||D.t[i]}<br>`+
-    `<span style="color:#6b7280">${(D.la[i]/1e5).toFixed(4)}°, ${(D.lo[i]/1e5).toFixed(4)}°</span>`;
+  const fecha=`${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')}/${y}`;
+  const rows=[
+    ['ID',i],
+    ['Fecha',fecha],
+    ['Hora (UTC)',`${hm.slice(0,2)}:${hm.slice(2)} (${D.dn[i]?'noche':'día'})`],
+    ['Latitud',(D.la[i]/1e5).toFixed(5)+'°'],
+    ['Longitud',(D.lo[i]/1e5).toFixed(5)+'°'],
+    ['Sensor',D.s[i]?'VIIRS (375 m)':'MODIS (1 km)'],
+    ['Satélite',SAT[D.sat[i]]],
+    ['Confianza',`<b>${CONF[D.c[i]]}</b>`],
+    ['Tipo FIRMS',TYPE[D.t[i]]||D.t[i]],
+    ['FRP',(D.f[i]/10).toFixed(1)+' MW'],
+    ['Municipio',D.mpios[D.m[i]].n]];
+  return `<table class="attr">${rows.map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join('')}</table>`;
 }
 function drawHotspots(){
   if(!map)return;
@@ -438,7 +451,7 @@ fetch('data/hotspots.json').then(r=>{if(!r.ok)throw 0;return r.json();}).then(j=
   $('badge').textContent='DATOS REALES · NASA FIRMS';$('badge').style.background='#0b7285';
   $('tip').textContent='Toca o pasa el cursor sobre el calendario; al tocar una semana se muestra en el mapa.';
   bind();initMap();styleMpios();C=compute();render();drawHotspots();
-  window.__fire={D,get C(){return C;},compute};
+  window.__fire={D,get C(){return C;},compute,get map(){return map;}};
 }).catch(()=>{
   $('badge').textContent='SIN DATOS';
   $('map').innerHTML='<p class="small" style="padding:12px">No se pudo cargar data/hotspots.json. Abre la página desde un servidor (python -m http.server) o desde GitHub Pages, no con doble clic.</p>';
