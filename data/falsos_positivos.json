@@ -1,0 +1,101 @@
+[
+ {
+  "lat": 3.8948,
+  "lon": -75.1012,
+  "radio_km": 1.0,
+  "date": "2023-09-06",
+  "days": 2,
+  "municipality": "Saldaña",
+  "hotspot_id": 7966,
+  "reason": "Suelo desnudo No hay noticia reportada de incendio ocurrido en esa zona con fechas cercanas a la reportada por el punto caliente. Es suelo desnudo y se repite una vez",
+  "source": "geologist review 2026-11-15"
+ },
+ {
+  "lat": 3.33338,
+  "lon": -75.60923,
+  "radio_km": 0.5,
+  "date": "2018-02-28",
+  "days": 2,
+  "municipality": "Ataco",
+  "hotspot_id": 20894,
+  "reason": "No hay noticia reportada de incendio ocurrido en esa zona con fechas cercanas a la reportada por el punto caliente, se repite 1 vez corresponde al periodo del niño y temporada seca",
+  "source": "geologist review 2026-11-15"
+ },
+ {
+  "lat": 3.84571,
+  "lon": -75.6373,
+  "radio_km": 0.5,
+  "date": "2018-09-08",
+  "days": 2,
+  "municipality": "Chaparral",
+  "hotspot_id": 21856,
+  "reason": "Fenomeno del Niño",
+  "source": "geologist review 2026-11-15"
+ },
+ {
+  "lat": 4.14716,
+  "lon": -74.85649,
+  "radio_km": 0.5,
+  "date": "2016-06-18",
+  "days": 2,
+  "municipality": "Espinal",
+  "hotspot_id": 18040,
+  "reason": "Expert review: not a fire",
+  "source": "geologist review 2026-11-15"
+ },
+ {
+  "lat": 4.20539,
+  "lon": -75.01888,
+  "radio_km": 0.5,
+  "date": "2016-09-08",
+  "days": 2,
+  "municipality": "Guamo",
+  "hotspot_id": 18571,
+  "reason": "Expert review: not a fire",
+  "source": "geologist review 2026-11-15"
+ },
+ {
+  "lat": 4.24269,
+  "lon": -74.91902,
+  "radio_km": 0.5,
+  "date": "2019-08-07",
+  "days": 2,
+  "municipality": "Coello",
+  "hotspot_id": 23223,
+  "reason": "Expert review: not a fire",
+  "source": "geologist review 2026-11-15"
+ },
+ {
+  "lat": 4.91501,
+  "lon": -74.79763,
+  "radio_km": 0.5,
+  "date": "2016-11-16",
+  "days": 2,
+  "municipality": "Ambalema",
+  "hotspot_id": 18941,
+  "reason": "Expert review: not a fire",
+  "source": "geologist review 2026-11-15"
+ },
+ {
+  "lat": 5.17047,
+  "lon": -74.78688,
+  "radio_km": 0.5,
+  "date": "2014-04-13",
+  "days": 2,
+  "municipality": "Honda",
+  "hotspot_id": 13019,
+  "reason": "Suelo desnudo",
+  "source": "geologist review 2026-11-15"
+ },
+ {
+  "lat": 3.3853,
+  "lon": -75.26791,
+  "radio_km": 0.5,
+  "date": "2012-11-02",
+  "days": 2,
+  "municipality": "Natagaima",
+  "hotspot_id": 10948,
+  "reason": "Suelo desnudo",
+  "source": "geologist review 2026-11-15"
+ }
+]

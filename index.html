@@ -582,6 +582,16 @@ body.intro-on{overflow:hidden}
       <tr><td>Espinal, Ibagué, San Luis, Rovira</td><td>15.4 %</td><td class="ok">15.8 % ✓</td></tr>
     </table>
   </div>
+  <h2 style="margin-top:28px;font-size:20px">Expert review by a geologist</h2>
+  <div class="card" style="padding:16px;max-width:760px">
+    <p style="margin:0 0 10px;font-size:13px;color:var(--ink2)">On 15 Nov 2026 our team geologist labeled 53 random hotspots with the <code>etiquetar.html</code> tool, checking Sentinel-2/Landsat images before and after, burn scars, land cover and local news.</p>
+    <table class="val">
+      <tr><th>Our classification</th><th>Real fire</th><th>False</th><th>Unsure</th></tr>
+      <tr><td>Volcano / static source (hidden by default)</td><td>1</td><td class="ok">21 ✓</td><td>0</td></tr>
+      <tr><td>Vegetation fire</td><td class="ok">18 ✓</td><td>9</td><td>4</td></tr>
+    </table>
+    <p style="margin:10px 0 0;font-size:12.5px;color:var(--ink3)">21 of 22 points we hid as volcano or industry were confirmed false (Nevado del Ruiz, Caracolito cement kiln, rice-husk burning at Espinal mills). Of the vegetation points with a clear verdict, 67 % (18/27) were real fires, mostly in croplands and pastures during the dry season and El Niño. The 9 false ones (bare soil, no burn scar or news) were removed from the fire events (<code>data/falsos_positivos.json</code>); the labeled sample is in <code>data/etiquetas_geologa_2026-11-15.csv</code>.</p>
+  </div>
 </div></section>
 
 <section class="block" id="refs" style="padding-top:0"><div class="wrap">

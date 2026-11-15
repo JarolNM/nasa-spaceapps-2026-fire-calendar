@@ -1,0 +1,54 @@
+﻿id;etiqueta;motivos;nota;fecha_etiqueta;sensor;satelite;fecha;hora_utc;latitud;longitud;confianza;frp_mw;tipo_firms;municipio;repeticiones_pixel;vecinos_5km_mismo_dia
+7966;falso;Suelo desnudo;No hay noticia reportada de incendio ocurrido en esa zona con fechas cercanas a la reportada por el punto caliente. Es suelo desnudo y se repite una vez ;2026-11-15T15:52:37.456Z;MODIS;Aqua;2023-09-06;18:51;3,89480;-75,10120;Alta;16,0;Vegetación (presunto);Saldaña;1;2
+20894;falso;;No hay noticia reportada de incendio ocurrido en esa zona con fechas cercanas a la reportada por el punto caliente, se repite 1 vez corresponde al periodo del niño y temporada seca;2026-11-15T15:41:28.981Z;VIIRS;Suomi-NPP;2018-02-28;18:40;3,33338;-75,60923;Nominal;40,2;Vegetación (presunto);Ataco;1;0
+24123;fuego;Cultivo / pastos | Grupo de hotspots;Noticia reportada de incendio ocurrido en esa zona con fechas cercanas a la reportada por el punto caliente. Fenomeno del niño;2026-11-15T16:00:50.702Z;VIIRS;Suomi-NPP;2019-09-07;18:16;4,16127;-74,86190;Baja;4,5;Vegetación (presunto);Espinal;5;0
+11203;fuego;Cultivo / pastos | Grupo de hotspots | Temporada seca;Noticia reportada de incendio ocurrido en esa zona con fechas cercanas a la reportada por el punto caliente;2026-11-15T16:01:54.103Z;VIIRS;Suomi-NPP;2013-01-21;17:49;3,92941;-74,93964;Nominal;5,6;Vegetación (presunto);Saldaña;2;0
+18867;falso;Volcán;;2026-11-15T16:02:09.705Z;VIIRS;Suomi-NPP;2016-10-11;07:07;4,89594;-75,31990;Nominal;0,9;Volcán activo;Casabianca;133;0
+1503;fuego;Grupo de hotspots | Temporada seca | Cultivo / pastos;Noticia reportada de incendio ocurrido en esa zona con fechas cercanas a la reportada por el punto caliente. Fenomeno del niño;2026-11-15T16:03:51.098Z;MODIS;Terra;2004-07-08;15:29;4,19280;-74,85290;Nominal;8,3;Vegetación (presunto);Flandes;1;0
+6029;fuego;Bosque | Cultivo / pastos | Grupo de hotspots | Temporada seca;Noticia reportada de incendio ocurrido en esa zona con fechas cercanas a la reportada por el punto caliente. Fenomeno del niño;2026-11-15T16:05:46.315Z;MODIS;Terra;2017-02-21;16:00;3,90830;-74,87260;Baja;21,2;Vegetación (presunto);Purificación;1;0
+26587;fuego;Cicatriz de quema | Bosque | Grupo de hotspots | Temporada seca;Noticia reportada de incendio ocurrido en esa zona con fechas cercanas a la reportada por el punto caliente;2026-11-15T16:07:00.406Z;VIIRS;Suomi-NPP;2021-01-20;18:22;4,91763;-74,93113;Nominal;3,0;Vegetación (presunto);Lérida;2;0
+28643;duda;Nubes en imágenes;;2026-11-15T16:09:03.291Z;VIIRS;Suomi-NPP;2023-01-29;19:08;4,02234;-75,43252;Nominal;5,2;Vegetación (presunto);San Antonio;3;0
+26860;fuego;Cicatriz de quema | Cultivo / pastos;Noticia reportada de incendio ocurrido en esa zona con fechas cercanas a la reportada por el punto caliente. Si observamos una imagen del año aterior se observa la vegetación sana, el año de reporte del hotspot la vegetació cambia a un color marrón. ;2026-11-15T16:11:01.076Z;VIIRS;Suomi-NPP;2021-04-17;17:51;5,21731;-74,87463;Nominal;5,0;Vegetación (presunto);San Sebastián De Mariquita;1;0
+5175;falso;Zona urbana / techos | Industria / ladrillera;Permiso de emisiones atmosféricas para quemar cascarilla de arroz.;2026-11-15T16:18:04.009Z;MODIS;Aqua;2014-11-02;18:23;4,14760;-74,88310;Nominal;9,2;Fuente fija;Espinal;110;0
+4028;duda;;;2026-11-15T16:26:33.934Z;MODIS;Aqua;2011-02-18;18:29;4,29360;-74,94540;Nominal;10,2;Vegetación (presunto);Coello;3;0
+4187;duda;;;2026-11-15T18:41:52.461Z;MODIS;Terra;2011-09-05;15:35;4,11360;-75,24950;Nominal;11,3;Vegetación (presunto);Rovira;4;1
+11538;falso;Industria / ladrillera;Corresponde a Cemex Colombia (acuerdo de venta a Holcim, 2026). Construida por Cementos Diamante. El horno de clínker trabaja a más de 1.400 °C de forma continua: el satélite lo ve como un punto caliente todos los días.;2026-11-15T18:43:27.605Z;VIIRS;Suomi-NPP;2013-04-27;06:48;4,30966;-75,09999;Nominal;1,3;Fuente fija;Ibagué;77;0
+15217;fuego;Cicatriz de quema | Bosque | Cultivo / pastos | Grupo de hotspots;Fenomeno del Niño + Temporada seca;2026-11-15T18:46:37.264Z;VIIRS;Suomi-NPP;2015-08-03;06:27;3,69649;-75,32496;Nominal;2,4;Vegetación (presunto);Chaparral;1;2
+6009;fuego;Cicatriz de quema | Cultivo / pastos | Bosque;Noticia reportada de incendio ocurrido en esa zona con fechas cercanas a la reportada por el punto caliente. Si observamos una imagen del año aterior se observa la vegetación sana, el año de reporte del hotspot la vegetació cambia a un color marrón. ;2026-11-15T20:44:38.496Z;MODIS;Aqua;2017-02-07;18:47;3,54910;-75,11180;Nominal;17,0;Vegetación (presunto);Natagaima;1;2
+20534;falso;Volcán;;2026-11-15T20:45:19.761Z;VIIRS;Suomi-NPP;2017-11-13;06:05;4,89084;-75,31796;Nominal;8,2;Volcán activo;Villahermosa;44;0
+11135;fuego;Cicatriz de quema | Cultivo / pastos | Bosque;;2026-11-15T21:05:22.498Z;VIIRS;Suomi-NPP;2013-01-08;18:33;3,79934;-75,28308;Nominal;1,9;Vegetación (presunto);Ortega;1;0
+4340;falso;;Molino Espinal, realizan quema de cascara de arroz;2026-11-15T21:05:51.792Z;MODIS;Terra;2012-05-25;15:42;4,14870;-74,88000;Nominal;11,6;Fuente fija;Espinal;110;0
+376;fuego;Cicatriz de quema | Bosque | Temporada seca;;2026-11-15T21:41:27.672Z;MODIS;Aqua;2002-07-19;18:27;4,45840;-74,88570;Alta;33,4;Vegetación (presunto);Coello;3;1
+20586;falso;Volcán;;2026-11-15T21:41:43.554Z;VIIRS;Suomi-NPP;2017-12-16;18:29;4,89222;-75,31839;Nominal;3,3;Volcán activo;Villahermosa;226;0
+18957;falso;Volcán;;2026-11-15T21:42:04.304Z;VIIRS;Suomi-NPP;2016-12-07;05:58;4,89380;-75,32008;Nominal;1,8;Volcán activo;Casabianca;176;0
+18021;fuego;Cultivo / pastos | Temporada seca | Cicatriz de quema;;2026-11-15T21:44:24.584Z;VIIRS;Suomi-NPP;2016-06-12;17:40;4,91598;-74,78990;Nominal;5,6;Vegetación (presunto);Ambalema;7;1
+14063;fuego;Cicatriz de quema;;2026-11-15T21:46:27.049Z;VIIRS;Suomi-NPP;2014-09-30;18:31;3,89371;-74,81628;Baja;8,3;Vegetación (presunto);Cunday;2;1
+6216;falso;Industria / ladrillera;;2026-11-15T21:51:42.536Z;MODIS;Aqua;2018-01-20;18:29;3,72170;-75,48220;Nominal;7,9;Fuente fija;Chaparral;63;0
+6703;falso;Industria / ladrillera;;2026-11-15T21:52:03.302Z;MODIS;Terra;2019-08-01;15:42;5,19570;-74,88650;Nominal;5,6;Fuente fija;San Sebastián De Mariquita;20;0
+14043;fuego;Cultivo / pastos | Temporada seca;;2026-11-15T21:54:36.033Z;VIIRS;Suomi-NPP;2014-09-30;18:31;3,69198;-75,61134;Baja;30,6;Vegetación (presunto);Chaparral;1;0
+21856;falso;;Fenomeno del Niño;2026-11-15T21:55:15.969Z;VIIRS;Suomi-NPP;2018-09-08;18:41;3,84571;-75,63730;Nominal;11,0;Vegetación (presunto);Chaparral;2;0
+24453;fuego;Cicatriz de quema;Fenomeno del Niño;2026-11-15T21:56:44.402Z;VIIRS;Suomi-NPP;2019-09-24;17:58;4,04621;-75,13954;Nominal;44,2;Vegetación (presunto);San Luis;2;5
+18040;falso;;;2026-11-15T21:58:49.728Z;VIIRS;Suomi-NPP;2016-06-18;19:07;4,14716;-74,85649;Nominal;2,7;Vegetación (presunto);Espinal;2;0
+1927;duda;;;2026-11-15T22:00:00.878Z;MODIS;Aqua;2005-08-10;18:37;4,30790;-75,23150;Nominal;18,8;Vegetación (presunto);Ibagué;3;4
+20602;falso;Industria / ladrillera;;2026-11-15T22:00:46.155Z;VIIRS;Suomi-NPP;2017-12-19;06:30;4,30854;-75,10059;Nominal;1,8;Fuente fija;Ibagué;521;0
+5982;falso;Industria / ladrillera;;2026-11-15T22:00:55.951Z;MODIS;Terra;2016-11-30;15:30;4,14480;-74,88310;Nominal;7,4;Fuente fija;Espinal;110;0
+6657;falso;Industria / ladrillera;;2026-11-15T22:01:00.674Z;MODIS;Terra;2019-06-09;15:24;4,14670;-74,87890;Baja;9,5;Fuente fija;Espinal;110;0
+7142;falso;Industria / ladrillera;;2026-11-15T22:01:06.283Z;MODIS;Terra;2020-03-19;15:49;3,72370;-75,48770;Nominal;10,3;Fuente fija;Chaparral;16;0
+14861;falso;Volcán;;2026-11-15T22:01:12.137Z;VIIRS;Suomi-NPP;2015-04-06;07:00;4,89385;-75,31898;Nominal;1,6;Volcán activo;Villahermosa;176;0
+18684;falso;Volcán;;2026-11-15T22:01:18.228Z;VIIRS;Suomi-NPP;2016-09-17;06:17;4,89198;-75,31790;Nominal;1,0;Volcán activo;Villahermosa;226;0
+2848;fuego;Temporada seca | Bosque | Cicatriz de quema;;2026-11-15T22:02:09.115Z;MODIS;Aqua;2007-08-18;18:28;5,19490;-74,79920;Alta;19,3;Vegetación (presunto);Honda;2;1
+13649;falso;Volcán;;2026-11-15T22:02:17.075Z;VIIRS;Suomi-NPP;2014-09-05;06:56;4,89454;-75,32082;Nominal;1,6;Volcán activo;Casabianca;133;0
+11894;fuego;Cultivo / pastos | Cicatriz de quema | Temporada seca;;2026-11-15T22:03:39.463Z;VIIRS;Suomi-NPP;2013-08-21;18:17;4,84831;-74,91945;Baja;6,6;Vegetación (presunto);Lérida;2;0
+8911;falso;Industria / ladrillera;;2026-11-15T22:05:04.735Z;MODIS;Aqua;2025-10-22;19:38;4,43530;-75,18590;Nominal;9,4;Fuente fija;Ibagué;1;0
+18571;falso;;;2026-11-15T22:06:17.891Z;VIIRS;Suomi-NPP;2016-09-08;18:29;4,20539;-75,01888;Baja;8,9;Vegetación (presunto);Guamo;3;1
+7643;falso;Industria / ladrillera;;2026-11-15T22:06:22.997Z;MODIS;Terra;2022-10-05;15:21;4,02830;-74,96540;Nominal;6,8;Fuente fija;Guamo;2;2
+7266;falso;Industria / ladrillera;;2026-11-15T22:06:28.151Z;MODIS;Aqua;2020-12-04;18:22;4,15020;-74,88180;Baja;9,8;Fuente fija;Espinal;110;0
+3865;fuego;Cicatriz de quema | Bosque | Temporada seca;;2026-11-15T22:07:19.862Z;MODIS;Terra;2010-03-22;16:00;4,43010;-74,86430;Alta;97,7;Vegetación (presunto);Coello;3;1
+23223;falso;;;2026-11-15T22:08:27.361Z;VIIRS;Suomi-NPP;2019-08-07;17:58;4,24269;-74,91902;Nominal;12,0;Vegetación (presunto);Coello;1;0
+6975;falso;Industria / ladrillera;;2026-11-15T22:08:37.408Z;MODIS;Terra;2019-10-27;15:48;4,14980;-74,87900;Nominal;12,4;Fuente fija;Espinal;110;0
+17931;fuego;;;2026-11-15T22:08:56.701Z;VIIRS;Suomi-NPP;2016-03-29;06:43;4,30793;-75,09781;Nominal;1,1;Fuente fija;Ibagué;521;0
+17933;falso;Volcán;;2026-11-15T22:09:01.989Z;VIIRS;Suomi-NPP;2016-03-30;06:24;4,89242;-75,31850;Nominal;3,7;Volcán activo;Villahermosa;226;0
+7067;fuego;Cicatriz de quema | Cultivo / pastos | Temporada seca;;2026-11-15T22:10:19.353Z;MODIS;Aqua;2020-02-11;18:29;4,21590;-74,91740;Alta;11,8;Vegetación (presunto);Espinal;4;3
+18941;falso;;;2026-11-15T22:11:13.394Z;VIIRS;Suomi-NPP;2016-11-16;18:36;4,91501;-74,79763;Nominal;6,3;Vegetación (presunto);Ambalema;1;3
+13019;falso;Suelo desnudo;;2026-11-15T22:12:05.721Z;VIIRS;Suomi-NPP;2014-04-13;18:15;5,17047;-74,78688;Baja;2,0;Vegetación (presunto);Honda;1;0
+10948;falso;Suelo desnudo;;2026-11-15T22:12:51.458Z;VIIRS;Suomi-NPP;2012-11-02;17:49;3,38530;-75,26791;Nominal;2,6;Vegetación (presunto);Natagaima;1;0

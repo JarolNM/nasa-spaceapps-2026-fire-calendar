@@ -173,7 +173,14 @@ def main():
     fp_path = Path("data/falsos_positivos.json")
     FP = json.loads(fp_path.read_text(encoding="utf-8")) if fp_path.exists() else []
     n_fp = len(ev)
-    ev = [e for e in ev if not any(km(e["lat"], e["lon"], f["lat"], f["lon"]) <= f.get("radio_km", 1.0) for f in FP)]
+    def es_fp(e, f):
+        if km(e["lat"], e["lon"], f["lat"], f["lon"]) > f.get("radio_km", 1.0):
+            return False
+        if "date" not in f:                      # sin fecha: el lugar es siempre falso (p. ej. industria)
+            return True
+        d = (date.fromisoformat(f["date"]) - base).days
+        return e["d0"] - f.get("days", 2) <= d <= e["d1"] + f.get("days", 2)
+    ev = [e for e in ev if not any(es_fp(e, f) for f in FP)]
     n_fp -= len(ev)
     print(f"quitados: {n_urb} sobre zona urbana, {n_fp} de la lista revisada a mano")
     cols = ["lat", "lon", "d0", "d1", "n", "nv", "frp", "frpmax", "area", "m", "sev", "cob"]
