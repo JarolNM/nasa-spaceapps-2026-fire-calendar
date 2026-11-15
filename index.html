@@ -947,7 +947,7 @@ function updateBase(){
   const ex=e?{nino:'Menos lluvias en el Tolima: más riesgo de incendios.',nina:'Más lluvias en el Tolima: menos incendios.',neutral:'Ni El Niño ni La Niña en este periodo.'}[e.fase]:'';
   let img='';
   if(baseMode==='year')img='🛰 '+ysrc.lab;
-  else if(baseMode==='nasa')img=`🛰 Imagen NASA del ${nice(S.to-S.from<=31?S.from:Math.round((S.from+S.to)/2))} (puede tener nubes)`;
+  else if(baseMode==='nasa'){nasaDate();img=`🛰 NASA MODIS del ${nice(nasaPick.d)}${nasaPick.pct!=null?` · ${nasaPick.pct} % nubes`:''}${nasaPick.exact?'':' (el día más cercano con menos de 30 % de nubes)'}`;}
   else img='🗺 OpenStreetMap';
   el.innerHTML=`<div class="img" style="border:0;margin:0;padding:0">${img}</div>`;
   const bd=$('ensoBadge');
@@ -969,11 +969,14 @@ function yearSource(y){
   const esri=yy=>{const k=WB&&(WB[yy]||WB[Math.max(2014,Math.min(2026,yy))]);
     return {key:'esri'+(k?k.num:'x'),url:k?'https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/'+k.num+'/{z}/{y}/{x}':'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
       mz:17,att:'Imágenes © Esri World Imagery (Wayback), Maxar, Earthstar Geographics',lab:k?`Esri alta resolución · versión ${k.fecha.slice(0,7)}`:'Esri alta resolución'};};
-  if(y<=2006)return {key:'weld2000',url:'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/Landsat_WELD_CorrectedReflectance_TrueColor_Global_Annual/default/2000-12-01/GoogleMapsCompatible_Level12/{z}/{y}/{x}.jpg',
-    mz:12,att:'Landsat 7 · NASA WELD (GIBS)',lab:`Landsat 30 m · mosaico anual 2000${y>2000?' (el más cercano disponible)':''}`};
+  if(y<=2000)return {key:'weld2000',url:'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/Landsat_WELD_CorrectedReflectance_TrueColor_Global_Annual/default/2000-12-01/GoogleMapsCompatible_Level12/{z}/{y}/{x}.jpg',
+    mz:12,att:'Landsat 7 · NASA WELD (GIBS)',lab:'Landsat 30 m · mosaico anual 2000'};
   if(y===2016||(y>=2018&&y<=2025))return {key:'s2_'+y,url:`https://tiles.maps.eox.at/wmts/1.0.0/${y===2016?'s2cloudless_3857':'s2cloudless-'+y+'_3857'}/default/g/{z}/{y}/{x}.jpg`,
     mz:15,att:`Sentinel-2 cloudless ${y} by <a href="https://s2maps.eu" target="_blank">EOX IT Services GmbH</a> (Contains modified Copernicus Sentinel data ${y})`,lab:`Sentinel-2 10 m · mosaico sin nubes ${y}`};
-  const r=esri(y);if(y<2014)r.lab+=' (no hay mosaico anual gratuito de este año)';return r;
+  if(y<=2013){const p=pickClear(dayOf(y,0,1),dayOf(y,11,31));
+    return {key:'modis_'+p.d,url:'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/'+iso(p.d)+'/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
+      mz:9,att:'NASA GIBS · MODIS Terra',lab:`MODIS 250 m · día más despejado de ${y} (${nice(p.d)}${p.pct!=null?', '+p.pct+' % nubes':''})`};}
+  return esri(y);
 }
 let yearSrc=null;
 function setYearLayer(){
@@ -984,7 +987,19 @@ function setYearLayer(){
   yearSrc=src;return src;
 }
 const wbUrl=yr=>{const k=WB&&(WB[yr]||WB[Math.max(2014,Math.min(2026,yr))]);return k?'https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/'+k.num+'/{z}/{y}/{x}':'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';};
-const nasaDate=()=>iso(S.to-S.from<=31?S.from:Math.round((S.from+S.to)/2));
+let NUBES=null; // % de nubes diurnas (MODIS Terra) sobre el Tolima por día desde 2000-01-01
+const nub=d=>NUBES&&d>=0&&d<NUBES.length?NUBES[d]:-1;
+// Día para la imagen NASA: en un rango, el más despejado; si hay > 30 % de nubes, el día más cercano con < 30 % (primero el anterior)
+function pickClear(from,to,lim=30){
+  if(!NUBES)return {d:from,pct:null,exact:true};
+  let best=-1,bp=101;for(let d=from;d<=to;d++){const v=nub(d);if(v>=0&&v<bp){bp=v;best=d;}}
+  if(best>=0&&bp<lim)return {d:best,pct:bp,exact:true};
+  const c=from===to?from:(best>=0?best:Math.round((from+to)/2));
+  for(let k=1;k<=400;k++){for(const d of [c-k,c+k]){const v=nub(d);if(v>=0&&v<lim)return {d,pct:v,exact:false};}}
+  return best>=0?{d:best,pct:bp,exact:true}:{d:from,pct:null,exact:true};
+}
+let nasaPick={d:0,pct:null,exact:true};
+const nasaDate=()=>{nasaPick=pickClear(S.from,S.to);return iso(nasaPick.d);};
 const nasaUrl=()=>'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/'+nasaDate()+'/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg';
 function styleMpios(){
   if(!map)return;
@@ -1400,7 +1415,7 @@ function bind(){
     [baseYear,baseNasa,baseOSM].forEach(l=>map.hasLayer(l)&&map.removeLayer(l));
     baseMode=b.dataset.b;({year:baseYear,nasa:baseNasa,osm:baseOSM})[baseMode].addTo(map).bringToBack();updateBase();
     say(({year:'Te muestro la <b>imagen satelital del año</b> que elijas: Landsat (30 m) para los primeros años, el archivo de Esri y, desde 2016, mosaicos <b>Sentinel-2 sin nubes</b> de 10 m. Cambia de año y compara el paisaje.',
-      nasa:'Esta es la <b>imagen de NASA del mismo día</b> (MODIS Terra, 250 m). A veces hay nubes, pero en días de quema puedes ver hasta el <b>humo</b>.',
+      nasa:'Te muestro la <b>imagen de la NASA</b> (MODIS Terra, 250 m) de la fecha elegida. Si ese día estaba muy nublado, busco el día más cercano con <b>menos de 30 % de nubes</b>. En días de quema a veces se ve hasta el <b>humo</b>.',
       osm:'Mapa de calles de OpenStreetMap, útil para ubicar veredas y vías.'})[baseMode],'Mapa base');});
   document.querySelector('.layers .head').onclick=()=>{const l=document.querySelector('.layers');l.classList.toggle('closed');$('lyTog').textContent=l.classList.contains('closed')?'▾':'▴';};
   bindSearch();
@@ -1423,8 +1438,9 @@ function bind(){
 fetch('data/hotspots.json').then(r=>{if(!r.ok)throw 0;return r.json();}).then(j=>{
   D=j;prep();initMap();bind();initFx();styleMpios();C=compute();
   setRange(S.from,S.to,{quiet:true});
-  Promise.all([fetch('data/clima.json').then(r=>r.ok?r.json():null).catch(()=>null),fetch('data/wayback.json').then(r=>r.ok?r.json():null).catch(()=>null)])
-    .then(([c,w])=>{CLIMA=c;WB=w;updateBase();if(S.tab==='years')renderCharts();ready=true;lastYearSaid=S.year;});
+  Promise.all([fetch('data/clima.json').then(r=>r.ok?r.json():null).catch(()=>null),fetch('data/wayback.json').then(r=>r.ok?r.json():null).catch(()=>null),
+    fetch('data/nubes.json').then(r=>r.ok?r.json():null).catch(()=>null)])
+    .then(([c,w,nb])=>{CLIMA=c;WB=w;NUBES=nb&&nb.pct;yearSrc=null;updateBase();if(S.tab==='years')renderCharts();ready=true;lastYearSaid=S.year;});
   countUp($('k-hot'),N);countUp($('k-k'),C.kg,1,'×');$('kStep').textContent=C.kg.toFixed(1).replace('.',',');
   window.__fire={D,get C(){return C;},compute,get map(){return map;},S,setRange,say,sayYear,goMpio,get hs(){return hsLayer;},get ready(){return ready;}};
 }).catch(err=>{console.error(err);
