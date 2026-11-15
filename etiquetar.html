@@ -65,6 +65,8 @@ kbd{font:600 10.5px Inter,sans-serif;background:var(--soft);border:1px solid var
 .legend{position:absolute;left:10px;bottom:24px;z-index:500;background:var(--surface);color:var(--ink);border-radius:10px;padding:8px 10px;font-size:11.5px;box-shadow:0 4px 14px rgba(0,0,0,.2)}
 .legend div{display:flex;align-items:center;gap:6px}
 .legend i{width:12px;height:12px;border-radius:2px;display:inline-block}
+.mplab{background:rgba(11,42,91,.78);color:#fff;border:0;box-shadow:none;font:700 12px Inter,sans-serif;padding:3px 8px;border-radius:6px;letter-spacing:.02em}
+.mplab::before{display:none}
 .help{position:fixed;inset:0;background:rgba(5,10,25,.6);z-index:4000;display:none;align-items:center;justify-content:center;padding:16px}
 .help.on{display:flex}
 .help .card{background:var(--surface);color:var(--ink);border-radius:16px;max-width:620px;padding:22px 24px;max-height:90vh;overflow:auto}
@@ -87,6 +89,8 @@ kbd{font:600 10.5px Inter,sans-serif;background:var(--soft);border:1px solid var
     <div><i style="border:2.5px solid #ff2d2d"></i>Hotspot a revisar (huella del píxel)</div>
     <div><i style="background:#ffb347"></i>Otros hotspots ese día (±1)</div>
     <div><i style="background:#9fb0cc"></i>Mismo lugar, otras fechas</div>
+    <div><i style="border:2px dashed #fff;background:transparent"></i>Límite municipal (DANE)</div>
+    <div><i style="border:2.5px solid #ffd43b;background:transparent"></i>Municipio del punto</div>
   </div></div>
   <aside class="side">
     <div class="sbody">
@@ -144,7 +148,7 @@ const REASONS={
   duda:['Nubes en imágenes','Sin imagen en la fecha','Borde de cultivo','Resolución insuficiente']
 };
 const toast=m=>{const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),1800);};
-let D,N,S=[],cur=0,labels={},map,layer;
+let D,N,S=[],cur=0,labels={},map,layer,MP=[],DET=null;
 
 /* ---------- guardado ---------- */
 function load(){try{labels=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){labels={};}}
@@ -195,6 +199,13 @@ function initMap(){
   const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19});
   L.control.layers({'Satélite alta resolución (Esri)':esri,'Sentinel-2 2020':s2,'Mapa (OSM)':osm},null,{collapsed:false,position:'topright'}).addTo(map);
   L.control.scale({imperial:false}).addTo(map);
+  // límites municipales (DANE) con su nombre
+  const pane=map.createPane('mpios');pane.style.zIndex=420;pane.style.pointerEvents='none';
+  const src=(DET&&DET.mpios&&DET.mpios.length===D.mpios.length)?DET.mpios:D.mpios; // límites precisos (~30 m) si están
+  MP=src.map(m=>{
+    const pl=L.polygon(m.rings.map(r=>r.map(p=>[p[1],p[0]])),{pane:'mpios',color:'#ffffff',weight:2,opacity:.9,fill:false,dashArray:'6 4',interactive:false}).addTo(map);
+    L.tooltip({permanent:true,direction:'center',className:'mplab',pane:'mpios'}).setContent(m.n).setLatLng(pl.getBounds().getCenter()).addTo(map);
+    return pl;});
   layer=L.layerGroup().addTo(map);
 }
 function box(la,lo,h,opt){const hx=h/Math.cos(la*Math.PI/180);return L.rectangle([[la-h,lo-hx],[la+h,lo+hx]],opt);}
@@ -209,6 +220,8 @@ function drawPoint(i){
   for(const dd of [d-1,d,d+1])for(const j of (byDay.get(dd)||[])){if(j===i)continue;
     box(lat(j),lon(j),D.s[j]?0.0017:0.0045,{color:'#ffb347',weight:1.5,fillColor:'#ffb347',fillOpacity:.35})
       .bindTooltip(`${dateStr(j)} · ${D.s[j]?'VIIRS':'MODIS'} · conf. ${CONF[D.c[j]]}`).addTo(layer);}
+  // resaltar el municipio del punto
+  MP.forEach((pl,k)=>pl.setStyle(k===D.m[i]?{color:'#ffd43b',weight:3,opacity:1,dashArray:null}:{color:'#ffffff',weight:2,opacity:.9,dashArray:'6 4'}));
   box(la,lo,D.s[i]?0.0017:0.0045,{color:'#ff2d2d',weight:3,fill:false}).addTo(layer);
   L.circleMarker([la,lo],{radius:3,color:'#ff2d2d',fillOpacity:1}).addTo(layer);
   map.setView([la,lo],D.s[i]?15:14,{animate:false});
@@ -301,8 +314,9 @@ function bind(){
     else if(e.key==='ArrowRight')go(cur+1);else if(e.key==='ArrowLeft')go(cur-1);else if(e.key==='Escape')$('help').classList.remove('on');});
 }
 
-fetch('data/hotspots.json').then(r=>{if(!r.ok)throw 0;return r.json();}).then(j=>{
-  D=j;N=D.meta.n;load();features();S=sample();initMap();bind();
+Promise.all([fetch('data/hotspots.json').then(r=>{if(!r.ok)throw 0;return r.json();}),
+  fetch('data/municipios_detalle.json').then(r=>r.ok?r.json():null).catch(()=>null)]).then(([j,det])=>{
+  D=j;DET=det;N=D.meta.n;load();features();S=sample();initMap();bind();
   let p=0;try{p=+localStorage.getItem(KEY+'_pos')||0;}catch(e){}
   go(p);
   try{if(!localStorage.getItem(KEY+'_help')){$('help').classList.add('on');localStorage.setItem(KEY+'_help','1');}}catch(e){$('help').classList.add('on');}
