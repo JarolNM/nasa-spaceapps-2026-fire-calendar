@@ -288,6 +288,19 @@ body.intro-on{overflow:hidden}
 .ring{transform-box:fill-box;transform-origin:50% 0}
 .blinkstar{animation:tw 3s ease-in-out infinite}
 @media (max-width:600px){.caption{bottom:6px;padding:6px 8px}.stage .sub{display:none}}
+
+/* ---------- industrias y volcán (fuentes fijas) ---------- */
+.fxi{position:relative;width:40px;height:40px}
+.fxi svg{position:absolute;left:0;bottom:0;width:40px;height:40px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
+.fxi .puff{position:absolute;left:var(--x,26px);bottom:var(--y,30px);width:10px;height:10px;border-radius:50%;background:rgba(235,235,235,.9);opacity:0;animation:smoke 3.2s ease-out infinite}
+.fxi .puff.b{animation-delay:1.05s}.fxi .puff.c{animation-delay:2.1s}
+.fxi.volcan .puff{background:rgba(200,200,200,.85)}
+@keyframes smoke{0%{opacity:0;transform:translate(0,0) scale(.5)}15%{opacity:.95}100%{opacity:0;transform:translate(9px,-30px) scale(2.3)}}
+.fxi .badge{position:absolute;right:-6px;top:-4px;background:#0b2a5b;color:#fff;font:700 9px Inter,sans-serif;border-radius:99px;padding:1px 5px;border:1.5px solid #fff}
+.fx-pop h5{margin:0 0 4px;font-size:13px}
+.fx-pop p{margin:4px 0;font-size:11.5px;line-height:1.4;color:#374151}
+.fx-pop .n{font-weight:700;color:#c92a2a}
+@media (prefers-reduced-motion:reduce){.fxi .puff{animation:none;opacity:.6}}
 </style>
 </head>
 <body class="intro-on">
@@ -830,7 +843,7 @@ function layersControl(){
         <span class="chip on" data-c="2"><span class="dot" style="background:var(--c2)"></span>Alta</span></div></div>
       <div class="blk"><h4>Satélite</h4><div class="chips" id="sensChips">
         <span class="chip on" data-s="1">VIIRS 375 m</span><span class="chip on" data-s="0">MODIS 1 km</span></div></div>
-      <div class="blk"><h4>Falsos positivos</h4><div class="chips"><span class="chip on" id="exclChip"><span class="dot" style="background:var(--cx)"></span>Ocultar volcán y fuentes fijas</span></div></div>
+      <div class="blk"><h4>Falsos positivos</h4><div class="chips"><span class="chip on" id="exclChip"><span class="dot" style="background:var(--cx)"></span>Ocultar volcán y fuentes fijas</span><span class="chip on" id="indChip">🏭 Mostrar industrias y volcán</span></div></div>
       <div class="blk" style="font-size:11.5px;color:var(--ink3)" id="mapCount"></div>
     </div>`;
     return d;}});
@@ -1133,6 +1146,33 @@ function bindSearch(){
   $('selPill').onclick=()=>{SEL.fill(1);markPreset('all');inp.value='';map.flyToBounds(bounds,{padding:[16,16],duration:.8});styleMpios();refresh();};
 }
 
+
+/* ---------- capa de industrias y volcán ---------- */
+let fxLayer=null;
+const FXSVG={
+  fab:(c)=>`<svg viewBox="0 0 40 40"><path d="M3 38V22l8-5v5l8-5v5l8-5v21Z" fill="${c}"/><rect x="27" y="7" width="6" height="31" fill="${c}"/><rect x="26" y="5" width="8" height="3" rx="1" fill="#1f2937"/><rect x="7" y="27" width="4" height="4" fill="#ffd43b"/><rect x="15" y="27" width="4" height="4" fill="#ffd43b"/><rect x="21" y="27" width="4" height="4" fill="#ffd43b"/><path d="M1 38.5h38" stroke="#1f2937" stroke-width="2"/></svg>`,
+  volcan:()=>`<svg viewBox="0 0 40 40"><path d="M2 38L15 12h10l13 26Z" fill="#6b4f3a"/><path d="M15 12h10l-2 4h-6Z" fill="#ff6b00"/><path d="M17 16l-3 8 4-3 2 6 2-6 4 3-3-8Z" fill="#ff922b" opacity=".85"/><path d="M8 26l4 2-3 5Z M30 25l-2 6 4-3Z" fill="#fff" opacity=".35"/></svg>`
+};
+function fxIcon(f){
+  const volc=f.tipo==='volcan',col=f.tipo==='cemento'?'#64748b':f.tipo==='molinos'?'#a16207':'#6b7280';
+  const html=`<div class="fxi ${f.tipo}" style="${volc?'--x:15px;--y:28px':''}">${volc?FXSVG.volcan():FXSVG.fab(col)}<span class="puff"></span><span class="puff b"></span><span class="puff c"></span>${f.tipo==='sin_identificar'?'<span class="badge">?</span>':''}</div>`;
+  return L.divIcon({html,className:'',iconSize:[40,40],iconAnchor:[20,38],popupAnchor:[0,-34]});
+}
+function fxPopup(f){
+  const tip={cemento:'Industria · cemento',molinos:'Agroindustria · molinos de arroz',volcan:'Volcán activo',sin_identificar:'Fuente fija sin identificar'}[f.tipo];
+  return `<div class="fx-pop"><h5>${f.tipo==='volcan'?'🌋':'🏭'} ${f.nombre}</h5><p style="color:#6b7280;margin-top:0">${tip} · ${f.municipio}</p>
+    <p class="n">${fmt(f.n)} hotspots marcados como fuente fija (${f.desde}–${f.hasta})</p><p>${f.detalle}</p>
+    <p><b>No son incendios:</b> por eso se ocultan del calendario cuando está activo «Ocultar volcán y fuentes fijas».</p>
+    ${f.fuente?`<p><a href="${f.fuente}" target="_blank" rel="noopener">Fuente ↗</a></p>`:''}</div>`;
+}
+function initFx(){
+  fetch('data/fuentes_fijas.json').then(r=>r.ok?r.json():[]).then(list=>{
+    if(!map||!list.length)return;
+    fxLayer=L.layerGroup(list.map(f=>L.marker([f.lat,f.lon],{icon:fxIcon(f),title:f.nombre,riseOnHover:true,zIndexOffset:500}).bindPopup(fxPopup(f),{maxWidth:280}))).addTo(map);
+    const chip=$('indChip');if(chip)chip.onclick=()=>{chip.classList.toggle('on');chip.classList.contains('on')?fxLayer.addTo(map):map.removeLayer(fxLayer);};
+  }).catch(()=>{});
+}
+
 /* ---------- eventos ---------- */
 function bind(){
   for(let y=Y1;y>=Y0;y--)$('fYear').add(new Option(y,y));
@@ -1179,7 +1219,7 @@ function bind(){
 }
 
 fetch('data/hotspots.json').then(r=>{if(!r.ok)throw 0;return r.json();}).then(j=>{
-  D=j;prep();initMap();bind();styleMpios();C=compute();
+  D=j;prep();initMap();bind();initFx();styleMpios();C=compute();
   setRange(S.from,S.to);
   countUp($('k-hot'),N);countUp($('k-k'),C.kg,1,'×');$('kStep').textContent=C.kg.toFixed(1).replace('.',',');
   window.__fire={D,get C(){return C;},compute,get map(){return map;},S,setRange};
