@@ -512,7 +512,8 @@ body.intro-on{overflow:hidden}
   <span class="lg" role="img" aria-label="Logo GeoElectronic"></span>
   <div><b style="color:var(--ink)">GeoElectronic</b> · NASA Space Apps Challenge 2026<br>
   Datos: NASA FIRMS (LANCE/EOSDIS) · DANE, Marco Geoestadístico Nacional · Mapa base: Sentinel-2 cloudless 2020 © EOX (uso no comercial), © OpenStreetMap.<br>
-  Validación: Perea-Ardila &amp; Murillo-Sandoval, Nota Regional CERE 21, Universidad del Tolima.</div>
+  Validación: Perea-Ardila &amp; Murillo-Sandoval, Nota Regional CERE 21, Universidad del Tolima.<br>
+  Voz de Sati: voz neuronal de Microsoft (es-CO, Salomé), generada con edge-tts. Clima: NOAA CPC (ONI). Imágenes: NASA GIBS, Esri Wayback, Sentinel-2 cloudless (EOX).</div>
 </div></footer>
 
 <div id="howto" role="dialog" aria-label="Cómo funciona">
@@ -654,10 +655,11 @@ body.intro-on{overflow:hidden}
     'Con esa historia sabemos qué es normal para cada semana del año. Si una semana supera mucho ese valor, sobre todo en temporada seca, el sistema podría enviar una alerta temprana a bomberos, corporaciones ambientales y gestión del riesgo, antes de que el incendio se salga de control.',
     'Ahora te toca a ti. Explora el mapa y el calendario, y descubre cómo se ha quemado el Tolima en los últimos veintiséis años.'
   ];
+  window.__howtoTexts=SC.flatMap(t=>t.match(/[^.!?]+[.!?]+/g).map(x=>x.trim()));
   const box=document.getElementById('howto');if(!box)return;
   const cap=document.getElementById('hwCap'),dots=document.getElementById('hwDots'),stepT=document.getElementById('hwStep');
   SC.forEach((_,i)=>{const d=document.createElement('i');d.onclick=()=>go(i);dots.appendChild(d);});
-  const synth=window.speechSynthesis;let voice=null,muted=!synth,paused=false,cur=0,timer=0,token=0;
+  const synth=window.speechSynthesis;let voice=null,muted=false,paused=false,cur=0,timer=0,token=0;
   function pickVoice(){if(!synth)return;const vs=synth.getVoices().filter(v=>/^es/i.test(v.lang));
     voice=vs.find(v=>/es-(CO|MX|US|419)/i.test(v.lang)&&/natural|online|google/i.test(v.name))||vs.find(v=>/natural|online|google/i.test(v.name))||vs.find(v=>/es-(CO|MX|US|419)/i.test(v.lang))||vs[0]||null;}
   if(synth){pickVoice();synth.onvoiceschanged=pickVoice;}
@@ -667,7 +669,7 @@ body.intro-on{overflow:hidden}
   function restart(g){g.classList.remove('play');void g.getBoundingClientRect();g.classList.add('play');
     g.querySelectorAll('animateMotion').forEach(a=>{try{a.beginElement();}catch(e){}});}
   function go(i){
-    cur=Math.max(0,Math.min(SC.length-1,i));token++;clearTimeout(timer);if(synth)synth.cancel();
+    cur=Math.max(0,Math.min(SC.length-1,i));token++;clearTimeout(timer);if(window.satiStop)window.satiStop();else if(synth)synth.cancel();
     box.querySelectorAll('.sc').forEach((g,j)=>{g.classList.toggle('on',j===cur);if(j===cur)restart(g);else g.classList.remove('play');});
     [...dots.children].forEach((d,j)=>{d.classList.toggle('done',j<cur);d.classList.remove('on','paused');});
     const d=dots.children[cur],dur=estimate(SC[cur]);d.style.setProperty('--d',dur+'ms');void d.offsetWidth;d.classList.add('on');
@@ -681,15 +683,15 @@ body.intro-on{overflow:hidden}
     const done=()=>{if(tk!==token)return;if(cur<SC.length-1)timer=setTimeout(()=>tk===token&&!paused&&go(cur+1),900);};
     if(muted){cap.textContent=SC[i];timer=setTimeout(()=>{if(tk===token&&!paused)go(cur+1<SC.length?cur+1:cur);},estimate(SC[i]));if(cur===SC.length-1)clearTimeout(timer);return;}
     const say=()=>{if(tk!==token)return;if(k>=parts.length)return done();
-      cap.textContent=parts[k];const u=new SpeechSynthesisUtterance(parts[k]);u.lang=voice?voice.lang:'es-ES';if(voice)u.voice=voice;u.rate=1.03;u.pitch=1.05;
+      cap.textContent=parts[k];
       let fired=false;const nxt=()=>{if(fired)return;fired=true;k++;say();};
-      u.onend=nxt;u.onerror=nxt;
-      setTimeout(nxt,estimate(parts[k])+4000); // respaldo si el navegador no avisa el final
-      synth.speak(u);};
+      setTimeout(nxt,estimate(parts[k])+6000); // respaldo si el audio no avisa el final
+      if(window.satiSpeak)window.satiSpeak(parts[k],nxt);
+      else{const u=new SpeechSynthesisUtterance(parts[k]);u.lang=voice?voice.lang:'es-ES';if(voice)u.voice=voice;u.onend=nxt;u.onerror=nxt;synth.speak(u);}};
     say();
   }
   window.openHowto=()=>{box.classList.add('on');document.body.style.overflow='hidden';go(0);};
-  const closeH=()=>{token++;clearTimeout(timer);if(synth)synth.cancel();box.classList.remove('on');document.body.style.overflow='';};
+  const closeH=()=>{token++;clearTimeout(timer);if(window.satiStop)window.satiStop();else if(synth)synth.cancel();box.classList.remove('on');document.body.style.overflow='';};
   document.getElementById('hwClose').onclick=closeH;document.getElementById('hwGo').onclick=closeH;
   box.addEventListener('click',e=>{if(e.target===box)closeH();});
   document.getElementById('hwPrev').onclick=()=>go(cur-1);
@@ -699,7 +701,7 @@ body.intro-on{overflow:hidden}
     dots.children[cur].classList.toggle('paused',paused);
     box.querySelectorAll('.sc.on *').forEach(el=>el.style.animationPlayState=paused?'paused':'');
     const svg=box.querySelector('svg');paused?svg.pauseAnimations():svg.unpauseAnimations();
-    if(synth&&!muted){paused?synth.pause():synth.resume();}
+    if(!muted){if(window.satiPause)window.satiPause(paused);else if(synth){paused?synth.pause():synth.resume();}}
     if(!paused&&muted)go(cur);
   };
   document.getElementById('hwMute').onclick=()=>{if(!synth)return;muted=!muted;
@@ -774,10 +776,28 @@ try{voiceOn=localStorage.getItem('satiVoz')!=='0';}catch(e){}
 function pickSatiVoice(){if(!window.speechSynthesis)return;const vs=speechSynthesis.getVoices().filter(v=>/^es/i.test(v.lang));
   satiVoice=vs.find(v=>/es-(CO|MX|US|419)/i.test(v.lang)&&/natural|online|google/i.test(v.name))||vs.find(v=>/natural|online|google/i.test(v.name))||vs.find(v=>/es-(CO|MX|US|419)/i.test(v.lang))||vs[0]||null;}
 if(window.speechSynthesis){pickSatiVoice();speechSynthesis.addEventListener('voiceschanged',pickSatiVoice);}
+function vozNorm(html){return html.replace(/<br\s*\/?>/g,'. ').replace(/<[^>]+>/g,'').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,'').replace(/k ≈ 6/g,'k cercano a 6').replace(/#(\d+)/g,'número $1').replace(/ONI/g,'O N I').replace(/ \+(\d)/g,' más $1').replace(/ −(\d)/g,' menos $1').replace(/\s+/g,' ').trim();}
+// Voz natural pregrabada (audio/sati/<hash>.mp3, voz neuronal es-CO); si no hay audio, voz del navegador
+let VOZ=null,curAudio=null;window.__voz=[];
+fetch('audio/sati/index.json').then(r=>r.ok?r.json():[]).then(l=>{VOZ=new Set(l);}).catch(()=>{VOZ=new Set();});
+function hashTxt(t){let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))>>>0;return h.toString(36);}
+function ttsSpeak(t,onend){
+  if(!window.speechSynthesis){if(onend)setTimeout(onend,Math.max(2500,t.split(' ').length*380));return;}
+  const u=new SpeechSynthesisUtterance(t);u.lang=satiVoice?satiVoice.lang:'es-ES';if(satiVoice)u.voice=satiVoice;u.rate=1.05;u.pitch=1.1;
+  if(onend){u.onend=onend;u.onerror=onend;}speechSynthesis.speak(u);}
+window.satiStop=()=>{if(curAudio){curAudio.onended=null;curAudio.pause();curAudio=null;}if(window.speechSynthesis)speechSynthesis.cancel();};
+window.satiPause=p=>{if(curAudio){p?curAudio.pause():curAudio.play().catch(()=>{});}else if(window.speechSynthesis){p?speechSynthesis.pause():speechSynthesis.resume();}};
+window.satiSpeak=(t,onend)=>{
+  window.__voz.push(t);window.satiStop();
+  const h=hashTxt(t);
+  if(VOZ&&VOZ.has(h)){const a=new Audio('audio/sati/'+h+'.mp3');curAudio=a;let done=false;const fin=()=>{if(done)return;done=true;if(curAudio===a)curAudio=null;onend&&onend();};
+    a.onended=fin;a.onerror=()=>{if(done)return;done=true;curAudio=null;ttsSpeak(t,onend);};a.play().catch(()=>{if(done)return;done=true;curAudio=null;ttsSpeak(t,onend);});return;}
+  ttsSpeak(t,onend);
+};
 function speak(html){
-  if(!voiceOn||!window.speechSynthesis)return;const hw=document.getElementById('howto');if(hw&&hw.classList.contains('on'))return;
-  const t=html.replace(/<br\s*\/?>/g,'. ').replace(/<[^>]+>/g,'').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,'').replace(/k ≈ 6/g,'k cercano a 6').replace(/#(\d+)/g,'número $1').replace(/ONI/g,'O N I').replace(/ \+(\d)/g,' más $1').replace(/ −(\d)/g,' menos $1').replace(/\s+/g,' ').trim();
-  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=satiVoice?satiVoice.lang:'es-ES';if(satiVoice)u.voice=satiVoice;u.rate=1.05;u.pitch=1.15;speechSynthesis.speak(u);}
+  const t=vozNorm(html);
+  if(!voiceOn){window.__voz.push(t);return;}const hw=document.getElementById('howto');if(hw&&hw.classList.contains('on'))return;
+  window.satiSpeak(t);}
 function say(html,title='Sati te cuenta',ms=11000){speak(html);const g=$('guideText');clearTimeout(sayT);g.style.display='';
   g.classList.remove('pop');void g.offsetWidth;g.innerHTML=`<span class="gt">${title}</span>${html}`;g.style.opacity=1;g.classList.add('pop');
   sayT=setTimeout(()=>g.style.opacity=0,ms);}
@@ -817,7 +837,7 @@ function tip(k){say(TIPS[k],({cal:'Calendario',season:'Temporadas',years:'Por a�
 setTimeout(()=>{$('guideText').style.opacity=0;},9000);
 const gm=$('guideMute');const setMuteIcon=()=>gm.textContent=voiceOn?'🔊':'🔇';setMuteIcon();
 gm.onclick=()=>{voiceOn=!voiceOn;try{localStorage.setItem('satiVoz',voiceOn?'1':'0');}catch(e){}setMuteIcon();
-  if(!voiceOn&&window.speechSynthesis)speechSynthesis.cancel();else say('¡Listo! Ahora te hablo cuando hagas algo en el tablero.','Voz activada',6000);};
+  if(!voiceOn&&window.satiStop)window.satiStop();else say('¡Listo! Ahora te hablo cuando hagas algo en el tablero.','Voz activada',6000);};
 $('guideBot').onclick=()=>{const g=$('guideText');g.style.display=g.style.display==='none'?'':'none';};
 
 function countUp(el,to,dec=0,suf=''){const t0=performance.now();
@@ -1406,7 +1426,7 @@ fetch('data/hotspots.json').then(r=>{if(!r.ok)throw 0;return r.json();}).then(j=
   Promise.all([fetch('data/clima.json').then(r=>r.ok?r.json():null).catch(()=>null),fetch('data/wayback.json').then(r=>r.ok?r.json():null).catch(()=>null)])
     .then(([c,w])=>{CLIMA=c;WB=w;updateBase();if(S.tab==='years')renderCharts();ready=true;lastYearSaid=S.year;});
   countUp($('k-hot'),N);countUp($('k-k'),C.kg,1,'×');$('kStep').textContent=C.kg.toFixed(1).replace('.',',');
-  window.__fire={D,get C(){return C;},compute,get map(){return map;},S,setRange};
+  window.__fire={D,get C(){return C;},compute,get map(){return map;},S,setRange,say,sayYear,goMpio,get hs(){return hsLayer;},get ready(){return ready;}};
 }).catch(err=>{console.error(err);
   $('map').innerHTML='<div class="loading" style="padding:20px;text-align:center">No se pudo cargar data/hotspots.json.<br>Abre la página desde GitHub Pages o con python -m http.server.</div>';});
 })();
