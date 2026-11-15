@@ -40,22 +40,22 @@ label.chk{font-size:13px;display:flex;gap:6px;align-items:center}
 <body>
 <main>
 <h1>Calendario de actividad de quema</h1>
-<p class="sub">Armonización de hotspots MODIS + VIIRS · Llanos Colombia–Venezuela (piloto)</p>
-<span class="badge">DATOS SINTÉTICOS DE DEMOSTRACIÓN</span>
+<p class="sub">Armonización de hotspots MODIS + VIIRS · Tolima, Colombia (piloto)</p>
+<span class="badge" id="badge">CARGANDO…</span>
 
 <section>
   <h2>1 · Área de interés</h2>
   <div id="map"></div>
   <div class="row" id="presets">
     <button data-p="all">Todo</button>
-    <button data-p="n">Norte (≥7°N)</button>
-    <button data-p="c">Centro (5–7°N)</button>
-    <button data-p="s">Sur (&lt;5°N)</button>
+    <button data-p="n">Norte (≥4,5°N)</button>
+    <button data-p="c">Centro (3,75–4,5°N)</button>
+    <button data-p="s">Sur (&lt;3,75°N)</button>
     <button data-p="none">Limpiar</button>
     <button data-p="fit">Reencuadrar mapa</button>
   </div>
   <p class="small" id="selinfo"></p>
-  <p class="small">Toca celdas (0,25°) para sumarlas o quitarlas. Las grises son fuentes fijas urbanas/industriales.</p>
+  <p class="small">Toca celdas (0,25°) para sumarlas o quitarlas. Solo se muestran celdas con al menos 25 % de su área dentro del Tolima (límites municipales: DANE, MGN). Las grises son fuentes fijas urbanas/industriales.</p>
 </section>
 
 <section>
@@ -90,11 +90,9 @@ label.chk{font-size:13px;display:flex;gap:6px;align-items:center}
 
 <details>
   <summary>Metodología y formato de datos reales</summary>
-  <p>1) Hotspots de FIRMS agregados a grilla de 0,25° y semana. 2) k = Σ VIIRS / Σ MODIS en el solapamiento 2012–2025 sobre el AOI seleccionado. 3) Serie armonizada = MODIS×k antes de 2012 y VIIRS después. 4) Anomalía z contra la climatología de cada semana (±1 semana). Aquí todo se genera con una función sintética; para datos reales basta reemplazar <code>compute()</code> por la lectura de:</p>
-  <pre>data/harmonized.json
-[{"cell":"r-c","lat":..,"lon":..,"urban":false,
-  "modis":[[wk0..wk52] por año 2000-2025],
-  "viirs":[[wk0..wk52] por año 2012-2025]}]</pre>
+  <p>1) Hotspots de NASA FIRMS (MODIS Collection 6.1 y VIIRS S-NPP 375 m, productos estándar) agregados a grilla de 0,25° y semana; MODIS con confianza ≥ 30, VIIRS nominal/alta. 2) Celdas con detección en más del 60 % de las semanas VIIRS se marcan como fuente fija (urbana/industrial). 3) k = Σ VIIRS / Σ MODIS en el solapamiento 2012–2025, por banda de latitud (norte/centro/sur) y mes. 4) Serie armonizada = MODIS×k antes de 2012 y VIIRS desde 2012. 5) Anomalía z contra la climatología de cada semana (±1 semana).</p>
+  <p>La tarjeta «k» muestra Σ VIIRS / Σ MODIS de las celdas seleccionadas en el solapamiento; la serie usa el k por banda×mes calculado en <code>pipeline/harmonize.py</code>. Datos: <code>data/harmonized.json</code>. Si no existe, la página usa un modelo sintético de demostración.</p>
+  <p>Créditos: NASA FIRMS (LANCE/EOSDIS) · Sentinel-2 cloudless 2020 © EOX (uso no comercial) · © OpenStreetMap.</p>
 </details>
 </main>
 
@@ -102,7 +100,11 @@ label.chk{font-size:13px;display:flex;gap:6px;align-items:center}
 <script>
 (()=>{
 const Y0=2000,Y1=2025,NY=Y1-Y0+1,NW=53,YV=2012,SENS=0.35;
-const LAT0=3,LAT1=9,LON0=-73,LON1=-66,STEP=0.25,NR=24,NC=28;
+const LAT0=2.75,LAT1=5.5,LON0=-76.25,LON1=-74.25,STEP=0.25,NR=11,NC=8;
+let BAND_CUTS=[4.5,3.75],REAL=null; // REAL = contenido de data/harmonized.json
+let TOL=null; const TOL_MIN=0.25;     // TOL = data/tolima.json (celdas con >=25 % dentro del Tolima)
+const bandOf=c=>{const lat=(c.lat0+c.lat1)/2;return lat>=BAND_CUTS[0]?0:lat>=BAND_CUTS[1]?1:2;};
+const monthOfWeek=w=>Math.min(11,Math.floor((w*7+3)/30.44));
 const MONTHS=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 const $=id=>document.getElementById(id);
 const S={src:'harm',view:'int',mask:true,hl:null};
@@ -123,16 +125,55 @@ const reg=new Float64Array(NY*NW);
 for(let y=0;y<NY;y++)for(let w=0;w<NW;w++)reg[y*NW+w]=gauss(rnd(y,w,77,0),rnd(y,w,78,0));
 
 const cells=[];
-for(let r=0;r<NR;r++)for(let c=0;c<NC;c++){
-  const g=gauss(rnd(r,c,1,0),rnd(r,c,2,0));
-  const smooth=.5+.5*Math.sin(r/3.5+1)*Math.cos(c/4.5);
-  const urban=rnd(r,c,3,0)<0.05;
-  cells.push({id:r*NC+c,r,c,urban,
-    base:urban?0.4:Math.exp(.8*g)*(.25+1.4*smooth),
-    lat0:LAT1-(r+1)*STEP,lat1:LAT1-r*STEP,lon0:LON0+c*STEP,lon1:LON0+(c+1)*STEP,sel:true});
+function buildCells(){
+  const byRC={};
+  if(REAL)for(const e of REAL.cells)byRC[e.r+'-'+e.c]=e;
+  const tol={};
+  if(TOL)for(const t of TOL.cells)tol[t.r+'-'+t.c]=t;
+  for(let r=0;r<NR;r++)for(let c=0;c<NC;c++){
+    const tc=tol[r+'-'+c];
+    if(TOL&&!(tc&&tc.frac>=TOL_MIN))continue; // fuera del Tolima
+    const cell={id:r*NC+c,r,c,mpio:tc?tc.mpio:null,frac:tc?tc.frac:1,
+      lat0:LAT1-(r+1)*STEP,lat1:LAT1-r*STEP,lon0:LON0+c*STEP,lon1:LON0+(c+1)*STEP,sel:true};
+    if(REAL){
+      const e=byRC[r+'-'+c];
+      cell.urban=!!(e&&e.urban);
+      cell.m=e?e.m:null;cell.v=e?e.v:null;
+      cell.base=e?e.v.reduce((a,b)=>a+b,0)+e.m.reduce((a,b)=>a+b,0):0;
+    }else{
+      const g=gauss(rnd(r,c,1,0),rnd(r,c,2,0));
+      const smooth=.5+.5*Math.sin(r/2+1)*Math.cos(c/2.5);
+      cell.urban=rnd(r,c,3,0)<0.05;
+      cell.base=cell.urban?0.4:Math.exp(.8*g)*(.25+1.4*smooth);
+    }
+    cells.push(cell);
+  }
+  const mx=Math.max(1,...cells.filter(c=>!c.urban).map(c=>c.base));
+  for(const c of cells)c.t=Math.sqrt(c.base/mx);
+}
+
+function computeReal(){
+  const use=cells.filter(c=>c.sel&&!(S.mask&&c.urban));
+  const K=REAL.meta.k_banda_mes;
+  const R=new Float64Array(NY*NW),H=new Float64Array(NY*NW);
+  let sv=0,sm=0;
+  for(const c of use){
+    if(!c.m)continue;
+    const b=bandOf(c);
+    for(let y=0;y<NY;y++){const pre=Y0+y<YV;
+      for(let w=0;w<NW;w++){
+        const i=y*NW+w,m=c.m[i],v=c.v[i];
+        if(pre){R[i]+=m;H[i]+=m*K[b][monthOfWeek(w)];}
+        else{R[i]+=v;H[i]+=v;sv+=v;sm+=m;}
+      }
+    }
+  }
+  return {R,H,k:sm>0?sv/sm:REAL.meta.k_global,n:use.length,
+    nUrb:cells.filter(c=>c.sel&&c.urban).length,empty:use.length===0};
 }
 
 function compute(){
+  if(REAL)return computeReal();
   const use=cells.filter(c=>c.sel&&!(S.mask&&c.urban));
   const M=new Float64Array(NY*NW),V=new Float64Array(NY*NW);
   for(const c of use){
@@ -217,14 +258,15 @@ function fit(cv,h){
 
 /* ---------- mapa ---------- */
 function cellStyle(c){
-  const t=Math.min(1,c.base/3);
+  const t=c.t;
   return {color:c.sel?css('--ok'):'#999',weight:c.sel?1.4:.3,
     fillColor:c.urban?'#6b7280':ramp(HEAT,t),fillOpacity:c.sel?.5:.08};
 }
 let map=null;
 function initMap(){
   if(typeof L==='undefined'){$('map').innerHTML='<p class="small" style="padding:12px">No se pudo cargar el mapa (sin conexión). Usa los botones de selección.</p>';return;}
-  map=L.map('map').setView([(LAT0+LAT1)/2,(LON0+LON1)/2],6);
+  map=L.map('map').setView([(LAT0+LAT1)/2,(LON0+LON1)/2],7);
+  map.attributionControl.addAttribution('Hotspots: <a href="https://firms.modaps.eosdis.nasa.gov" target="_blank">NASA FIRMS</a>');
   const s2=L.tileLayer('https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg',
     {attribution:'<a href="https://s2maps.eu" target="_blank">Sentinel-2 cloudless</a> by <a href="https://eox.at" target="_blank">EOX IT Services GmbH</a> (Contains modified Copernicus Sentinel data 2020)',maxZoom:12,minZoom:4});
   const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -233,8 +275,14 @@ function initMap(){
   L.control.layers({'Sentinel-2':s2,'OpenStreetMap':osm},null,{collapsed:true}).addTo(map);
   let s2err=0;
   s2.on('tileerror',()=>{if(++s2err===4){map.removeLayer(s2);osm.addTo(map);}});
+  if(TOL){
+    const rings=[];
+    for(const m of TOL.municipios)for(const r of m.rings)rings.push(r.map(p=>[p[1],p[0]]));
+    L.polygon(rings,{color:'#ffffff',weight:1,opacity:.8,fill:false,interactive:false}).addTo(map);
+  }
   for(const c of cells){
     c.rect=L.rectangle([[c.lat0,c.lon0],[c.lat1,c.lon1]],cellStyle(c)).addTo(map);
+    if(c.mpio)c.rect.bindTooltip(c.mpio+(c.urban?' · fuente fija':''),{sticky:true});
     c.rect.on('click',()=>{c.sel=!c.sel;c.rect.setStyle(cellStyle(c));refresh();});
   }
   map.fitBounds([[LAT0,LON0],[LAT1,LON1]]);
@@ -335,7 +383,7 @@ $('mask').onchange=e=>{S.mask=e.target.checked;refresh();};
 $('presets').querySelectorAll('button').forEach(b=>b.onclick=()=>{
   const p=b.dataset.p;
   if(p==='fit'){if(map)map.fitBounds([[LAT0,LON0],[LAT1,LON1]]);return;}
-  setSel(c=>p==='all'?true:p==='none'?false:p==='n'?c.lat0>=7:p==='c'?(c.lat0>=5&&c.lat0<7):c.lat0<5);
+  setSel(c=>p==='all'?true:p==='none'?false:bandOf(c)===({n:0,c:1,s:2})[p]);
 });
 function pick(e){
   if(!G||C.empty)return null;
@@ -352,8 +400,17 @@ $('cal').addEventListener('pointerdown',e=>{const p=pick(e);if(p){S.hl={y:p.y,w0
 window.addEventListener('resize',()=>{if(C)render();});
 
 $('tip').textContent='Toca o pasa el cursor sobre el calendario.';
-initMap();
-C=compute();render();
+function start(){
+  const b=$('badge');
+  if(REAL){b.textContent='DATOS REALES · NASA FIRMS';b.style.background='#0b7285';}
+  else b.textContent='DATOS SINTÉTICOS DE DEMOSTRACIÓN';
+  buildCells();initMap();C=compute();render();
+}
+const getJSON=u=>fetch(u).then(r=>r.ok?r.json():null).catch(()=>null);
+Promise.all([getJSON('data/harmonized.json'),getJSON('data/tolima.json')]).then(([j,t])=>{
+  if(j&&j.meta&&j.cells){REAL=j;if(j.meta.band_cuts)BAND_CUTS=j.meta.band_cuts;}
+  if(t&&t.cells)TOL=t;
+}).finally(start);
 window.__fire={get C(){return C;},compute,zscores,critical};
 })();
 </script>

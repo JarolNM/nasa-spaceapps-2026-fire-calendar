@@ -63,6 +63,15 @@ def main():
         urban[m.row.values, m.col.values] = True
     print(f"Celdas marcadas como urbanas/fuente fija: {int(urban.sum())}")
     use = ~urban
+    tol_file = Path("data/tolima.json")  # generado por pipeline/tolima_mask.py
+    inside = np.ones((NR, NC), bool)
+    if tol_file.exists():
+        inside[:] = False
+        for t in json.loads(tol_file.read_text(encoding="utf-8"))["cells"]:
+            if t["frac"] >= 0.25:
+                inside[t["r"], t["c"]] = True
+        use &= inside
+        print(f"Recorte al Tolima: {int(inside.sum())} celdas dentro (>=25 % de area)")
 
     # --- calibracion k por banda x mes ---
     bands = np.array([band_of(r) for r in range(NR)])
@@ -105,7 +114,7 @@ def main():
         for c in range(NC):
             m = M[:, :, r, c].ravel().astype(int).tolist()
             v = V[:, :, r, c].ravel().astype(int).tolist()
-            if sum(m) == 0 and sum(v) == 0 and not urban[r, c]:
+            if not inside[r, c] or (sum(m) == 0 and sum(v) == 0 and not urban[r, c]):
                 continue
             cells.append({"r": r, "c": c, "urban": bool(urban[r, c]), "m": m, "v": v})
     out = {
