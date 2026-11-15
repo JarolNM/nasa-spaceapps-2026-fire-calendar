@@ -1,0 +1,942 @@
+{
+"items": [
+{
+"id": "2000-MAM",
+"y": 2000,
+"t": 1,
+"temp": "lluvias",
+"n": 30,
+"cob": 45,
+"dnbr": false
+},
+{
+"id": "2000-JJA",
+"y": 2000,
+"t": 2,
+"temp": "seca",
+"n": 56,
+"cob": 80,
+"dnbr": true
+},
+{
+"id": "2000-SON",
+"y": 2000,
+"t": 3,
+"temp": "lluvias",
+"n": 46,
+"cob": 70,
+"dnbr": true
+},
+{
+"id": "2001-DEF",
+"y": 2001,
+"t": 0,
+"temp": "seca",
+"n": 32,
+"cob": 86,
+"dnbr": true
+},
+{
+"id": "2001-MAM",
+"y": 2001,
+"t": 1,
+"temp": "lluvias",
+"n": 50,
+"cob": 85,
+"dnbr": true
+},
+{
+"id": "2001-JJA",
+"y": 2001,
+"t": 2,
+"temp": "seca",
+"n": 39,
+"cob": 87,
+"dnbr": true
+},
+{
+"id": "2001-SON",
+"y": 2001,
+"t": 3,
+"temp": "lluvias",
+"n": 26,
+"cob": 51,
+"dnbr": true
+},
+{
+"id": "2002-DEF",
+"y": 2002,
+"t": 0,
+"temp": "seca",
+"n": 32,
+"cob": 71,
+"dnbr": true
+},
+{
+"id": "2002-MAM",
+"y": 2002,
+"t": 1,
+"temp": "lluvias",
+"n": 26,
+"cob": 58,
+"dnbr": true
+},
+{
+"id": "2002-JJA",
+"y": 2002,
+"t": 2,
+"temp": "seca",
+"n": 23,
+"cob": 67,
+"dnbr": true
+},
+{
+"id": "2002-SON",
+"y": 2002,
+"t": 3,
+"temp": "lluvias",
+"n": 19,
+"cob": 85,
+"dnbr": true
+},
+{
+"id": "2003-DEF",
+"y": 2003,
+"t": 0,
+"temp": "seca",
+"n": 30,
+"cob": 80,
+"dnbr": true
+},
+{
+"id": "2003-MAM",
+"y": 2003,
+"t": 1,
+"temp": "lluvias",
+"n": 10,
+"cob": 35,
+"dnbr": true
+},
+{
+"id": "2003-JJA",
+"y": 2003,
+"t": 2,
+"temp": "seca",
+"n": 13,
+"cob": 26,
+"dnbr": true
+},
+{
+"id": "2003-SON",
+"y": 2003,
+"t": 3,
+"temp": "lluvias",
+"n": 12,
+"cob": 51,
+"dnbr": true
+},
+{
+"id": "2004-DEF",
+"y": 2004,
+"t": 0,
+"temp": "seca",
+"n": 21,
+"cob": 71,
+"dnbr": true
+},
+{
+"id": "2004-MAM",
+"y": 2004,
+"t": 1,
+"temp": "lluvias",
+"n": 12,
+"cob": 18,
+"dnbr": true
+},
+{
+"id": "2004-JJA",
+"y": 2004,
+"t": 2,
+"temp": "seca",
+"n": 19,
+"cob": 57,
+"dnbr": true
+},
+{
+"id": "2004-SON",
+"y": 2004,
+"t": 3,
+"temp": "lluvias",
+"n": 32,
+"cob": 47,
+"dnbr": true
+},
+{
+"id": "2005-DEF",
+"y": 2005,
+"t": 0,
+"temp": "seca",
+"n": 24,
+"cob": 65,
+"dnbr": true
+},
+{
+"id": "2005-MAM",
+"y": 2005,
+"t": 1,
+"temp": "lluvias",
+"n": 17,
+"cob": 49,
+"dnbr": true
+},
+{
+"id": "2005-JJA",
+"y": 2005,
+"t": 2,
+"temp": "seca",
+"n": 25,
+"cob": 66,
+"dnbr": true
+},
+{
+"id": "2005-SON",
+"y": 2005,
+"t": 3,
+"temp": "lluvias",
+"n": 17,
+"cob": 29,
+"dnbr": true
+},
+{
+"id": "2006-DEF",
+"y": 2006,
+"t": 0,
+"temp": "seca",
+"n": 30,
+"cob": 60,
+"dnbr": true
+},
+{
+"id": "2006-MAM",
+"y": 2006,
+"t": 1,
+"temp": "lluvias",
+"n": 26,
+"cob": 45,
+"dnbr": true
+},
+{
+"id": "2006-JJA",
+"y": 2006,
+"t": 2,
+"temp": "seca",
+"n": 24,
+"cob": 49,
+"dnbr": true
+},
+{
+"id": "2006-SON",
+"y": 2006,
+"t": 3,
+"temp": "lluvias",
+"n": 20,
+"cob": 52,
+"dnbr": true
+},
+{
+"id": "2007-DEF",
+"y": 2007,
+"t": 0,
+"temp": "seca",
+"n": 25,
+"cob": 79,
+"dnbr": true
+},
+{
+"id": "2007-MAM",
+"y": 2007,
+"t": 1,
+"temp": "lluvias",
+"n": 19,
+"cob": 63,
+"dnbr": true
+},
+{
+"id": "2007-JJA",
+"y": 2007,
+"t": 2,
+"temp": "seca",
+"n": 19,
+"cob": 53,
+"dnbr": true
+},
+{
+"id": "2007-SON",
+"y": 2007,
+"t": 3,
+"temp": "lluvias",
+"n": 26,
+"cob": 68,
+"dnbr": true
+},
+{
+"id": "2008-DEF",
+"y": 2008,
+"t": 0,
+"temp": "seca",
+"n": 16,
+"cob": 44,
+"dnbr": true
+},
+{
+"id": "2008-MAM",
+"y": 2008,
+"t": 1,
+"temp": "lluvias",
+"n": 11,
+"cob": 16,
+"dnbr": true
+},
+{
+"id": "2008-JJA",
+"y": 2008,
+"t": 2,
+"temp": "seca",
+"n": 19,
+"cob": 48,
+"dnbr": true
+},
+{
+"id": "2008-SON",
+"y": 2008,
+"t": 3,
+"temp": "lluvias",
+"n": 19,
+"cob": 73,
+"dnbr": true
+},
+{
+"id": "2009-DEF",
+"y": 2009,
+"t": 0,
+"temp": "seca",
+"n": 29,
+"cob": 69,
+"dnbr": true
+},
+{
+"id": "2009-MAM",
+"y": 2009,
+"t": 1,
+"temp": "lluvias",
+"n": 22,
+"cob": 53,
+"dnbr": true
+},
+{
+"id": "2009-JJA",
+"y": 2009,
+"t": 2,
+"temp": "seca",
+"n": 31,
+"cob": 52,
+"dnbr": true
+},
+{
+"id": "2009-SON",
+"y": 2009,
+"t": 3,
+"temp": "lluvias",
+"n": 36,
+"cob": 75,
+"dnbr": true
+},
+{
+"id": "2010-DEF",
+"y": 2010,
+"t": 0,
+"temp": "seca",
+"n": 37,
+"cob": 94,
+"dnbr": true
+},
+{
+"id": "2010-MAM",
+"y": 2010,
+"t": 1,
+"temp": "lluvias",
+"n": 28,
+"cob": 70,
+"dnbr": true
+},
+{
+"id": "2010-JJA",
+"y": 2010,
+"t": 2,
+"temp": "seca",
+"n": 28,
+"cob": 68,
+"dnbr": true
+},
+{
+"id": "2010-SON",
+"y": 2010,
+"t": 3,
+"temp": "lluvias",
+"n": 24,
+"cob": 74,
+"dnbr": true
+},
+{
+"id": "2011-DEF",
+"y": 2011,
+"t": 0,
+"temp": "seca",
+"n": 26,
+"cob": 68,
+"dnbr": true
+},
+{
+"id": "2011-MAM",
+"y": 2011,
+"t": 1,
+"temp": "lluvias",
+"n": 34,
+"cob": 64,
+"dnbr": true
+},
+{
+"id": "2011-JJA",
+"y": 2011,
+"t": 2,
+"temp": "seca",
+"n": 32,
+"cob": 64,
+"dnbr": true
+},
+{
+"id": "2011-SON",
+"y": 2011,
+"t": 3,
+"temp": "lluvias",
+"n": 26,
+"cob": 72,
+"dnbr": true
+},
+{
+"id": "2012-DEF",
+"y": 2012,
+"t": 0,
+"temp": "seca",
+"n": 33,
+"cob": 66,
+"dnbr": true
+},
+{
+"id": "2012-MAM",
+"y": 2012,
+"t": 1,
+"temp": "lluvias",
+"n": 26,
+"cob": 64,
+"dnbr": true
+},
+{
+"id": "2012-JJA",
+"y": 2012,
+"t": 2,
+"temp": "seca",
+"n": 34,
+"cob": 84,
+"dnbr": true
+},
+{
+"id": "2012-SON",
+"y": 2012,
+"t": 3,
+"temp": "lluvias",
+"n": 31,
+"cob": 70,
+"dnbr": true
+},
+{
+"id": "2013-DEF",
+"y": 2013,
+"t": 0,
+"temp": "seca",
+"n": 28,
+"cob": 75,
+"dnbr": true
+},
+{
+"id": "2013-MAM",
+"y": 2013,
+"t": 1,
+"temp": "lluvias",
+"n": 40,
+"cob": 67,
+"dnbr": true
+},
+{
+"id": "2013-JJA",
+"y": 2013,
+"t": 2,
+"temp": "seca",
+"n": 65,
+"cob": 80,
+"dnbr": true
+},
+{
+"id": "2013-SON",
+"y": 2013,
+"t": 3,
+"temp": "lluvias",
+"n": 67,
+"cob": 77,
+"dnbr": true
+},
+{
+"id": "2014-DEF",
+"y": 2014,
+"t": 0,
+"temp": "seca",
+"n": 54,
+"cob": 85,
+"dnbr": true
+},
+{
+"id": "2014-MAM",
+"y": 2014,
+"t": 1,
+"temp": "lluvias",
+"n": 46,
+"cob": 86,
+"dnbr": true
+},
+{
+"id": "2014-JJA",
+"y": 2014,
+"t": 2,
+"temp": "seca",
+"n": 64,
+"cob": 75,
+"dnbr": true
+},
+{
+"id": "2014-SON",
+"y": 2014,
+"t": 3,
+"temp": "lluvias",
+"n": 58,
+"cob": 82,
+"dnbr": true
+},
+{
+"id": "2015-DEF",
+"y": 2015,
+"t": 0,
+"temp": "seca",
+"n": 62,
+"cob": 93,
+"dnbr": true
+},
+{
+"id": "2015-MAM",
+"y": 2015,
+"t": 1,
+"temp": "lluvias",
+"n": 60,
+"cob": 72,
+"dnbr": true
+},
+{
+"id": "2015-JJA",
+"y": 2015,
+"t": 2,
+"temp": "seca",
+"n": 58,
+"cob": 70,
+"dnbr": true
+},
+{
+"id": "2015-SON",
+"y": 2015,
+"t": 3,
+"temp": "lluvias",
+"n": 64,
+"cob": 83,
+"dnbr": true
+},
+{
+"id": "2016-DEF",
+"y": 2016,
+"t": 0,
+"temp": "seca",
+"n": 65,
+"cob": 95,
+"dnbr": true
+},
+{
+"id": "2016-MAM",
+"y": 2016,
+"t": 1,
+"temp": "lluvias",
+"n": 56,
+"cob": 84,
+"dnbr": true
+},
+{
+"id": "2016-JJA",
+"y": 2016,
+"t": 2,
+"temp": "seca",
+"n": 57,
+"cob": 78,
+"dnbr": true
+},
+{
+"id": "2016-SON",
+"y": 2016,
+"t": 3,
+"temp": "lluvias",
+"n": 65,
+"cob": 88,
+"dnbr": true
+},
+{
+"id": "2017-DEF",
+"y": 2017,
+"t": 0,
+"temp": "seca",
+"n": 56,
+"cob": 85,
+"dnbr": true
+},
+{
+"id": "2017-MAM",
+"y": 2017,
+"t": 1,
+"temp": "lluvias",
+"n": 51,
+"cob": 81,
+"dnbr": true
+},
+{
+"id": "2017-JJA",
+"y": 2017,
+"t": 2,
+"temp": "seca",
+"n": 65,
+"cob": 68,
+"dnbr": true
+},
+{
+"id": "2017-SON",
+"y": 2017,
+"t": 3,
+"temp": "lluvias",
+"n": 62,
+"cob": 85,
+"dnbr": true
+},
+{
+"id": "2018-DEF",
+"y": 2018,
+"t": 0,
+"temp": "seca",
+"n": 66,
+"cob": 80,
+"dnbr": true
+},
+{
+"id": "2018-MAM",
+"y": 2018,
+"t": 1,
+"temp": "lluvias",
+"n": 60,
+"cob": 77,
+"dnbr": true
+},
+{
+"id": "2018-JJA",
+"y": 2018,
+"t": 2,
+"temp": "seca",
+"n": 63,
+"cob": 89,
+"dnbr": true
+},
+{
+"id": "2018-SON",
+"y": 2018,
+"t": 3,
+"temp": "lluvias",
+"n": 55,
+"cob": 73,
+"dnbr": true
+},
+{
+"id": "2019-DEF",
+"y": 2019,
+"t": 0,
+"temp": "seca",
+"n": 264,
+"cob": 89,
+"dnbr": true
+},
+{
+"id": "2019-MAM",
+"y": 2019,
+"t": 1,
+"temp": "lluvias",
+"n": 197,
+"cob": 84,
+"dnbr": true
+},
+{
+"id": "2019-JJA",
+"y": 2019,
+"t": 2,
+"temp": "seca",
+"n": 279,
+"cob": 85,
+"dnbr": true
+},
+{
+"id": "2019-SON",
+"y": 2019,
+"t": 3,
+"temp": "lluvias",
+"n": 233,
+"cob": 87,
+"dnbr": true
+},
+{
+"id": "2020-DEF",
+"y": 2020,
+"t": 0,
+"temp": "seca",
+"n": 303,
+"cob": 98,
+"dnbr": true
+},
+{
+"id": "2020-MAM",
+"y": 2020,
+"t": 1,
+"temp": "lluvias",
+"n": 245,
+"cob": 88,
+"dnbr": true
+},
+{
+"id": "2020-JJA",
+"y": 2020,
+"t": 2,
+"temp": "seca",
+"n": 249,
+"cob": 92,
+"dnbr": true
+},
+{
+"id": "2020-SON",
+"y": 2020,
+"t": 3,
+"temp": "lluvias",
+"n": 269,
+"cob": 81,
+"dnbr": true
+},
+{
+"id": "2021-DEF",
+"y": 2021,
+"t": 0,
+"temp": "seca",
+"n": 251,
+"cob": 90,
+"dnbr": true
+},
+{
+"id": "2021-MAM",
+"y": 2021,
+"t": 1,
+"temp": "lluvias",
+"n": 204,
+"cob": 77,
+"dnbr": true
+},
+{
+"id": "2021-JJA",
+"y": 2021,
+"t": 2,
+"temp": "seca",
+"n": 253,
+"cob": 84,
+"dnbr": true
+},
+{
+"id": "2021-SON",
+"y": 2021,
+"t": 3,
+"temp": "lluvias",
+"n": 286,
+"cob": 86,
+"dnbr": true
+},
+{
+"id": "2022-DEF",
+"y": 2022,
+"t": 0,
+"temp": "seca",
+"n": 247,
+"cob": 92,
+"dnbr": true
+},
+{
+"id": "2022-MAM",
+"y": 2022,
+"t": 1,
+"temp": "lluvias",
+"n": 192,
+"cob": 81,
+"dnbr": true
+},
+{
+"id": "2022-JJA",
+"y": 2022,
+"t": 2,
+"temp": "seca",
+"n": 235,
+"cob": 90,
+"dnbr": true
+},
+{
+"id": "2022-SON",
+"y": 2022,
+"t": 3,
+"temp": "lluvias",
+"n": 248,
+"cob": 96,
+"dnbr": true
+},
+{
+"id": "2023-DEF",
+"y": 2023,
+"t": 0,
+"temp": "seca",
+"n": 285,
+"cob": 99,
+"dnbr": true
+},
+{
+"id": "2023-MAM",
+"y": 2023,
+"t": 1,
+"temp": "lluvias",
+"n": 220,
+"cob": 93,
+"dnbr": true
+},
+{
+"id": "2023-JJA",
+"y": 2023,
+"t": 2,
+"temp": "seca",
+"n": 279,
+"cob": 97,
+"dnbr": true
+},
+{
+"id": "2023-SON",
+"y": 2023,
+"t": 3,
+"temp": "lluvias",
+"n": 249,
+"cob": 98,
+"dnbr": true
+},
+{
+"id": "2024-DEF",
+"y": 2024,
+"t": 0,
+"temp": "seca",
+"n": 305,
+"cob": 100,
+"dnbr": true
+},
+{
+"id": "2024-MAM",
+"y": 2024,
+"t": 1,
+"temp": "lluvias",
+"n": 233,
+"cob": 92,
+"dnbr": true
+},
+{
+"id": "2024-JJA",
+"y": 2024,
+"t": 2,
+"temp": "seca",
+"n": 246,
+"cob": 99,
+"dnbr": true
+},
+{
+"id": "2024-SON",
+"y": 2024,
+"t": 3,
+"temp": "lluvias",
+"n": 233,
+"cob": 95,
+"dnbr": true
+},
+{
+"id": "2025-DEF",
+"y": 2025,
+"t": 0,
+"temp": "seca",
+"n": 231,
+"cob": 97,
+"dnbr": true
+},
+{
+"id": "2025-MAM",
+"y": 2025,
+"t": 1,
+"temp": "lluvias",
+"n": 229,
+"cob": 84,
+"dnbr": true
+},
+{
+"id": "2025-JJA",
+"y": 2025,
+"t": 2,
+"temp": "seca",
+"n": 294,
+"cob": 88,
+"dnbr": true
+},
+{
+"id": "2025-SON",
+"y": 2025,
+"t": 3,
+"temp": "lluvias",
+"n": 299,
+"cob": 87,
+"dnbr": true
+}
+],
+"bounds": [
+[
+2.82,
+-76.24378
+],
+[
+5.37,
+-74.32622
+]
+],
+"metodo": "Mediana sin nubes por temporada (DEF, MAM, JJA, SON) de Landsat 5/7/8/9 y Sentinel-2, armonizados a Landsat 8 (Roy 2016; HLS). dNBR = NBR trimestre anterior − actual."
+}

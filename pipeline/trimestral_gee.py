@@ -194,7 +194,7 @@ def main():
             img, n = compuesto(col, y, t)
             dnbr = prev_nbr.subtract(img.select("nbr")).rename("dnbr") if prev_nbr is not None else None
             prev_nbr = img.select("nbr")
-            if tid in hechos:
+            if tid in hechos or (IT / f"{tid}.json").exists():
                 continue
             n = n.getInfo()
             cov = bajar(img.visualize(**vis_rgb), OUT / f"{tid}_rgb.webp", mask)

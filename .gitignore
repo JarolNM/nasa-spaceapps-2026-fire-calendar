@@ -4,3 +4,4 @@ data/raw/
 __pycache__/
 *.pyc
 .claude/
+data/trimestral/_items/
