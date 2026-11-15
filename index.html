@@ -177,10 +177,21 @@ footer .lg{width:110px;height:72px;border-radius:12px;background:#fff center/con
 
 /* guía + tipografía */
 #guide{position:fixed;right:18px;bottom:18px;z-index:1200;display:flex;align-items:flex-end;gap:8px;pointer-events:none}
-#guide .bubble{pointer-events:auto;max-width:250px;background:var(--surface);color:var(--ink);font-size:12.5px;line-height:1.45;padding:10px 12px;border-radius:14px 14px 4px 14px;box-shadow:0 10px 30px rgba(15,31,61,.18);border:1px solid var(--line);transition:opacity .3s}
+#guide .bubble{pointer-events:auto;max-width:340px;background:var(--surface);color:var(--ink);font-size:14px;line-height:1.5;padding:14px 16px;border-radius:14px 14px 4px 14px;box-shadow:0 10px 30px rgba(15,31,61,.18);border:1px solid var(--line);transition:opacity .3s}
 #guide .bubble b{color:var(--fire)}
-#guide .mini{width:56px;height:56px;pointer-events:auto;cursor:pointer;animation:float 4s ease-in-out infinite}
-@media (max-width:600px){#guide .bubble{max-width:180px;font-size:11.5px}#guide .mini{width:44px;height:44px}}
+#guide .mini{width:96px;height:96px;pointer-events:auto;cursor:pointer;animation:float 4s ease-in-out infinite}
+@media (max-width:600px){#guide .bubble{max-width:220px;font-size:12.5px}#guide .mini{width:64px;height:64px}}
+#guide .bubble .gt{display:block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--fire);margin-bottom:4px}
+#guide .bubble.pop{animation:gpop .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes gpop{from{transform:scale(.85) translateY(8px);opacity:0}to{transform:none;opacity:1}}
+.mapinfo{background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(6px);color:var(--ink);border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.25);padding:8px 10px;font:12px/1.4 var(--font),sans-serif;max-width:270px}
+.mapinfo .enso{display:flex;align-items:center;gap:8px;font-weight:700}
+.mapinfo .enso i{width:12px;height:12px;border-radius:50%;flex:none}
+.mapinfo .enso.nino i{background:#e03131;box-shadow:0 0 0 4px rgba(224,49,49,.25);animation:pulse 2s infinite}
+.mapinfo .enso.nina i{background:#1c7ed6;box-shadow:0 0 0 4px rgba(28,126,214,.25)}
+.mapinfo .enso.neutral i{background:#adb5bd}
+.mapinfo .ex{color:var(--ink2);font-size:11.5px;margin-top:2px}
+.mapinfo .img{border-top:1px solid var(--line);margin-top:6px;padding-top:5px;color:var(--ink3);font-size:11px}
 #fontPick{margin-left:auto;display:flex;align-items:center;gap:6px;background:var(--surface);border-radius:99px;padding:3px 4px 3px 10px;font-size:12px;color:var(--ink2);border:1px solid var(--line)}
 #fontPick b{font-size:14px;color:var(--ink)}
 #fontPick select{border:0;background:var(--soft);color:var(--ink);border-radius:99px;padding:5px 8px;font-size:12px}
@@ -290,15 +301,15 @@ body.intro-on{overflow:hidden}
 @media (max-width:600px){.caption{bottom:6px;padding:6px 8px}.stage .sub{display:none}}
 
 /* ---------- industrias y volcán (fuentes fijas) ---------- */
-.fxi{position:relative;width:44px;height:44px;cursor:pointer;transition:transform .15s}
+.fxi{position:relative;width:32px;height:32px;cursor:pointer;transition:transform .15s}
 .fxi:hover{transform:scale(1.15)}
-.fxi.ctx{width:34px;height:34px;opacity:.9}
-.fxi.small{width:30px;height:30px;opacity:.85}
+.fxi.ctx{width:24px;height:24px;opacity:.9}
+.fxi.small{width:22px;height:22px;opacity:.85}
 .fxi::before{content:'';position:absolute;left:4%;right:4%;bottom:0;height:92%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95) 55%,rgba(255,255,255,.55));box-shadow:0 2px 8px rgba(0,0,0,.45);border:2px solid var(--rc,#fff)}
 .fxi>svg{position:absolute;left:14%;bottom:8%;width:72%;height:72%;filter:drop-shadow(0 2px 4px rgba(0,0,0,.55));overflow:visible}
 .fxi .puff{position:absolute;left:var(--x,70%);bottom:var(--y,72%);width:22%;height:22%;border-radius:50%;background:var(--pc,rgba(235,235,235,.92));opacity:0;animation:smoke var(--sd,3.2s) ease-out infinite}
 .fxi .puff.b{animation-delay:calc(var(--sd,3.2s)/3)}.fxi .puff.c{animation-delay:calc(var(--sd,3.2s)*2/3)}
-@keyframes smoke{0%{opacity:0;transform:translate(0,0) scale(.5)}15%{opacity:.95}100%{opacity:0;transform:translate(10px,-34px) scale(2.4)}}
+@keyframes smoke{0%{opacity:0;transform:translate(0,0) scale(.5)}15%{opacity:.95}100%{opacity:0;transform:translate(7px,-24px) scale(2.2)}}
 .fxi .flame{transform-origin:50% 100%;transform-box:fill-box;animation:flame .35s ease-in-out infinite alternate}
 @keyframes flame{from{transform:scale(1,1)}to{transform:scale(.85,1.25)}}
 .fxi .glow{animation:glow 1.6s ease-in-out infinite}
@@ -307,7 +318,7 @@ body.intro-on{overflow:hidden}
 @keyframes kiln{to{transform:rotate(360deg)}}
 .fxi .bean{transform-origin:center;transform-box:fill-box;animation:bob 1.8s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
-.fxi .q{position:absolute;right:-5px;top:-5px;background:#0b2a5b;color:#fff;font:700 9px Inter,sans-serif;border-radius:99px;padding:1px 5px;border:1.5px solid #fff}
+.fxi .q{position:absolute;right:-6px;top:-6px;transform:scale(.85);background:#0b2a5b;color:#fff;font:700 9px Inter,sans-serif;border-radius:99px;padding:1px 5px;border:1.5px solid #fff}
 .fx-pop{font:12px/1.4 var(--font),Inter,sans-serif;min-width:250px}
 .fx-pop .hd{display:flex;gap:8px;align-items:center;margin-bottom:6px}
 .fx-pop .hd .ic{width:30px;height:30px;flex:none}
@@ -439,8 +450,8 @@ body.intro-on{overflow:hidden}
         <div class="pane" id="p-years">
           <div class="ph"><div><h3>Total por año</h3><p>Sin armonizar, en 2012 aparece un salto que es solo el cambio de satélite. Armonizado, los 26 años se comparan en la misma escala.</p></div></div>
           <svg class="chart" id="bars"></svg>
-          <div class="legend"><span><i style="background:var(--gray)"></i>Sin armonizar (MODIS → VIIRS en 2012)</span><span><i style="background:var(--fire)"></i>Armonizado</span></div>
-          <div class="hint">👆 Toca un año para verlo en el mapa.</div>
+          <div class="legend"><span><i style="background:var(--gray)"></i>Sin armonizar (MODIS → VIIRS en 2012)</span><span><i style="background:var(--fire)"></i>Armonizado</span><span><i style="background:rgba(224,49,49,.35)"></i>Año El Niño</span><span><i style="background:rgba(28,126,214,.4)"></i>Año La Niña</span></div>
+          <div class="hint">👆 Toca un año para verlo en el mapa. Fíjate cómo los años de El Niño (rojo) suelen tener más fuego. Fuente: NOAA, índice ONI.</div>
         </div>
 
         <div class="pane" id="p-mun">
@@ -750,6 +761,42 @@ const TIPS={
   mun:'Comparamos por cada 100 km², así un municipio grande no gana solo por tamaño.',
   crit:'Estos periodos tuvieron mucho más fuego de lo normal. 2015 y 2024 fueron años de <b>El Niño</b>.'
 };
+let sayT=0;
+function say(html,title='Sati te cuenta',ms=11000){const g=$('guideText');clearTimeout(sayT);g.style.display='';
+  g.classList.remove('pop');void g.offsetWidth;g.innerHTML=`<span class="gt">${title}</span>${html}`;g.style.opacity=1;g.classList.add('pop');
+  sayT=setTimeout(()=>g.style.opacity=0,ms);}
+const EVENTOS={
+  2000:'El satélite Terra (MODIS) empezó a enviar datos a comienzos de 2000; por eso este año casi no tiene registros.',
+  2002:'En mayo de 2002 la NASA lanzó <b>Aqua</b>, el segundo satélite con MODIS: desde entonces hay dos pasadas MODIS al día.',
+  2003:'Según la Universidad del Tolima, 2003 fue el año con más focos MODIS del periodo 2001–2022. Venía de El Niño 2002–2003.',
+  2007:'Comenzó una La Niña fuerte (2007–2008): más lluvias en los Andes colombianos.',
+  2009:'El Niño 2009–2010 trajo sequía a Colombia a finales de 2009 y comienzos de 2010.',
+  2010:'La Niña 2010–2011 causó la "ola invernal", una de las temporadas de lluvias más graves de la historia de Colombia.',
+  2012:'Llegó <b>VIIRS</b> (satélite Suomi NPP, lanzado en octubre de 2011): ve fuegos más pequeños, por eso los datos sin armonizar "saltan" este año.',
+  2015:'El Niño 2015–2016 fue uno de los más fuertes registrados por la NOAA (ONI hasta +2,6). En el Tolima se nota en agosto–septiembre.',
+  2016:'El Niño 2015–2016 terminó hacia abril de 2016; los primeros meses del año siguieron secos.',
+  2020:'Comenzó una La Niña que duró tres años seguidos (2020–2023), algo poco común.',
+  2023:'El Niño regresó a mediados de 2023.',
+  2024:'En enero de 2024, en pleno El Niño, Colombia sufrió una ola de incendios forestales y el Gobierno declaró situación de desastre.'
+};
+function sayYear(y){
+  if(!C)return;const tot=k=>{let s=0;for(let m=0;m<12;m++)s+=C.M.H[(k-Y0)*12+m];return s;};
+  const vals=[];for(let k=2001;k<=Y1;k++)vals.push(tot(k));const avg=vals.reduce((a,b)=>a+b,0)/vals.length;
+  const t=tot(y),rank=[...vals].sort((a,b)=>b-a).indexOf(t)+1;let pm=0;for(let m=1;m<12;m++)if(C.M.H[(y-Y0)*12+m]>C.M.H[(y-Y0)*12+pm])pm=m;
+  const ea=CLIMA&&CLIMA.anual[y],en=ea&&ea.fase!=='neutral'?` Fue año de <b>${ea.fase==='nino'?'El Niño':'La Niña'} ${ea.fuerza}</b>.`:'';
+  const pct=Math.round((t/avg-1)*100);
+  const stat=y===2000?'':`Se registraron <b>${fmt(t)}</b> hotspots (armonizados), ${Math.abs(pct)} % ${pct>=0?'más':'menos'} que el promedio; es el puesto <b>#${rank}</b> de 25 años. Mes más activo: <b>${MONTHL[pm].toLowerCase()}</b>.`;
+  say(`${stat}${en}${EVENTOS[y]?'<br><br>📌 '+EVENTOS[y]:''}`,`En ${y}…`,13000);
+}
+const FXFACT={
+  volcan:'¿Sabías que el 13 de noviembre de 1985 una erupción del <b>Nevado del Ruiz</b> generó flujos de lodo que sepultaron <b>Armero</b>, en el Tolima? Murieron unas 23.000 personas. Hoy el Servicio Geológico Colombiano lo vigila las 24 horas, y desde el espacio la NASA detecta su calor.',
+  cemento:'¿Sabías que un horno de cemento trabaja a más de 1.400 °C sin parar? Por eso los satélites de la NASA lo detectan casi todos los días… ¡aunque no sea un incendio!',
+  petroleo:'¿Sabías que las <b>teas</b> petroleras queman el gas que sale con el crudo? VIIRS las ve incluso de noche, y el Banco Mundial y la NOAA usan estos datos para medir la quema de gas en el mundo.',
+  arroz:'¿Sabías que el Tolima es uno de los mayores productores de arroz de Colombia? Muchos molinos queman la <b>cascarilla</b> para secar el grano, y ese calor también lo ven los satélites.',
+  cafe:'¿Sabías que las trilladoras secan el café quemando su propia cascarilla (el <b>cisco</b>)? Ese calor repetido aparece como hotspot.',
+  sin_identificar:'Este punto se calienta una y otra vez durante años en el mismo lugar. Un incendio real no se repite así: probablemente es un horno o una industria. ¿Sabes qué hay aquí?'
+};
+let hsSaid=0;
 let tipT=0;function tip(k){const g=$('guideText');g.style.display='';g.style.opacity=0;clearTimeout(tipT);setTimeout(()=>{g.innerHTML=TIPS[k];g.style.opacity=1;},200);tipT=setTimeout(()=>g.style.opacity=0,9000);}
 setTimeout(()=>{$('guideText').style.opacity=0;},9000);
 $('guideBot').onclick=()=>{const g=$('guideText');g.style.display=g.style.display==='none'?'':'none';};
@@ -837,7 +884,34 @@ function setRange(from,to,opts={}){
     S.month=fullMonth?d0.getUTCMonth():-1;
   }
   $('fYear').value=S.year;$('fMonth').value=S.month;$('fFrom').value=iso(S.from);$('fTo').value=iso(S.to);
-  drawHotspots();renderCharts();
+  drawHotspots();renderCharts();updateBase();
+  if(!opts.quiet&&ready&&S.year!==lastYearSaid){lastYearSaid=S.year;sayYear(S.year);}
+}
+let ready=false,lastYearSaid=null;
+/* ---------- clima (El Niño / La Niña) e imagen del mapa ---------- */
+function ensoRange(){
+  if(!CLIMA)return null;let sum=0,n=0,ni=0,na=0,pkN=0,pkA=0;
+  const d0=dateOf(S.from),d1=dateOf(S.to);
+  for(let y=d0.getUTCFullYear(),m=d0.getUTCMonth();y<d1.getUTCFullYear()||(y===d1.getUTCFullYear()&&m<=d1.getUTCMonth());m===11?(y++,m=0):m++){
+    const v=CLIMA.mensual[`${y}-${String(m+1).padStart(2,'0')}`];if(!v)continue;sum+=v[0];n++;if(v[1]>0){ni++;pkN=Math.max(pkN,v[0]);}if(v[1]<0){na++;pkA=Math.min(pkA,v[0]);}if(n>400)break;}
+  if(!n)return null;const avg=sum/n,fase=ni>n/2?'nino':na>n/2?'nina':'neutral';
+  const a=fase==='nino'?pkN:fase==='nina'?-pkA:Math.abs(avg),fz=a>=2?'muy fuerte':a>=1.5?'fuerte':a>=1?'moderado':a>=.5?'débil':'';
+  return {fase,avg,fz,n,peak:a};
+}
+function updateBase(){
+  if(!map)return;
+  if(baseYear)baseYear.setUrl(wbUrl(S.year));
+  if(baseNasa)baseNasa.setUrl(nasaUrl());
+  const el=$('mapInfo');if(!el)return;
+  const e=ensoRange();
+  const lab=e?{nino:`El Niño ${e.fz}`,nina:`La Niña ${e.fz}`,neutral:'Condiciones neutrales'}[e.fase]:'';
+  const ex=e?{nino:'Menos lluvias en el Tolima: más riesgo de incendios.',nina:'Más lluvias en el Tolima: menos incendios.',neutral:'Ni El Niño ni La Niña en este periodo.'}[e.fase]:'';
+  let img='';
+  if(baseMode==='year'){const k=WB&&WB[Math.max(2014,Math.min(2026,S.year))];
+    img=k?`🛰 Imagen Esri, versión ${k.fecha.slice(0,7)}${S.year<2014?' (no hay archivo antes de 2014)':''}`:'🛰 Imagen Esri actual';}
+  else if(baseMode==='nasa')img=`🛰 Imagen NASA del ${nice(S.to-S.from<=31?S.from:Math.round((S.from+S.to)/2))} (puede tener nubes)`;
+  else img='🗺 OpenStreetMap';
+  el.innerHTML=(e?`<div class="enso ${e.fase}"><i></i>${lab} <span style="font-weight:500;color:var(--ink3)">ONI ${e.fase==='neutral'?(e.avg>=0?'+':'')+e.avg.toFixed(1).replace('.',','):'pico '+(e.fase==='nino'?'+':'−')+e.peak.toFixed(1).replace('.',',')}</span></div><div class="ex">${ex}</div>`:'')+`<div class="img">${img}</div>`;
 }
 function applyYM(){
   const y=S.year,m=S.month;
@@ -846,7 +920,10 @@ function applyYM(){
 }
 
 /* ---------- mapa ---------- */
-let map=null,mpLayers=[],hsLayer=null,bounds=null,canvasR=null,baseS2=null,baseOSM=null;
+let map=null,mpLayers=[],hsLayer=null,bounds=null,canvasR=null,baseYear=null,baseNasa=null,baseOSM=null,baseMode='year',WB=null,CLIMA=null,infoCtl=null;
+const wbUrl=yr=>{const k=WB&&(WB[yr]||WB[Math.max(2014,Math.min(2026,yr))]);return k?'https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/WMTS/1.0.0/default028mm/MapServer/tile/'+k.num+'/{z}/{y}/{x}':'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';};
+const nasaDate=()=>iso(S.to-S.from<=31?S.from:Math.round((S.from+S.to)/2));
+const nasaUrl=()=>'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/'+nasaDate()+'/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg';
 function styleMpios(){
   if(!map)return;
   mpLayers.forEach((l,k)=>{const s=SEL[k];
@@ -858,7 +935,7 @@ function layersControl(){
     const d=stop(L.DomUtil.create('div','mctl layers'+(innerWidth<700?' closed':'')));
     d.innerHTML=`<div class="head"><span>⚙ Capas y filtros</span><span id="lyTog">${innerWidth<700?'▾':'▴'}</span></div>
     <div class="body">
-      <div class="blk"><h4>Mapa base</h4><div class="seg" id="segBase"><button data-b="s2" class="on">Satélite</button><button data-b="osm">Mapa</button></div></div>
+      <div class="blk"><h4>Mapa base</h4><div class="seg" id="segBase"><button data-b="year" class="on" title="Esri alta resolución, versión del año elegido">Satélite del año</button><button data-b="nasa" title="Imagen diaria de NASA (250 m) de la fecha elegida">NASA del día</button><button data-b="osm">Mapa</button></div></div>
       <div class="blk"><h4>Confianza</h4><div class="chips" id="confChips">
         <span class="chip" data-c="0"><span class="dot" style="background:var(--c0)"></span>Baja</span>
         <span class="chip on" data-c="1"><span class="dot" style="background:var(--c1)"></span>Nominal</span>
@@ -892,14 +969,14 @@ function initMap(){
   if(typeof L==='undefined'){$('map').innerHTML='<div class="loading">No se pudo cargar el mapa (sin conexión).</div>';return;}
   map=L.map('map',{preferCanvas:true,zoomControl:false});
   canvasR=L.canvas({padding:.3});
-  baseS2=L.tileLayer('https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg',
-    {attribution:'Sentinel-2 cloudless © <a href="https://eox.at" target="_blank">EOX</a>',maxZoom:16,maxNativeZoom:14,minZoom:6}).addTo(map);
+  baseYear=L.tileLayer(wbUrl(S.year),{attribution:'Imágenes © Esri World Imagery (Wayback), Maxar, Earthstar Geographics',maxZoom:18,maxNativeZoom:17,minZoom:6}).addTo(map);
+  baseNasa=L.tileLayer(nasaUrl(),{attribution:'Imagen diaria NASA GIBS (MODIS Terra)',maxZoom:18,maxNativeZoom:9,minZoom:6});
   baseOSM=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:16,minZoom:6});
   map.attributionControl.setPrefix(false).addAttribution('<a href="https://firms.modaps.eosdis.nasa.gov" target="_blank">NASA FIRMS</a> · DANE');
-  let s2err=0;baseS2.on('tileerror',()=>{if(++s2err===4&&map.hasLayer(baseS2)){map.removeLayer(baseS2);baseOSM.addTo(map);}});
   searchControl();
   L.control.zoom({position:'topleft'}).addTo(map);
   layersControl();
+  infoCtl=L.control({position:'bottomleft'});infoCtl.onAdd=()=>{const d=L.DomUtil.create('div','mapinfo');d.id='mapInfo';L.DomEvent.disableClickPropagation(d);return d;};infoCtl.addTo(map);
   L.control.scale({imperial:false,position:'bottomleft',maxWidth:140}).addTo(map);
   northControl();
   D.mpios.forEach((m,k)=>{
@@ -912,6 +989,9 @@ function initMap(){
   map.fitBounds(bounds,{padding:[16,16]});
   hsLayer=L.layerGroup().addTo(map);
   map.on('zoomend',drawHotspots);
+  map.on('popupopen',e=>{const el=e.popup.getElement();if(!el||!el.querySelector('table.attr')||hsSaid>=3)return;hsSaid++;
+    const v=/VIIRS/.test(el.textContent);
+    say(v?'Este hotspot lo vio <b>VIIRS</b>: cada píxel mide 375 × 375 m, unas <b>14 hectáreas</b>. El fuego puede ser mucho más pequeño que el píxel, pero su calor basta para detectarlo.':'Este hotspot lo vio <b>MODIS</b>: cada píxel mide 1 × 1 km, unas <b>100 hectáreas</b>. Por eso MODIS no ve fuegos tan pequeños como VIIRS.','Dato curioso');});
 }
 function popup(i){
   const d=dateOf(DA[i]),hm=String(D.hm[i]).padStart(4,'0');
@@ -1089,10 +1169,12 @@ function drawBars(){
     r.setAttribute('d',d(0));setTimeout(()=>{let t0=null;const an=t=>{t0=t0||t;const p=Math.min(1,(t-t0)/550),e=1-Math.pow(1-p,3);r.setAttribute('d',d(h*e));if(p<1)requestAnimationFrame(an);};requestAnimationFrame(an);},delay);};
   for(let i=0;i<NY;i++){
     const x0=ml+i*gw+(gw-2*bw-2)/2;
-    if(Y0+i===S.year)el('rect',{x:ml+i*gw,y:mt-4,width:gw,height:base-mt+4,rx:4,fill:'var(--soft)'},svg);
+    const ea=CLIMA&&CLIMA.anual[Y0+i];
+    if(ea&&ea.fase!=='neutral')el('rect',{x:ml+i*gw,y:mt-4,width:gw,height:base-mt+4,fill:ea.fase==='nino'?'rgba(224,49,49,.13)':'rgba(28,126,214,.15)'},svg);
+    if(Y0+i===S.year)el('rect',{x:ml+i*gw,y:mt-4,width:gw,height:base-mt+4,rx:4,fill:'none',stroke:'var(--ink3)','stroke-width':1.5},svg);
     bar(x0,tr[i],'var(--gray)',i*20);bar(x0+bw+2,th[i],'var(--fire)',i*20+50);
     const hit=el('rect',{x:ml+i*gw,y:mt,width:gw,height:H-mt-mb,fill:'transparent',style:'cursor:pointer'},svg);
-    hit.addEventListener('pointermove',e=>showTT(`<b>${Y0+i}</b> · ${Y0+i<YV?'MODIS':'VIIRS'}<br>Sin armonizar: ${fmt(tr[i])}<br>Armonizado: ${fmt(th[i])}`,e));
+    hit.addEventListener('pointermove',e=>showTT(`<b>${Y0+i}</b> · ${Y0+i<YV?'MODIS':'VIIRS'}${ea&&ea.fase!=='neutral'?` · ${ea.fase==='nino'?'🔴 El Niño':'🔵 La Niña'} ${ea.fuerza}`:''}<br>Sin armonizar: ${fmt(tr[i])}<br>Armonizado: ${fmt(th[i])}`,e));
     hit.addEventListener('pointerleave',hideTT);
     hit.addEventListener('click',()=>{S.year=Y0+i;S.month=-1;applyYM();});
     if(i%5===0||Y0+i===S.year)txt(svg,ml+i*gw+gw/2,H-8,Y0+i,{'text-anchor':'middle','font-weight':Y0+i===S.year?700:400});
@@ -1147,6 +1229,9 @@ function markPreset(p){$('presets').querySelectorAll('.chip').forEach(c=>c.class
 function goMpio(k,only=true){
   if(only){SEL.fill(0);SEL[k]=1;markPreset('one');
     const pill=$('selPill');pill.textContent=`Solo ${D.mpios[k].n}  ✕`;pill.style.display='block';}
+  {const cnt=new Float64Array(D.mpios.length);for(let i=0;i<N;i++)if(D.s[i]===1&&passes(i))cnt[D.m[i]]++;
+   const dens=D.mpios.map((m,j)=>({j,v:cnt[j]/m.area*100})).sort((a,b)=>b.v-a.v),r=dens.findIndex(x=>x.j===k)+1;
+   say(`<b>${D.mpios[k].n}</b> (${fmt(D.mpios[k].area)} km²) tuvo <b>${fmt(cnt[k])}</b> hotspots VIIRS entre 2012 y 2025: es el puesto <b>#${r}</b> de 47 municipios en fuego por km².`,'Municipio');}
   map.flyToBounds(mpLayers[k].getBounds(),{padding:[30,30],duration:.8});
   styleMpios();refresh();
 }
@@ -1181,7 +1266,7 @@ const FX={
 };
 function fxIcon(f){
   const t=FX[f.tipo]||FX.sin_identificar,cls=f.identificacion==='contexto'?' ctx':f.tipo==='sin_identificar'?' small':'';
-  const sz=f.identificacion==='contexto'?34:f.tipo==='sin_identificar'?30:44;
+  const sz=f.identificacion==='contexto'?24:f.tipo==='sin_identificar'?22:32;
   const ring={confirmada:'#2b8a3e',probable:'#f59f00',contexto:'#1c7ed6'}[f.identificacion]||'#868e96';
   const html=`<div class="fxi${cls}" style="--rc:${ring};--pc:${t.pc};--x:${t.x};--y:${t.y};${t.sd?'--sd:'+t.sd:''}">${t.svg}<span class="puff"></span><span class="puff b"></span><span class="puff c"></span>${f.tipo==='sin_identificar'?'<span class="q">?</span>':''}</div>`;
   return L.divIcon({html,className:'',iconSize:[sz,sz],iconAnchor:[sz/2,sz-2],popupAnchor:[0,-sz+6]});
@@ -1206,6 +1291,7 @@ function initFx(){
     fxLayer=L.layerGroup(list.map(f=>L.marker([f.lat,f.lon],{icon:fxIcon(f),title:f.nombre,riseOnHover:true,zIndexOffset:400+100*(order[f.tipo]||0)})
       .bindPopup(fxPopup(f),{maxWidth:320,minWidth:250,autoPanPaddingTopLeft:L.point(20,80),autoPanPaddingBottomRight:L.point(250,20)}))).addTo(map);
     map.on('popupopen',e=>{const b=e.popup.getElement().querySelector('[data-fx]');if(!b)return;
+      const ff=FXL.find(x=>x.id===b.dataset.fx);if(ff)say(FXFACT[ff.tipo]||'', ff.tipo==='volcan'?'¿Sabías que…?':'Dato curioso');
       b.onclick=()=>{const f=FXL.find(x=>x.id===b.dataset.fx);
         if(S.excl){S.excl=false;$('exclChip').classList.remove('on');}
         setRange(dayOf(Y0,0,1),dayOf(Y1,11,31));refresh();map.closePopup();map.flyTo([f.lat,f.lon],f.tipo==='volcan'?13:14,{duration:.8});};});
@@ -1234,12 +1320,17 @@ function bind(){
     $(id).querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));S[key]=b.dataset.v;drawCal();});
   seg('segGran','gran');seg('segView','view');seg('segSrc','src');
   // controles dentro del mapa
-  document.querySelectorAll('#confChips [data-c]').forEach(c=>c.onclick=()=>{c.classList.toggle('on');S.conf[+c.dataset.c]=c.classList.contains('on');refresh();});
+  document.querySelectorAll('#confChips [data-c]').forEach(c=>c.onclick=()=>{c.classList.toggle('on');S.conf[+c.dataset.c]=c.classList.contains('on');refresh();
+    if(c.dataset.c==='0'&&S.conf[0])say('Activaste la <b>confianza baja</b>: incluye detecciones dudosas, como reflejos del sol o suelos muy calientes. Úsala con cuidado.','Ojo');});
   document.querySelectorAll('#sensChips [data-s]').forEach(c=>c.onclick=()=>{c.classList.toggle('on');S.sens[+c.dataset.s]=c.classList.contains('on');drawHotspots();});
   $('exclChip').onclick=()=>{$('exclChip').classList.toggle('on');S.excl=$('exclChip').classList.contains('on');refresh();};
   $('segBase').querySelectorAll('button').forEach(b=>b.onclick=()=>{
     $('segBase').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
-    const s2=b.dataset.b==='s2';map.removeLayer(s2?baseOSM:baseS2);(s2?baseS2:baseOSM).addTo(map);});
+    [baseYear,baseNasa,baseOSM].forEach(l=>map.hasLayer(l)&&map.removeLayer(l));
+    baseMode=b.dataset.b;({year:baseYear,nasa:baseNasa,osm:baseOSM})[baseMode].addTo(map).bringToBack();updateBase();
+    say(({year:'Estás viendo el <b>archivo histórico de Esri</b>: una versión del mapa satelital por año desde 2014. Cambia de año y compara cómo cambia el paisaje.',
+      nasa:'Esta es la <b>imagen de NASA del mismo día</b> (MODIS Terra, 250 m). A veces hay nubes, pero en días de quema puedes ver hasta el <b>humo</b>.',
+      osm:'Mapa de calles de OpenStreetMap, útil para ubicar veredas y vías.'})[baseMode],'Mapa base');});
   document.querySelector('.layers .head').onclick=()=>{const l=document.querySelector('.layers');l.classList.toggle('closed');$('lyTog').textContent=l.classList.contains('closed')?'▾':'▴';};
   bindSearch();
   // calendario
@@ -1260,7 +1351,9 @@ function bind(){
 
 fetch('data/hotspots.json').then(r=>{if(!r.ok)throw 0;return r.json();}).then(j=>{
   D=j;prep();initMap();bind();initFx();styleMpios();C=compute();
-  setRange(S.from,S.to);
+  setRange(S.from,S.to,{quiet:true});
+  Promise.all([fetch('data/clima.json').then(r=>r.ok?r.json():null).catch(()=>null),fetch('data/wayback.json').then(r=>r.ok?r.json():null).catch(()=>null)])
+    .then(([c,w])=>{CLIMA=c;WB=w;updateBase();if(S.tab==='years')renderCharts();ready=true;lastYearSaid=S.year;});
   countUp($('k-hot'),N);countUp($('k-k'),C.kg,1,'×');$('kStep').textContent=C.kg.toFixed(1).replace('.',',');
   window.__fire={D,get C(){return C;},compute,get map(){return map;},S,setRange};
 }).catch(err=>{console.error(err);
