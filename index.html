@@ -52,6 +52,7 @@ label.chk{font-size:13px;display:flex;gap:6px;align-items:center}
     <button data-p="c">Centro (5–7°N)</button>
     <button data-p="s">Sur (&lt;5°N)</button>
     <button data-p="none">Limpiar</button>
+    <button data-p="fit">Reencuadrar mapa</button>
   </div>
   <p class="small" id="selinfo"></p>
   <p class="small">Toca celdas (0,25°) para sumarlas o quitarlas. Las grises son fuentes fijas urbanas/industriales.</p>
@@ -224,7 +225,14 @@ let map=null;
 function initMap(){
   if(typeof L==='undefined'){$('map').innerHTML='<p class="small" style="padding:12px">No se pudo cargar el mapa (sin conexión). Usa los botones de selección.</p>';return;}
   map=L.map('map').setView([(LAT0+LAT1)/2,(LON0+LON1)/2],6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO',maxZoom:12}).addTo(map);
+  const s2=L.tileLayer('https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg',
+    {attribution:'<a href="https://s2maps.eu" target="_blank">Sentinel-2 cloudless</a> by <a href="https://eox.at" target="_blank">EOX IT Services GmbH</a> (Contains modified Copernicus Sentinel data 2020)',maxZoom:12,minZoom:4});
+  const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:12,minZoom:4});
+  s2.addTo(map);
+  L.control.layers({'Sentinel-2':s2,'OpenStreetMap':osm},null,{collapsed:true}).addTo(map);
+  let s2err=0;
+  s2.on('tileerror',()=>{if(++s2err===4){map.removeLayer(s2);osm.addTo(map);}});
   for(const c of cells){
     c.rect=L.rectangle([[c.lat0,c.lon0],[c.lat1,c.lon1]],cellStyle(c)).addTo(map);
     c.rect.on('click',()=>{c.sel=!c.sel;c.rect.setStyle(cellStyle(c));refresh();});
@@ -326,6 +334,7 @@ seg('segSrc','src');seg('segView','view');
 $('mask').onchange=e=>{S.mask=e.target.checked;refresh();};
 $('presets').querySelectorAll('button').forEach(b=>b.onclick=()=>{
   const p=b.dataset.p;
+  if(p==='fit'){if(map)map.fitBounds([[LAT0,LON0],[LAT1,LON1]]);return;}
   setSel(c=>p==='all'?true:p==='none'?false:p==='n'?c.lat0>=7:p==='c'?(c.lat0>=5&&c.lat0<7):c.lat0<5);
 });
 function pick(e){
